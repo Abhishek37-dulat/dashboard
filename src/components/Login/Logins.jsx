@@ -223,8 +223,8 @@ const Logins = () => {
         ease: "power3.inOut",
       });
     };
-    return () => animateWidth();
-  }, []);
+    animateWidth();
+  }, [elementRef]);
 
   return (
     <LoginBox>

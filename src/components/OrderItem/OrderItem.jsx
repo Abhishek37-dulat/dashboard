@@ -1,6 +1,9 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ItemMain from "./ItemMain";
+import { useDispatch, useSelector } from "react-redux";
+import Order from "../../pages/Order/Order";
+import { getTodayOrder } from "../../redux/actions/OrdersAction";
 
 const AllCommentBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -39,14 +42,22 @@ const CommentMainBox = styled(Box)(({ theme }) => ({
 }));
 
 const OrderItem = () => {
+  const dispatch = useDispatch();
+  const { OrderData, TodayOrder } = useSelector((state) => state.Orders);
+  console.log(OrderData);
+  console.log(TodayOrder);
+  useEffect(() => {
+    dispatch(getTodayOrder());
+  }, []);
   return (
     <AllCommentBox>
       <CommetPageTitle>
         <Typography>
-          Total Orders: <b style={{ color: "#5A73CD" }}>1458</b>
+          Total Orders: <b style={{ color: "#5A73CD" }}>{OrderData?.length}</b>
         </Typography>
         <Typography>
-          Todays Orders: <b style={{ color: "#5A73CD" }}>145</b>
+          Todays Orders:{" "}
+          <b style={{ color: "#5A73CD" }}>{TodayOrder?.length}</b>
         </Typography>
       </CommetPageTitle>
       <CommentMainBox>

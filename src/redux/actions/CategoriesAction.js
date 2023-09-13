@@ -2,11 +2,11 @@ import axios from "axios";
 import * as actionType from "../Constants/CategorieTypes";
 import { toast, ToastContainer } from "react-toastify";
 
-const url = "https://hair-product-api-buuh.vercel.app";
+const url = process.env.REACT_APP_URL;
 
 export const getAllCategories = () => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -20,7 +20,7 @@ export const getAllCategories = () => async (dispatch) => {
 
 export const getSingleCategorie = (id) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -34,7 +34,8 @@ export const getSingleCategorie = (id) => async (dispatch) => {
 
 export const addNewCategorie = (newData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    console.log("newData: ", newData);
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -48,7 +49,7 @@ export const addNewCategorie = (newData) => async (dispatch) => {
 
 export const updateNewCategorie = (id, newData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -64,7 +65,7 @@ export const updateNewCategorie = (id, newData) => async (dispatch) => {
 
 export const deleteExistingCategorie = (newData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };

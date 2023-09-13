@@ -16,6 +16,7 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const TableRowArea = styled(TableRow)(({ theme }) => ({
   width: "100%",
@@ -61,24 +62,24 @@ const TableButtonDelete = styled(Button)(({ theme }) => ({
   },
 }));
 
-const ItemRow = ({ Id }) => {
-  const [toggleAvailable, setToggleAvailable] = useState(true);
-  const handleToggle = (e) => {
-    e.preventDefault();
-    setToggleAvailable(!toggleAvailable);
-  };
+const ItemRow = ({ Id, data }) => {
+  const { UserData } = useSelector((state) => state.Users);
+  const user = UserData?.find((item) => item._id === data.userID);
+
+  console.log(user);
   return (
     <TableRowArea>
       <TableCellArea>{Id}</TableCellArea>
       <TableCellArea>
         <p>
-          <span>Hair Grow</span>
+          <span>
+            {user?.first_name} {user?.last_name}
+          </span>
           <br />
-          <span>9992908567</span>
+          <span>{user?.phone}</span>
         </p>
       </TableCellArea>
-      <TableCellArea>abcdef@gmail.com</TableCellArea>
-      <TableCellArea>8</TableCellArea>
+      <TableCellArea>{user?.email}</TableCellArea>
 
       <TableCellArea>
         <TableButtonDelete sx={{ backgroundColor: "#EC7B7C" }}>

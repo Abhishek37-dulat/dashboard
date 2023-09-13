@@ -1,6 +1,8 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ItemMain from "./ItemMain";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCarts } from "../../redux/actions/CartAction";
 
 const AllCommentBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -37,15 +39,21 @@ const CommentMainBox = styled(Box)(({ theme }) => ({
 }));
 
 const CartItem = () => {
+  const dispatch = useDispatch();
+  const { CartData } = useSelector((state) => state.Carts);
+  useEffect(() => {
+    dispatch(getAllCarts());
+  }, [dispatch]);
+  console.log(CartData);
   return (
     <AllCommentBox>
       <CommetPageTitle>
         <Typography>
-          Cart Item: <b style={{ color: "#5A73CD" }}>198</b>
+          Cart Item: <b style={{ color: "#5A73CD" }}>{CartData?.length}</b>
         </Typography>
       </CommetPageTitle>
       <CommentMainBox>
-        <ItemMain />
+        <ItemMain data={CartData} />
       </CommentMainBox>
     </AllCommentBox>
   );

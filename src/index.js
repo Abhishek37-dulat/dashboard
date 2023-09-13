@@ -11,13 +11,14 @@ import { ToastContainer } from "react-toastify";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ToastContainer />
-      <DataProvider>
+    <DataProvider>
+      <Provider store={store}>
+        <ToastContainer />
+
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </DataProvider>
-    </Provider>
+      </Provider>
+    </DataProvider>
   </React.StrictMode>
 );

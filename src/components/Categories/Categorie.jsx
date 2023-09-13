@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ElectricBikeIcon from "@mui/icons-material/ElectricBike";
 import EnergySavingsLeafIcon from "@mui/icons-material/EnergySavingsLeaf";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import PreExistData from "./PreExistData";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -259,21 +259,24 @@ const Subs = ({ number, setSubData, subData }) => {
 
   const handleOnchangeValue = (e) => {
     setSelectedValue(e.target.value);
-    setNewData({ id: number, name: selectedValue });
+    setNewData({ id: number, name: e.target.value });
   };
   const handleDelete = () => {
+    console.log("number: ", number);
     const updatedData = subData.filter((item) => item.id !== number);
     setSubData(updatedData);
   };
   useEffect(() => {
     const index = subData.findIndex((item) => item.id === number);
-    console.log(index);
+    console.log("index: ", index);
     if (index !== -1) {
       const updatedData = [...subData];
       updatedData[index] = { ...updatedData[index], ...newData };
       setSubData(updatedData);
     }
   }, [newData]);
+  console.log(selectedValue);
+  console.log(newData);
   return (
     <CategorieBoxHandleSmall sx={{ width: `${x - y}%`, marginLeft: `${y}%` }}>
       <HandleInputsSmall>
@@ -316,6 +319,7 @@ const Categorie = () => {
     if (mainCat === "") {
       return console.log("Categorie name is required");
     } else {
+      console.log("subData: ", subData);
       const tempdata = { name: mainCat, subCategories: subData };
       dispatch(addNewCategorie(tempdata));
     }
@@ -376,9 +380,23 @@ const Categorie = () => {
           <Typography sx={{ color: "#252F43" }}>All Categories</Typography>
         </Box>
         <CategorieTopMain>
-          {CategorieData.map((data, index) => {
-            return <PreExistData key={data.id} data={data} />;
-          })}
+          {CategorieData?.length > 0 ? (
+            CategorieData?.map((data, index) => {
+              return <PreExistData key={data.id} data={data} />;
+            })
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
+              <Typography style={{ color: "#BAC0C7" }}>Loading...</Typography>
+            </Box>
+          )}
         </CategorieTopMain>
       </CategorieAll>
     </CategorieMain>

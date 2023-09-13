@@ -116,12 +116,16 @@ const ItemRow = ({ data }) => {
     dispatch(getSingleProduct(data._id));
     navigate(`/product/${data._id}`);
   };
-  console.log(data);
+  const handleViewProduct = (e) => {
+    e.preventDefault();
+    dispatch(getSingleProduct(data._id));
+    navigate(`/product/view/${data._id}`);
+  };
   return (
     <TableRowArea>
-      <TableCellArea>
+      <TableCellArea onClick={(e) => handleViewProduct(e)}>
         <img
-          src={`http://localhost:5643/images/${data.product_image[0]}`}
+          src={`${process.env.REACT_APP_URL}/images/${data.product_image[0]}`}
           alt={`Product image_${data.product_image[0]}`}
           style={{ width: "50px" }}
         />

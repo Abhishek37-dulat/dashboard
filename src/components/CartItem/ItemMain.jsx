@@ -196,7 +196,7 @@ const ProductTable = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ItemMain = () => {
+const ItemMain = ({ data }) => {
   return (
     <>
       <ProductSearch>
@@ -254,12 +254,6 @@ const ItemMain = () => {
                 <th>
                   <Typography>Email</Typography>
                 </th>
-                <th>
-                  <span style={{ marginRight: "5px" }}>
-                    <CategoryIcon />
-                  </span>
-                  <Typography>Total Products</Typography>
-                </th>
 
                 <th>
                   <span style={{ marginRight: "5px" }}>
@@ -273,12 +267,9 @@ const ItemMain = () => {
               </tr>
             </thead>
             <tbody>
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
+              {data?.map((item, index) => {
+                return <ItemRow Id={`#  ${index + 1}`} data={item} />;
+              })}
             </tbody>
           </table>
         </ProductTable>

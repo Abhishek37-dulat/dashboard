@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
+import { useSelector } from "react-redux";
+import SingleOrder from "../../Home/SingleOrder";
 
 const CommetPageTitle = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -72,13 +74,13 @@ const Ticket5 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const OrderDetail = () => {
+const OrderDetail = ({ orderDetails }) => {
   return (
     <CommetPageTitle>
       <Ticket1>
         <Typography>
           ORDER DETAIL OF ORDER NO:{" "}
-          <span style={{ color: "#5A73CD" }}>{1231133434}</span>
+          <span style={{ color: "#5A73CD" }}>{orderDetails?.order_id}</span>
         </Typography>
       </Ticket1>
       <Ticket2>
@@ -91,31 +93,35 @@ const OrderDetail = () => {
       <Ticket3>
         <Typography>dvs_323sd</Typography>
         <Typography>342ssdf_32</Typography>
-        <Typography>29-07-2023</Typography>
-        <Typography>17:17:32 PM</Typography>
-        <Typography>Order Status</Typography>
+        <Typography>{orderDetails?.createdAt?.substring(0, 10)}</Typography>
+        <Typography>{orderDetails?.createdAt?.substring(11, 19)}</Typography>
+        <Typography>{orderDetails?.order_status}</Typography>
       </Ticket3>
       <Ticket4>
         <Typography>Order Price</Typography>
         <Typography>Discount</Typography>
         <Typography>Wallet Discount</Typography>
         <Typography>Delivery Charges</Typography>
-        <Typography>COD Charges</Typography>
+
         <Typography>Promo Code</Typography>
         <Typography>Total</Typography>
         <Typography>CashBack</Typography>
       </Ticket4>
       <Ticket5>
-        <Typography>₹{370.0}</Typography>
+        <Typography>₹{orderDetails?.total_amount.toFixed(2)}</Typography>
+        <Typography>₹{orderDetails?.total_discount.toFixed(2)}</Typography>
+
         <Typography>₹{0.0}</Typography>
-        <Typography>₹{0.0}</Typography>
-        <Typography>₹{0.0}</Typography>
-        <Typography>₹{0.0}</Typography>
+        <Typography>₹{orderDetails?.delivery_charge.toFixed(2)}</Typography>
         <Typography>FRESHCODE</Typography>
         <Typography>
-          ₹{370.0} for {1} items
+          ₹
+          {(orderDetails?.total_amount + orderDetails?.delivery_charge).toFixed(
+            2
+          )}{" "}
+          for {orderDetails?.items?.length} items
         </Typography>
-        <Typography>CashBack</Typography>
+        <Typography>{0} Points</Typography>
       </Ticket5>
     </CommetPageTitle>
   );

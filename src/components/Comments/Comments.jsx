@@ -1,6 +1,8 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CommentBox from "./CommentBox";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllComments } from "../../redux/actions/CommentsAction";
 
 const AllCommentBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -37,21 +39,26 @@ const CommentMainBox = styled(Box)(({ theme }) => ({
 }));
 
 const Comments = () => {
+  const dispatch = useDispatch();
+  const { CommentData } = useSelector((state) => state.Comments);
+  useEffect(() => {
+    dispatch(getAllComments());
+  }, [dispatch]);
+
+  console.log("CommentData::::::::", CommentData);
+
   return (
     <AllCommentBox>
       <CommetPageTitle>
         <Typography>
-          User Comments: <b style={{ color: "#5A73CD" }}>1458</b>
+          User Comments:{" "}
+          <b style={{ color: "#5A73CD" }}>{CommentData?.length}</b>
         </Typography>
       </CommetPageTitle>
       <CommentMainBox>
-        <CommentBox />
-        <CommentBox />
-        <CommentBox />
-        <CommentBox />
-        <CommentBox />
-        <CommentBox />
-        <CommentBox />
+        {CommentData?.map((data) => {
+          return <CommentBox data={data} />;
+        })}
       </CommentMainBox>
     </AllCommentBox>
   );

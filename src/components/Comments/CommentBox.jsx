@@ -1,9 +1,13 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Laptop from "../../assets/image/Laptop2-removeb.png";
 import User from "../../assets/image/pp.png";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProduct } from "../../redux/actions/ProductAction";
+import noimage from "../../assets/image/istockphoto-922962354-612x612.jpg";
+import Rating from "@mui/material/Rating";
 {
   /* <FontAwesomeIcon icon="fas fa-star" style={{color: "#fad000",}} /> */
 }
@@ -135,6 +139,8 @@ const CommentClientBoxUserImage = styled(Box)(({ theme }) => ({
   //   width: "100%",
   "& > img": {
     width: "40px",
+    height: "40px",
+    borderRadius: "100%",
   },
   [theme.breakpoints.down("md")]: {},
 }));
@@ -161,7 +167,7 @@ const CommentClientBoxUserProduct = styled(Box)(({ theme }) => ({
   alignItems: "center",
   width: "100%",
   "& > img": {
-    width: "110px",
+    width: "100px",
   },
   [theme.breakpoints.down("md")]: {},
 }));
@@ -169,8 +175,8 @@ const CommentClientBoxRight = styled(Box)(({ theme }) => ({
   //   border: "1px solid black",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
+  justifyContent: "flex-start",
+  alignItems: "flex-start",
   width: "65%",
   [theme.breakpoints.down("md")]: {},
 }));
@@ -189,8 +195,8 @@ const CommentClientBoxDescription = styled(Box)(({ theme }) => ({
   //   border: "1px solid black",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
+  justifyContent: "flex-start",
+  alignItems: "flex-start",
   width: "100%",
   "& > p": {
     fontFamily: "'Montserrat', sans-serif",
@@ -200,72 +206,122 @@ const CommentClientBoxDescription = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {},
 }));
-const CommentBox = () => {
-  const starsArray = Array.from({ length: 5 }).map((_, index) => (
-    <FontAwesomeIcon icon={faStar} />
-  ));
+const CommentBox = ({ data }) => {
+  // const dispatch = useDispatch();
+  const { ProductData } = useSelector((state) => state.Products);
+  const { UserData, UserProfileData } = useSelector((state) => state.Users);
+
+  const date = new Date(data?.createdAt);
+  const dayNumber = date.getDay();
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const dayName = daysOfWeek[dayNumber];
+
+  const product = ProductData.find((item) => item._id === data.productID);
+  const user = UserData.find((item) => item._id === data.userID);
+  const profile = UserProfileData.find((item) => item.user_id === data.userID);
+  console.log(user, profile, data);
   return (
-    <Comment>
-      <CommentDateBox>
-        <Typography>28/08/2001</Typography>
-        <Typography>Tuesday</Typography>
-      </CommentDateBox>
-      <CommentProductBox>
-        <CommentProductBoxLeft>
-          <CommentProductBoxImage>
-            <img src={Laptop} alt="" />
-          </CommentProductBoxImage>
-        </CommentProductBoxLeft>
-        <CommentProductBoxRight>
-          <CommentProductBoxTitle>
-            <Typography>Product Title</Typography>
-          </CommentProductBoxTitle>
-          <CommentProductBoxDescription>
-            <Typography>
-              React Context API is designed to share data between components,
-              while Redux is designed for centralized state management.
-            </Typography>
-          </CommentProductBoxDescription>
-        </CommentProductBoxRight>
-      </CommentProductBox>
-      <CommentClientBox>
-        <CommentClientBoxLeft>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              width: "100%",
-              margin: "5px 0px",
-            }}
-          >
-            <CommentClientBoxUserImage>
-              <img src={User} alt="" />
-            </CommentClientBoxUserImage>
-            <CommentClientBoxUserName>
-              <Typography>User Name</Typography>
-            </CommentClientBoxUserName>
-          </Box>
-          <CommentClientBoxUserProduct>
-            <img src={Laptop} alt="" />
-          </CommentClientBoxUserProduct>
-        </CommentClientBoxLeft>
-        <CommentClientBoxRight>
-          <CommentClientBoxStar>{starsArray}</CommentClientBoxStar>
-          <CommentClientBoxDescription>
-            <Typography>
-              When working with state management in React applications, you may
-              come across two popular options: useContext and Redux. Both
-              approaches provide ways to manage and share state across
-              components, but they have different purposes and use cases. In
-              this article, we’ll explore the key differences between useContext
-              and Redux to help you understand when to use each one.
-            </Typography>
-          </CommentClientBoxDescription>
-        </CommentClientBoxRight>
-      </CommentClientBox>
-    </Comment>
+    <>
+      {data ? (
+        <Comment>
+          <CommentDateBox>
+            <Typography>{String(data?.createdAt).substring(0, 10)}</Typography>
+            <Typography>{dayName ? dayName : ""}</Typography>
+          </CommentDateBox>
+          <CommentProductBox>
+            <CommentProductBoxLeft>
+              <CommentProductBoxImage>
+                <img
+                  src={
+                    product?.product_image
+                      ? product?.product_image.length > 0
+                        ? `${process.env.REACT_APP_URL}/images/${product?.product_image[0]}`
+                        : noimage
+                      : noimage
+                  }
+                  alt="imagenew"
+                />
+              </CommentProductBoxImage>
+            </CommentProductBoxLeft>
+            <CommentProductBoxRight>
+              <CommentProductBoxTitle>
+                <Typography>{product?.product_title}</Typography>
+              </CommentProductBoxTitle>
+              <CommentProductBoxDescription>
+                <Typography>
+                  {String(product?.product_description).length > 100
+                    ? String(product?.product_description).substring(0, 100) +
+                      "..."
+                    : String(product?.product_description)}
+                </Typography>
+              </CommentProductBoxDescription>
+            </CommentProductBoxRight>
+          </CommentProductBox>
+          <CommentClientBox>
+            <CommentClientBoxLeft>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: "100%",
+                  margin: "5px 0px",
+                }}
+              >
+                <CommentClientBoxUserImage>
+                  <img
+                    src={
+                      profile?.image
+                        ? profile?.image?.length > 0
+                          ? `${process.env.REACT_APP_URL}/images/${profile?.image[0]}`
+                          : noimage
+                        : noimage
+                    }
+                    alt="usernew"
+                  />
+                </CommentClientBoxUserImage>
+                <CommentClientBoxUserName>
+                  <Typography>
+                    {user?.first_name} {user?.last_name}
+                  </Typography>
+                </CommentClientBoxUserName>
+              </Box>
+              <CommentClientBoxUserProduct>
+                <img
+                  src={
+                    data?.image
+                      ? data?.image?.length > 0 && data?.image[0] !== ""
+                        ? `${process.env.REACT_APP_URL}/images/${data?.image[0]}`
+                        : noimage
+                      : noimage
+                  }
+                  alt="usernew"
+                />
+              </CommentClientBoxUserProduct>
+            </CommentClientBoxLeft>
+            <CommentClientBoxRight>
+              <Rating name="read-only" value={String(data?.rating)} readOnly />
+              {/* <CommentClientBoxStar>{starsArray}</CommentClientBoxStar> */}
+              <CommentClientBoxDescription>
+                <Typography style={{ fontWeight: "600" }}>
+                  {data?.title}
+                </Typography>
+                <Typography>{data?.comment}</Typography>
+              </CommentClientBoxDescription>
+            </CommentClientBoxRight>
+          </CommentClientBox>
+        </Comment>
+      ) : null}
+    </>
   );
 };
 

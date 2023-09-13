@@ -85,11 +85,12 @@ const ButtonAdd = styled(Button)(({ theme }) => ({
 }));
 
 const SingleCat = ({ open, setOpen, data }) => {
+  console.log("Single: ", data);
   const dispatch = useDispatch();
   const [openalert, setOpenalert] = useState(false);
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("");
-  const [mainCatValue, setMainCatValue] = useState(data.name);
+  const [mainCatValue, setMainCatValue] = useState("");
   const [subDataValues, setSubDataValues] = useState([]);
   const [count, setCount] = useState(data.subCategories.length);
 
@@ -148,9 +149,10 @@ const SingleCat = ({ open, setOpen, data }) => {
     let tempdata = data.subCategories?.map((item, index) => {
       return { id: index, name: item.name };
     });
+    setMainCatValue(data.name);
     setSubDataValues(tempdata);
-  }, []);
-
+  }, [data]);
+  console.log("SingleOneData: ");
   return (
     <>
       <Snackbar

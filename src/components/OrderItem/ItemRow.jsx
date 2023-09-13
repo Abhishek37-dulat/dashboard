@@ -17,6 +17,9 @@ import {
   TableCell,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getUserOrders } from "../../redux/actions/OrdersAction";
+import { getSingleUser } from "../../redux/actions/UserAction";
 
 const TableRowArea = styled(TableRow)(({ theme }) => ({
   width: "100%",
@@ -61,38 +64,45 @@ const TableButtonDelete = styled(Button)(({ theme }) => ({
   },
 }));
 
-const ItemRow = ({ Id }) => {
+const ItemRow = ({ Number, Id, data }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [toggleAvailable, setToggleAvailable] = useState(true);
   const handleToggle = (e) => {
     e.preventDefault();
     setToggleAvailable(!toggleAvailable);
   };
+  const handleSingleAction = (e, id) => {
+    dispatch(getUserOrders(id));
+    dispatch(getSingleUser(data.user_id));
+    navigate(`/order/${data._id}`);
+  };
+
   return (
     <TableRowArea>
       <TableCellArea>
-        <Typography>{Id}</Typography>
+        <Typography>{Number + 1}</Typography>
       </TableCellArea>
       <TableCellArea>
-        <Typography>{Id}</Typography>
+        <Typography>{data.user_id.substring(0, 7) + "..."}</Typography>
       </TableCellArea>
       <TableCellArea>
-        <Typography>{Id}</Typography>
+        <Typography>{data._id.substring(0, 7) + "..."}</Typography>
       </TableCellArea>
       <TableCellArea>
-        <Typography>29-07-2023</Typography>
+        <Typography>{data.createdAt.substring(0, 10)}</Typography>
       </TableCellArea>
       <TableCellArea>
-        <Typography>29-07-2023</Typography>
+        <Typography>{data.createdAt.substring(11, 19)}</Typography>
       </TableCellArea>
       <TableCellArea>
-        <Typography>50,000</Typography>
+        <Typography>{data.total_amount.toFixed(2)}</Typography>
       </TableCellArea>
 
       <TableCellArea>
         <TableButtonDelete
           sx={{ backgroundColor: "#EC7B7C" }}
-          onClick={() => navigate("/order/sdfsd")}
+          onClick={(e) => handleSingleAction(e, data._id)}
         >
           <span style={{ fontWeight: 600 }}>Action</span>&#160;
         </TableButtonDelete>

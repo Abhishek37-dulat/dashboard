@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNewColor, getAllColors } from "../../redux/actions/ColorsAction";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import ColorLists from "./ColorLists";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MainOfColor = styled(Box)(({ theme }) => ({
   // border: "1px solid black",
@@ -207,11 +208,16 @@ const AddColor = () => {
           <Typography>All Colors</Typography>
         </Box>
         <Box>
-          {ColorData?.length > 0
-            ? ColorData.map((c) => (
-                <ColorLists name={c.colorname} colorId={c._id} />
-              ))
-            : null}
+          {ColorData?.length > 0 ? (
+            ColorData.map((c) => (
+              <ColorLists name={c.colorname} colorId={c._id} />
+            ))
+          ) : (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+              <Typography>Loading...</Typography>
+            </Box>
+          )}
         </Box>
       </SubOfColorall>
       <Dialog

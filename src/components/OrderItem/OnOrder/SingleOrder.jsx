@@ -1,10 +1,11 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import OrderDetail from "./OrderDetail";
 import ProductDetail from "./ProductDetails";
 import UserDetails from "./UserDetails";
 import UserAddressDetails from "./UserAddressDetails";
 import DeliveryStatus from "./DeliveryStatus";
+import { useSelector } from "react-redux";
 
 const AllCommentBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -97,12 +98,49 @@ const CommentMainBox = styled(Box)(({ theme }) => ({
 }));
 
 const SingleOrder = () => {
+  const { SingleOrder } = useSelector((state) => state.Orders);
+  const { SingleUser } = useSelector((state) => state.Users);
+  const [orderDetails, setOrderDetails] = useState();
+  const [orderUsers, setOrderUsers] = useState();
+
+  useEffect(() => {
+    SingleOrder?.map((data, index) => {
+      if (SingleOrder?.length - 1 === index) {
+        localStorage.removeItem("OrderDetailsAdmin");
+        localStorage.setItem("OrderDetailsAdmin", JSON.stringify(data));
+        setOrderDetails(data);
+      }
+    });
+  }, [SingleOrder, setOrderDetails]);
+  useEffect(() => {
+    if (SingleUser) {
+      if (SingleUser?.length === 0) {
+        console.log(".........................", SingleUser);
+      } else {
+        localStorage.setItem("OrderUserAdmin", JSON.stringify(SingleUser));
+        setOrderUsers(SingleUser);
+      }
+    }
+  }, [SingleUser, setOrderDetails]);
+
+  useEffect(() => {
+    const data = localStorage.getItem("OrderDetailsAdmin");
+    const temp = JSON.parse(data);
+    setOrderDetails(temp);
+  }, []);
+  useEffect(() => {
+    const data = localStorage.getItem("OrderUserAdmin");
+    const temp = JSON.parse(data);
+    console.log(temp);
+    setOrderUsers(temp);
+  }, []);
+  console.log(SingleOrder);
   return (
     <>
       <AllCommentBox>
-        <OrderDetail />
-        <ProductDetail />
-        <UserDetails />
+        <OrderDetail orderDetails={orderDetails} />
+        <ProductDetail orderDetails={orderDetails} />
+        <UserDetails SingleUser={orderUsers} />
         <UserAddressDetails />
         <DeliveryStatus />
       </AllCommentBox>

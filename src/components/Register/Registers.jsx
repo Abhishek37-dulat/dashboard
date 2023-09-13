@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Snackbar,Alert, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  Snackbar,
+  Alert,
+  Typography,
+  styled,
+} from "@mui/material";
 import gsap from "gsap";
 import { useNavigate } from "react-router-dom";
 import File1 from "./File1";
@@ -44,13 +51,12 @@ const Registers = () => {
     number_of_employee: "",
   });
   const [showFile, setShowFile] = useState(0);
-  
 
   const handleOnChange = (e) => {
     e.preventDefault();
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
-  
+
   useEffect(() => {
     const animateWidth = () => {
       gsap.to(elementRef.current, {
@@ -84,7 +90,6 @@ const Registers = () => {
   console.log(showFile);
   return (
     <RegisterBox>
-      
       {showFile === 0 ? (
         <File1
           handleOnChange={handleOnChange}

@@ -66,8 +66,9 @@ const Ticket3 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UserDetails = () => {
+const UserDetails = ({ SingleUser }) => {
   const navigate = useNavigate();
+
   return (
     <CommetPageTitle>
       <Ticket1>
@@ -82,10 +83,21 @@ const UserDetails = () => {
         <Typography>Actions</Typography>
       </Ticket2>
       <Ticket3>
-        <Typography>{"#23131"}</Typography>
-        <Typography>{"GET E Idea"}</Typography>
-        <Typography>{"e.@gmail.com"}</Typography>
-        <Typography>{9992908567}</Typography>
+        <Typography>{String(SingleUser?._id).substring(0, 7)}</Typography>
+        <Typography>
+          {String(SingleUser?.first_name + " " + SingleUser?.last_name).length <
+          15
+            ? String(SingleUser?.first_name + " " + SingleUser?.last_name)
+            : String(
+                SingleUser?.first_name + " " + SingleUser?.last_name
+              ).substring(0, 12) + "..."}
+        </Typography>
+        <Typography>
+          {String(SingleUser?.email).length < 15
+            ? String(SingleUser?.email)
+            : String(SingleUser?.email).substring(0, 12) + "..."}
+        </Typography>
+        <Typography>{SingleUser?.phone}</Typography>
         <Typography>₹{0.0}</Typography>
         <Typography>
           <button onClick={() => navigate("/order/user/sdsfsd")}>Action</button>

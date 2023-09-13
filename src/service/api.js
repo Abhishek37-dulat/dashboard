@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const URL = "https://hair-product-api-buuh.vercel.app";
+const URL = process.env.REACT_APP_URL;
+console.log(URL);
 
 export const authenticatesSignup = async (data) => {
   try {
@@ -12,10 +13,11 @@ export const authenticatesSignup = async (data) => {
 };
 
 export const authenticatesLogin = async (data) => {
+  console.log(URL);
   try {
     const logindata = await axios.post(`${URL}/admin/login`, data);
-    localStorage.setItem("token", logindata.data.token);
-    localStorage.setItem("refreshtoken", logindata.data.refreshtoken);
+    localStorage.setItem("admintoken", logindata.data.token);
+    localStorage.setItem("adminrefreshtoken", logindata.data.refreshtoken);
     return logindata;
   } catch (error) {
     return error;
@@ -26,8 +28,8 @@ export const refreshCall = async (data) => {
   try {
     const logindata = await axios.post(`${URL}/admin/refresh-token`, data);
 
-    localStorage.setItem("token", logindata.data.token);
-    localStorage.setItem("refreshtoken", logindata.data.refreshtoken);
+    localStorage.setItem("admintoken", logindata.data.token);
+    localStorage.setItem("adminrefreshtoken", logindata.data.refreshtoken);
     return logindata;
   } catch (error) {
     return error;

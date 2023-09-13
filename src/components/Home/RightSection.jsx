@@ -1,10 +1,12 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import SingleOrder from "./SingleOrder";
+import { useDispatch, useSelector } from "react-redux";
+import { getTodayOrder, getUserOrders } from "../../redux/actions/OrdersAction";
 
 const RightSectionBox = styled(Box)(({ theme }) => ({
-  //   border: "1px solid black",
-  width: "20%",
+  // border: "1px solid black",
+  width: "25%",
   height: "80.5vh",
   position: "fixed",
   right: "0%",
@@ -88,6 +90,13 @@ const TopRight = styled(Box)(({ theme }) => ({
 }));
 
 const RightSection = () => {
+  const dispatch = useDispatch();
+  const { TodayOrder } = useSelector((state) => state.Orders);
+
+  useEffect(() => {
+    dispatch(getTodayOrder());
+  }, [dispatch]);
+  console.log(TodayOrder);
   return (
     <RightSectionBox>
       <RightTop>
@@ -111,31 +120,11 @@ const RightSection = () => {
         </TopRight>
       </RightTop>
       <RightAll>
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
-        <SingleOrder />
+        {TodayOrder?.length > 0
+          ? TodayOrder?.map((data) => {
+              return <SingleOrder key={data._id} data={data} />;
+            })
+          : null}
       </RightAll>
     </RightSectionBox>
   );

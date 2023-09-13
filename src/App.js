@@ -1,5 +1,11 @@
 import Navbar from "./components/Navbar/Navbar";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+  Redirect,
+} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Order from "./pages/Order/Order";
 import Product from "./pages/Product/Product";
@@ -18,9 +24,20 @@ import UserPage from "./pages/Order/UserPage";
 import ColorPage from "./pages/Color/ColorPage";
 import SingleProduct from "./pages/Product/SingleProduct";
 import EditProduct from "./pages/Product/EditProduct";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrders } from "./redux/actions/OrdersAction";
+import { getAllProduct } from "./redux/actions/ProductAction";
+import AllUserPage from "./pages/AllUserPage/AllUserPage";
+import LogoPage from "./pages/LogoPage/LogoPage";
+import AllBannerPage from "./pages/AllBannerPage/AllBannerPage";
+import NewPosterPage from "./pages/NewPosterPage/NewPosterPage";
+import { getAllBanner } from "./redux/actions/BannerAction";
+import { getAllPost } from "./redux/actions/PostAction";
+import { getAllUser, getAllUserProfile } from "./redux/actions/UserAction";
 
 function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
   const showNavbarPaths = ["/login", "/register"];
   const { account, setAccount, setAccountStatus, accountStatus } =
     useContext(DataContext);
@@ -37,20 +54,17 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("inside");
-    const tokenfunction = () => {
-      const token = localStorage.getItem("token");
-      console.log(token);
-      // const refreshtoken = await localStorage.getItem("refreshtoken"); // Not used in this code snippet
+    dispatch(getAllProduct());
+  }, []);
+
+  useEffect(() => {
+    const tokenfunction = async () => {
+      const token = localStorage.getItem("admintoken");
       if (token) {
-        console.log("in in");
         if (token && !tokenChecked) {
-          console.log("insidecheck1");
-          const tokenData = getUserFromToken(token);
+          const tokenData = await getUserFromToken(token);
           if (tokenData) {
-            console.log("Token Data:", tokenData);
             setAccount([tokenData]);
-            console.log("insidecheck3");
             setTokenChecked(true);
             setAccountStatus(true);
           }
@@ -58,38 +72,60 @@ function App() {
       }
     };
     tokenfunction();
-  }, [tokenChecked, setTokenChecked]);
+  }, [
+    tokenChecked,
+    setTokenChecked,
+    setAccount,
+    setAccountStatus,
+    accountStatus,
+  ]);
 
-  console.log(account);
-  console.log(account.length);
-  console.log(tokenChecked);
-  return tokenChecked || accountStatus ? (
+  useEffect(() => {
+    dispatch(getAllOrders());
+    dispatch(getAllBanner());
+    dispatch(getAllPost());
+    dispatch(getAllUser());
+    dispatch(getAllUserProfile());
+  }, [dispatch]);
+  console.log(tokenChecked, accountStatus);
+  return (
     <>
-      <Navbar />
+      {accountStatus ? tokenChecked ? <Navbar /> : null : null}
+      <Routes>
+        {accountStatus ? (
+          <>
+            <Route path="/" element={<Home />} />
 
-      <Routes>
-        <Route path="/" element={<Home />} exact />
-        <Route path="/order" element={<Order />} exact />
-        <Route path="/order/:id" element={<SingleOrders />} />
-        <Route path="/order/user/:id" element={<UserPage />} />
-        <Route path="/product" element={<Product />} exact />
-        <Route path="/product/:id" element={<EditProduct />} exact />
-        <Route path="/product/view/:id" element={<SingleProduct />} exact />
-        <Route path="/product/add" element={<AddP />} exact />
-        <Route path="/cart" element={<Cart />} exact />
-        <Route path="/save" element={<Save />} exact />
-        <Route path="/comment" element={<Comment />} exact />
-        <Route path="/categories" element={<Categories />} exact />
-        <Route path="/colors" element={<ColorPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </>
-  ) : (
-    <>
-      <Routes>
-        <Route path="/login" element={<Login />} exact />
-        <Route path="/register" element={<Register />} exact />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="/order" element={<Order />} exact />
+            <Route path="/order/:id" element={<SingleOrders />} />
+            <Route path="/order/user/:id" element={<UserPage />} />
+            <Route path="/product" element={<Product />} exact />
+            <Route path="/product/:id" element={<EditProduct />} exact />
+            <Route path="/product/view/:id" element={<SingleProduct />} exact />
+            <Route path="/product/add" element={<AddP />} exact />
+            <Route path="/cart" element={<Cart />} exact />
+            <Route path="/save" element={<Save />} exact />
+            <Route path="/comment" element={<Comment />} exact />
+            <Route path="/categories" element={<Categories />} exact />
+            <Route path="/colors" element={<ColorPage />} />
+            <Route path="/allusers" element={<AllUserPage />} />
+            <Route path="/logo" element={<LogoPage />} />
+            <Route path="/banner" element={<AllBannerPage />} />
+            <Route path="/poster" element={<NewPosterPage />} />
+            <Route
+              path="*"
+              element={
+                tokenChecked || accountStatus ? <Home /> : <Navigate to="/" />
+              }
+            />
+          </>
+        ) : (
+          <>
+            <Route path="/login" element={<Login />} exact />
+            <Route path="/register" element={<Register />} exact />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </>
+        )}
       </Routes>
     </>
   );

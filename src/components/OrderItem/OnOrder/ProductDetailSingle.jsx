@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import laptop from "../../../assets/image/Laptop2-removeb.png";
+import { useSelector } from "react-redux";
 
 const Ticket3 = styled(Box)(({ theme }) => ({
   borderBottom: "1px solid #D9E0E6",
@@ -20,17 +21,44 @@ const Ticket3 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ProductDetailSingle = () => {
+const ProductDetailSingle = ({ Number, data }) => {
+  const [productDetails, setProductDetails] = useState();
+  const { ProductData } = useSelector((state) => state.Products);
+  useEffect(() => {
+    ProductData?.map((item) => {
+      if (data.product_id === item._id) {
+        console.log(data.product_id);
+        setProductDetails(item);
+      }
+      console.log(item._id);
+    });
+  }, [setProductDetails, ProductData, data]);
+  useEffect(() => {}, []);
+  console.log(ProductData);
   return (
     <Ticket3>
       <Typography>
-        <img src={laptop} alt="" />
+        {Number + 1}
+        <img
+          src={`${process.env.REACT_APP_URL}/images/${productDetails?.product_image[0]}`}
+          alt=""
+        />
       </Typography>
-      <Typography>Laptop Laptop Laptop Laptop Laptop</Typography>
-      <Typography>₹{37.0}</Typography>
-      <Typography>{1}</Typography>
-      <Typography>₹{37.0}</Typography>
-      <Typography>{34}</Typography>
+      <Typography>
+        {productDetails?.product_title?.substring(0, 10) + "..."}
+      </Typography>
+      <Typography>₹{productDetails?.product_price?.toFixed(2)}</Typography>
+      <Typography>{data?.qty}</Typography>
+      <Typography>
+        ₹
+        {(
+          (productDetails?.product_price -
+            (productDetails?.product_price * productDetails?.product_discount) /
+              100) *
+          data?.qty
+        )?.toFixed(2)}
+      </Typography>
+      <Typography>{productDetails?.product_qty - data?.qty}</Typography>
     </Ticket3>
   );
 };

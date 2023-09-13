@@ -2,11 +2,11 @@ import axios from "axios";
 import * as actionType from "../Constants/ColorTypes";
 import { toast, ToastContainer } from "react-toastify";
 
-const url = "https://hair-product-api-buuh.vercel.app";
+const url = process.env.REACT_APP_URL;
 
 export const getAllColors = () => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -20,7 +20,7 @@ export const getAllColors = () => async (dispatch) => {
 
 export const getSingleColor = (id) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -34,7 +34,7 @@ export const getSingleColor = (id) => async (dispatch) => {
 
 export const addNewColor = (newData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -48,7 +48,7 @@ export const addNewColor = (newData) => async (dispatch) => {
 
 export const deleteExistingColor = (newData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
     };

@@ -1,6 +1,9 @@
 import { Box, Typography, styled } from "@mui/material";
 import React from "react";
 import WindPowerIcon from "@mui/icons-material/WindPower";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getUserOrders } from "../../redux/actions/OrdersAction";
 
 const NewOrderBox = styled(Box)(({ theme }) => ({
   borderLeft: "3px solid #1976D2",
@@ -26,19 +29,14 @@ const IndexNumber = styled(Typography)(({ theme }) => ({
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
-  width: "20%",
+  width: "80%",
   height: "100%",
   fontFamily: "'Pangolin', cursive",
+  overflow: "hidden",
+  padding: "0px 2px",
+  marginLeft: "2px",
 }));
-const ProductName = styled(Typography)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "center",
-  width: "70%",
-  height: "100%",
-  fontFamily: "'Pangolin', cursive",
-}));
+
 const IndexIcon = styled(Typography)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
@@ -50,11 +48,18 @@ const IndexIcon = styled(Typography)(({ theme }) => ({
   color: "#E93E3E",
 }));
 
-const SingleOrder = () => {
+const SingleOrder = ({ data }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleSingleOrderClick = (data) => {
+    console.log(data);
+    dispatch(getUserOrders(data._id));
+    navigate(`/order/${data.user_id}`);
+  };
   return (
-    <NewOrderBox>
-      <IndexNumber>#00</IndexNumber>
-      <ProductName>Alpha hairs ne...</ProductName>
+    <NewOrderBox onClick={() => handleSingleOrderClick(data)}>
+      <IndexNumber>{String(data?.order_id)}</IndexNumber>
+
       <IndexIcon>
         <WindPowerIcon />
       </IndexIcon>

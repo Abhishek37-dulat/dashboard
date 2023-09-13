@@ -1,6 +1,9 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ItemMain from "./ItemMain";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCarts } from "../../redux/actions/CartAction";
+import { getAllSaves } from "../../redux/actions/SavedAction";
 
 const AllCommentBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -37,15 +40,22 @@ const CommentMainBox = styled(Box)(({ theme }) => ({
 }));
 
 const SavedItem = () => {
+  const dispatch = useDispatch();
+  const { SaveData } = useSelector((state) => state.Saves);
+  useEffect(() => {
+    dispatch(getAllSaves());
+  }, [dispatch]);
+  console.log(SaveData);
   return (
     <AllCommentBox>
       <CommetPageTitle>
         <Typography>
-          Total Saved Item: <b style={{ color: "#5A73CD" }}>1458</b>
+          Total Saved Item:{" "}
+          <b style={{ color: "#5A73CD" }}>{SaveData?.length}</b>
         </Typography>
       </CommetPageTitle>
       <CommentMainBox>
-        <ItemMain />
+        <ItemMain data={SaveData} />
       </CommentMainBox>
     </AllCommentBox>
   );

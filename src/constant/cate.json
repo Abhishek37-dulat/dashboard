@@ -1,0 +1,20 @@
+{
+  "AllCate": [
+    "Logo",
+    "Home",
+    "Contact Us",
+    "Help Me",
+    "About Us",
+    "Before And After",
+    "FAQs",
+    "Gender Selection Image"
+  ],
+  "Logo": ["Logo"],
+  "Home": ["Poster", "Hair Transformation", "Why Meneology", "Marquee"],
+  "Contact Us": ["Mobile", "Email", "Address"],
+  "Help Me": ["Help Me"],
+  "About Us": ["About Us"],
+  "Before And After": ["Before And After", "Before And After Title"],
+  "FAQs": ["FAQs", "FAQs Title"],
+  "Gender Selection Image": ["Male image", "Female image"]
+}

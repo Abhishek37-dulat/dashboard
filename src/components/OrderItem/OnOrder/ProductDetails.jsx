@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import ProductDetailSingle from "./ProductDetailSingle";
+import { useSelector } from "react-redux";
 
 const CommetPageTitle = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -35,7 +36,7 @@ const Ticket2 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ProductDetail = () => {
+const ProductDetail = ({ orderDetails }) => {
   return (
     <CommetPageTitle>
       <Ticket1>
@@ -49,9 +50,11 @@ const ProductDetail = () => {
         <Typography>Amount</Typography>
         <Typography>Balance Qty</Typography>
       </Ticket2>
-      <ProductDetailSingle />
-      <ProductDetailSingle />
-      <ProductDetailSingle />
+      {orderDetails?.items?.map((data, index) => {
+        return (
+          <ProductDetailSingle key={data._id} Number={index} data={data} />
+        );
+      })}
     </CommetPageTitle>
   );
 };

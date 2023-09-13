@@ -8,10 +8,12 @@ import {
   Alert,
 } from "@mui/material";
 import gsap from "gsap";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { authenticatesLogin } from "../../service/api";
 import { DataContext } from "../../context/authContext";
+import { useDispatch } from "react-redux";
+import Home from "../../pages/Home/Home";
 
 const LoginBox = styled(Box)(({ theme }) => ({
   width: "100%",

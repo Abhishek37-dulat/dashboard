@@ -16,6 +16,7 @@ import {
   styled,
   InputAdornment,
   Avatar,
+  Button,
 } from "@mui/material";
 import ntc from "ntc-hi-js";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -27,6 +28,9 @@ import { getAllCategories } from "../../redux/actions/CategoriesAction";
 import { getAllColors } from "../../redux/actions/ColorsAction";
 import { addNewProduct } from "../../redux/actions/ProductAction";
 import hair from "../../assets/image/Laptop2-removeb.png";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -191,6 +195,99 @@ const AddProductColor = styled(Box)(({ theme }) => ({
   justifyContent: "flex-start",
   alignItem: "center",
   padding: "5px",
+}));
+
+const AddProductDensity = styled(Box)(({ theme }) => ({
+  // border: "1px solid black",
+  width: "99%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItem: "center",
+  padding: "5px",
+  "& > div": {
+    // border: "1px solid black",
+    width: "99%",
+    display: "flex",
+    flexDirection: "Column",
+    justifyContent: "flex-start",
+    alignItem: "center",
+    padding: "5px",
+    "& > div": {
+      // border: "1px solid black",
+      width: "99%",
+      display: "flex",
+      flexDirection: "Column",
+      justifyContent: "flex-start",
+      alignItem: "center",
+      padding: "5px",
+      "& > input": {
+        height: "40px",
+        width: "40px",
+        border: "none",
+        outline: "none",
+        // boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+        marginTop: "10px",
+        borderRadius: "5px",
+        cursor: "pointer",
+      },
+    },
+  },
+}));
+
+const AddProductSteps = styled(Box)(({ theme }) => ({
+  // border: "1px solid black",
+  width: "99%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItem: "center",
+  padding: "5px",
+  "& > div": {
+    // border: "1px solid black",
+    width: "99%",
+    display: "flex",
+    flexDirection: "Column",
+    justifyContent: "flex-start",
+    alignItem: "center",
+    padding: "5px",
+    "& > div": {
+      // border: "1px solid black",
+      width: "99%",
+      display: "flex",
+      flexDirection: "Column",
+      justifyContent: "flex-start",
+      alignItem: "center",
+      padding: "5px",
+      "& > input": {
+        height: "40px",
+        width: "200px",
+        border: "none",
+        outline: "none",
+        boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+        marginTop: "10px",
+        padding: "0px 15px",
+        borderRadius: "5px",
+      },
+      "& > textarea": {
+        border: "none",
+        outline: "none",
+        boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+        marginTop: "10px",
+        resize: "none",
+        width: "98%",
+        height: "150px",
+        padding: "10px 15px",
+        fontSize: "16px",
+        borderRadius: "5px",
+      },
+      "& > p": {
+        color: "#5A73CD",
+        fontSize: "18px",
+        fontFamily: "'Tektur', cursive",
+      },
+    },
+  },
 }));
 
 const AddProductSize = styled(Box)(({ theme }) => ({
@@ -371,6 +468,14 @@ const AddProduct = () => {
   const [toggleProductPrice, setToggleProductPrice] = useState(false);
   const [toggleProductCategorie, setToggleProductCategorie] = useState(false);
   const [toggleProductImage, setToggleProductImage] = useState(false);
+  const [toggleProductlength, setToggleProductlength] = useState(false);
+  const [toggleProductbreadth, setToggleProductbreadth] = useState(false);
+  const [toggleProductheight, setToggleProductheight] = useState(false);
+  const [toggleProductweight, setToggleProductweight] = useState(false);
+  const [toggleProductdensity, setToggleProductdensity] = useState(false);
+  const [toggleProductgender, setToggleProductgender] = useState(false);
+  const [toggleProductstepButton, setToggleProductstepButton] = useState(false);
+  const [toggleProductshowstep, setToggleProductshowstep] = useState(false);
   // const [toggleProductName, setToggleProductName] = useState(false);
   // ***********************************
   // ***********************************
@@ -394,6 +499,14 @@ const AddProduct = () => {
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("");
   const [imagePrint, setImagePrint] = useState([]);
+  const [genders, setGenders] = useState("");
+  const [video, setVideo] = useState("");
+  const [stepsAll, setStepsAll] = useState([]);
+  const [density, setDensity] = useState(false);
+  const [stepsInputTitle, setStepsInputTitle] = useState("");
+  const [stepsInputDes, setStepsInputDes] = useState("");
+  const [stepsInputLink, setStepsInputLink] = useState("");
+  const [countStep, setCountStep] = useState(1);
 
   const [constantValues, setConstantValues] = useState({
     productname: "",
@@ -402,7 +515,22 @@ const AddProduct = () => {
     productcostprice: "",
     productdiscount: "",
     productquantity: "",
+    productlength: "",
+    productbreadth: "",
+    productheight: "",
+    productweight: "",
   });
+
+  const [numOfInputs, setNumOfInputs] = useState(0); // Initial number of input boxes
+
+  const handleNumOfInputsChange = (event) => {
+    setToggleProductshowstep(!toggleProductshowstep);
+    setToggleProductstepButton(!toggleProductstepButton);
+  };
+
+  const handleStepRemove = (event) => {
+    setToggleProductstepButton(!toggleProductstepButton);
+  };
 
   const handleCategorieChange = (e) => {
     setSubCategorie([]);
@@ -522,7 +650,51 @@ const AddProduct = () => {
       }));
     }
   };
+  const handleGenderSelectChange = (e) => {
+    setGenders(e.target.value);
+  };
+
+  const handleVieoSelectChange = (e) => {
+    setVideo(e.target.value);
+  };
+
+  const handledensitySelectChange = (e) => {
+    setDensity(!density);
+  };
+
+  const handledeleteStepSaved = (id) => {
+    console.log(id);
+    const data = stepsAll.filter((item) => item.id !== id);
+    setStepsAll([...data]);
+  };
+
+  const stepsSubmit = (e) => {
+    e.preventDefault();
+    console.log(stepsInputTitle);
+    if (stepsInputTitle === "") {
+      return handleOpenalert("please Enter valid Title", "error");
+    } else if (stepsInputDes === "") {
+      return handleOpenalert("please Enter valid Description", "error");
+    } else if (stepsInputLink === "") {
+      return handleOpenalert("please Enter valid Link", "error");
+    } else {
+      setStepsAll([
+        ...stepsAll,
+        {
+          title: stepsInputTitle,
+          description: stepsInputDes,
+          link: stepsInputLink,
+          id: countStep,
+        },
+      ]);
+      setToggleProductstepButton(!toggleProductstepButton);
+      setToggleProductshowstep(!toggleProductshowstep);
+      setCountStep(countStep + 1);
+    }
+  };
+
   const handleSubmitForm = async (e) => {
+    console.log("imageAll:::", imageAll);
     e.preventDefault();
 
     constantValues.productname === ""
@@ -540,9 +712,24 @@ const AddProduct = () => {
     constantValues.productcostprice === ""
       ? setToggleProductPrice(true)
       : setToggleProductPrice(false);
+    constantValues.productlength === "" || constantValues.productlength <= 0.5
+      ? setToggleProductlength(true)
+      : setToggleProductlength(false);
+    constantValues.productbreadth === "" || constantValues.productbreadth <= 0.5
+      ? setToggleProductbreadth(true)
+      : setToggleProductbreadth(false);
+    constantValues.productheight === "" || constantValues.productheight <= 0.5
+      ? setToggleProductheight(true)
+      : setToggleProductheight(false);
+    constantValues.productweight === "" || constantValues.productweight <= 0
+      ? setToggleProductweight(true)
+      : setToggleProductweight(false);
     mainCategorie === ""
       ? setToggleProductCategorie(true)
       : setToggleProductCategorie(false);
+    genders === ""
+      ? setToggleProductgender(true)
+      : setToggleProductgender(false);
     imageAll.length <= 0
       ? setToggleProductImage(true)
       : setToggleProductImage(false);
@@ -552,6 +739,10 @@ const AddProduct = () => {
       constantValues.productquantity > 0 &&
       constantValues.productdescription !== "" &&
       constantValues.productcostprice !== "" &&
+      constantValues.productlength > 0.5 &&
+      constantValues.productbreadth > 0.5 &&
+      constantValues.productheight > 0.5 &&
+      constantValues.productweight > 0 &&
       mainCategorie !== "" &&
       imageAll.length > 0
     ) {
@@ -583,8 +774,16 @@ const AddProduct = () => {
         product_categories: tempCategorieData,
         product_price: constantValues.productcostprice,
         product_discount: constantValues.productdiscount,
+        product_length: constantValues.productlength,
+        product_breadth: constantValues.productbreadth,
+        product_height: constantValues.productheight,
+        product_weight: constantValues.productweight,
+        product_gender: genders,
+        product_density: density,
+        product_video: video,
+        product_steps: stepsAll,
       };
-
+      console.log("finalData::::::::", finalData);
       dispatch(addNewProduct(finalData));
       setConstantValues({
         productname: "",
@@ -593,13 +792,22 @@ const AddProduct = () => {
         productcostprice: "",
         productdiscount: "",
         productquantity: "",
+        productlength: "",
+        productbreadth: "",
+        productheight: "",
+        productweight: "",
       });
+      setMainCategorie("");
       setSubCategorie([]);
       setColorSelect([]);
       setImageAll([]);
       setSizeAll([]);
       setSizeInput("");
       setSizeType("");
+      setVideo("");
+      setDensity("");
+      setStepsAll([]);
+      setGenders("");
     }
   };
 
@@ -611,8 +819,13 @@ const AddProduct = () => {
       productdescription: "",
       productcostprice: "",
       productdiscount: "",
-      productquantity: 0,
+      productquantity: "",
+      productlength: "",
+      productbreadth: "",
+      productheight: "",
+      productweight: "",
     });
+    setMainCategorie("");
     setSubCategorie([]);
     setColorSelect([]);
     setImageAll([]);
@@ -633,7 +846,16 @@ const AddProduct = () => {
     });
     setAllColorData(updatedColorData);
   }, [ColorData]);
-
+  console.log(
+    "steps: ",
+    stepsAll,
+    " Density: ",
+    density,
+    " Video: ",
+    video,
+    "gender: ",
+    genders
+  );
   return (
     <AddProducts>
       <Snackbar
@@ -779,6 +1001,35 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductCategorie ? "Please Select Product Categorie*" : null}
           </Typography>
+          <Typography>Product Gender</Typography>
+          <AddProductColor>
+            <FormControl>
+              <RadioGroup
+                aria-label="gender"
+                name="gender"
+                value={genders}
+                onChange={(e) => handleGenderSelectChange(e)}
+              >
+                <FormControlLabel
+                  value="Male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="Female"
+                  control={<Radio />}
+                  label="Female"
+                />
+              </RadioGroup>
+              <FormHelperText>
+                Select Gender <span style={{ color: "red" }}>*</span>
+              </FormHelperText>
+            </FormControl>
+          </AddProductColor>
+          <Typography style={{ fontSize: "12px", color: "red" }}>
+            {toggleProductgender ? "Product Gender required*" : null}
+          </Typography>
+
           <Typography>Product Colors</Typography>
           <AddProductColor>
             <FormControl>
@@ -936,6 +1187,182 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductImage ? "Please Select atleast One Image*" : null}
           </Typography>
+          <Typography style={{ marginTop: "20px" }}>
+            Product Density:
+          </Typography>
+          <AddProductDensity>
+            <Box>
+              <Box>
+                <Typography style={{ color: "#252F43" }}>
+                  Density Present:
+                </Typography>
+                <input
+                  type="checkBox"
+                  value={density}
+                  onChange={() => handledensitySelectChange()}
+                  style={{ border: "none", outline: "none" }}
+                  placeholder={`Youtube Video Link  example: www.youtube.com`}
+                />
+              </Box>
+
+              <Box style={{ marginBottom: "20px" }}></Box>
+            </Box>
+          </AddProductDensity>
+          <Typography style={{ marginTop: "20px" }}>Product Video:</Typography>
+          <AddProductSteps>
+            <Box>
+              <Box>
+                <Typography style={{ color: "#252F43" }}>
+                  Enter Video Link
+                </Typography>
+                <input
+                  type="text"
+                  value={video}
+                  onChange={(e) => handleVieoSelectChange(e)}
+                  placeholder={`Youtube Video Link  example: www.youtube.com`}
+                  style={{ width: "98%" }}
+                />
+              </Box>
+
+              <Box style={{ marginBottom: "20px" }}></Box>
+            </Box>
+          </AddProductSteps>
+          <Typography>Steps Details:</Typography>
+          <AddProductSteps>
+            <Box>
+              <Box
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
+              >
+                {stepsAll?.length > 0
+                  ? stepsAll?.map((data, index) => {
+                      return (
+                        <Box
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                            padding: "10px",
+                            boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                            margin: "5px 0px",
+                          }}
+                        >
+                          <Typography>Title: {data.title}</Typography>
+                          <Typography>
+                            Video Link: <a href={data.link}>{data.link}</a>
+                          </Typography>
+                          <Typography>
+                            Description: {data.description}
+                          </Typography>
+                          <Button
+                            style={{ color: "red" }}
+                            onClick={() => handledeleteStepSaved(data.id)}
+                          >
+                            Delete
+                          </Button>
+                        </Box>
+                      );
+                    })
+                  : null}
+              </Box>
+              <Box>
+                {toggleProductshowstep ? (
+                  <>
+                    <hr
+                      style={{
+                        marginTop: "10px",
+                        color: "red",
+                        border: "1px solid #EEEFF1",
+                      }}
+                    />
+                    <Typography style={{ marginTop: "10px" }}>Step:</Typography>
+                    <Typography style={{ color: "#252F43" }}>
+                      Enter Title
+                    </Typography>
+                    <input
+                      type="text"
+                      value={stepsInputTitle}
+                      onChange={(e) => setStepsInputTitle(e.target.value)}
+                      placeholder={`Enter Title`}
+                      style={{ width: "98%" }}
+                    />
+                    <Typography style={{ color: "#252F43" }}>
+                      Enter Description
+                    </Typography>
+                    <textarea
+                      type="text"
+                      value={stepsInputDes}
+                      onChange={(e) => setStepsInputDes(e.target.value)}
+                      placeholder={`Enter Description`}
+                    />
+                    <Typography style={{ color: "#252F43" }}>
+                      Enter Video Link
+                    </Typography>
+                    <input
+                      type="text"
+                      value={stepsInputLink}
+                      onChange={(e) => setStepsInputLink(e.target.value)}
+                      placeholder={`Youtube Video Link  example: www.youtube.com`}
+                      style={{ width: "98%" }}
+                    />
+                  </>
+                ) : (
+                  ""
+                )}
+
+                <Box style={{ marginBottom: "20px" }}></Box>
+              </Box>
+              {toggleProductstepButton ? (
+                <>
+                  <Box>
+                    <Button
+                      onClick={stepsSubmit}
+                      style={{
+                        backgroundColor: "#2DB484",
+                        color: "#fff",
+                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Save Step
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button
+                      onClick={handleStepRemove}
+                      style={{
+                        backgroundColor: "#B73130",
+                        color: "#fff",
+                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Remove Step
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Box>
+                    <Button
+                      onClick={handleNumOfInputsChange}
+                      style={{
+                        backgroundColor: "#1976D2",
+                        color: "#fff",
+                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Add Steps
+                    </Button>
+                  </Box>
+                </>
+              )}
+            </Box>
+          </AddProductSteps>
           <AddProductPrice>
             <Box>
               <Box>
@@ -999,6 +1426,104 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductPrice ? "Product Price required**" : null}
           </Typography>
+          <AddProductPrice>
+            <Box>
+              <Box>
+                <Typography>Product Dimension</Typography>
+              </Box>
+              <Box>
+                <AddProductPriceMoney>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      length<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">cms</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productlength"
+                      type="number"
+                      value={constantValues.productlength}
+                      onChange={(e) => handleConstantProductValues(e)}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductlength ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceMoney>
+
+                <AddProductPriceDiscount>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      breadth<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">cms</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productbreadth"
+                      value={constantValues.productbreadth}
+                      onChange={(e) => handleConstantProductValues(e)}
+                      type="number"
+                      inputProps={{ maxLength: 2 }}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductbreadth ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceDiscount>
+
+                <AddProductPriceMoney>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      height<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">cms</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productheight"
+                      type="number"
+                      value={constantValues.productheight}
+                      onChange={(e) => handleConstantProductValues(e)}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductheight ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceMoney>
+
+                <AddProductPriceDiscount>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      weight<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">Kg</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productweight"
+                      value={constantValues.productweight}
+                      onChange={(e) => handleConstantProductValues(e)}
+                      type="number"
+                      inputProps={{ maxLength: 2 }}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductweight ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceDiscount>
+              </Box>
+            </Box>
+          </AddProductPrice>
           <AddProductButtons>
             <button
               style={{ backgroundColor: "#2DB484" }}

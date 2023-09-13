@@ -16,6 +16,10 @@ import {
   styled,
   InputAdornment,
   Avatar,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Button,
 } from "@mui/material";
 import ntc from "ntc-hi-js";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -30,6 +34,7 @@ import {
   updateNewProduct,
 } from "../../redux/actions/ProductAction";
 import hair from "../../assets/image/Laptop2-removeb.png";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -194,6 +199,99 @@ const AddProductColor = styled(Box)(({ theme }) => ({
   justifyContent: "flex-start",
   alignItem: "center",
   padding: "5px",
+}));
+
+const AddProductDensity = styled(Box)(({ theme }) => ({
+  // border: "1px solid black",
+  width: "99%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItem: "center",
+  padding: "5px",
+  "& > div": {
+    // border: "1px solid black",
+    width: "99%",
+    display: "flex",
+    flexDirection: "Column",
+    justifyContent: "flex-start",
+    alignItem: "center",
+    padding: "5px",
+    "& > div": {
+      // border: "1px solid black",
+      width: "99%",
+      display: "flex",
+      flexDirection: "Column",
+      justifyContent: "flex-start",
+      alignItem: "center",
+      padding: "5px",
+      "& > input": {
+        height: "40px",
+        width: "40px",
+        border: "none",
+        outline: "none",
+        // boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+        marginTop: "10px",
+        borderRadius: "5px",
+        cursor: "pointer",
+      },
+    },
+  },
+}));
+
+const AddProductSteps = styled(Box)(({ theme }) => ({
+  // border: "1px solid black",
+  width: "99%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItem: "center",
+  padding: "5px",
+  "& > div": {
+    // border: "1px solid black",
+    width: "99%",
+    display: "flex",
+    flexDirection: "Column",
+    justifyContent: "flex-start",
+    alignItem: "center",
+    padding: "5px",
+    "& > div": {
+      // border: "1px solid black",
+      width: "99%",
+      display: "flex",
+      flexDirection: "Column",
+      justifyContent: "flex-start",
+      alignItem: "center",
+      padding: "5px",
+      "& > input": {
+        height: "40px",
+        width: "200px",
+        border: "none",
+        outline: "none",
+        boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+        marginTop: "10px",
+        padding: "0px 15px",
+        borderRadius: "5px",
+      },
+      "& > textarea": {
+        border: "none",
+        outline: "none",
+        boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+        marginTop: "10px",
+        resize: "none",
+        width: "98%",
+        height: "150px",
+        padding: "10px 15px",
+        fontSize: "16px",
+        borderRadius: "5px",
+      },
+      "& > p": {
+        color: "#5A73CD",
+        fontSize: "18px",
+        fontFamily: "'Tektur', cursive",
+      },
+    },
+  },
 }));
 
 const AddProductSize = styled(Box)(({ theme }) => ({
@@ -385,9 +483,10 @@ const BoxforPreImg = styled(Box)(({ theme }) => ({
 
 const AddProduct = () => {
   const dispatch = useDispatch();
-  const { CategorieData } = useSelector((state) => state.Categories);
-  const { ColorData } = useSelector((state) => state.Colors);
-  const { singleProduct } = useSelector((state) => state.Products);
+  const navigate = useNavigate();
+  const { CategorieData } = useSelector((state) => state?.Categories);
+  const { ColorData } = useSelector((state) => state?.Colors);
+  const { singleProduct } = useSelector((state) => state?.Products);
   const preImageDisplay = useRef();
   // ***********************************
   // ***********************************
@@ -401,6 +500,13 @@ const AddProduct = () => {
   const [toggleProductPrice, setToggleProductPrice] = useState(false);
   const [toggleProductCategorie, setToggleProductCategorie] = useState(false);
   const [toggleProductImage, setToggleProductImage] = useState(false);
+  const [toggleProductlength, setToggleProductlength] = useState(false);
+  const [toggleProductbreadth, setToggleProductbreadth] = useState(false);
+  const [toggleProductheight, setToggleProductheight] = useState(false);
+  const [toggleProductweight, setToggleProductweight] = useState(false);
+  const [toggleProductgender, setToggleProductgender] = useState(false);
+  const [toggleProductstepButton, setToggleProductstepButton] = useState(false);
+  const [toggleProductshowstep, setToggleProductshowstep] = useState(false);
   // const [toggleProductName, setToggleProductName] = useState(false);
   // ***********************************
   // ***********************************
@@ -409,10 +515,10 @@ const AddProduct = () => {
 
   const [allColorData, setAllColorData] = useState([]);
   const ImageInputRef = useRef(null);
-  const [mainCategorie, setMainCategorie] = useState("");
+  const [mainCategorie, setMainCategorie] = useState([]);
   const [subCategorie, setSubCategorie] = useState([]);
   const [colorSelect, setColorSelect] = useState([]);
-  const [sizeType, setSizeType] = useState("");
+  const [sizeType, setSizeType] = useState([]);
   const [sizeInput, setSizeInput] = useState("");
   const [imageInput, setImageInput] = useState("");
   const [sizeAll, setSizeAll] = useState([]);
@@ -424,6 +530,14 @@ const AddProduct = () => {
   const [preLoadedImages, setPreLoadedImages] = useState([]);
   const [preLoadedImagesBoolean, setPreLoadedImagesBoolean] = useState(false);
   const [preLoadedImagesIndex, setPreLoadedImagesIndex] = useState("");
+  const [genders, setGenders] = useState("");
+  const [video, setVideo] = useState("");
+  const [stepsAll, setStepsAll] = useState([]);
+  const [density, setDensity] = useState(false);
+  const [stepsInputTitle, setStepsInputTitle] = useState("");
+  const [stepsInputDes, setStepsInputDes] = useState("");
+  const [stepsInputLink, setStepsInputLink] = useState("");
+  const [countStep, setCountStep] = useState(1);
 
   const [constantValues, setConstantValues] = useState({
     productname: "",
@@ -432,12 +546,25 @@ const AddProduct = () => {
     productcostprice: "",
     productdiscount: "",
     productquantity: "",
+    productlength: "",
+    productbreadth: "",
+    productheight: "",
+    productweight: "",
   });
+  const handleNumOfInputsChange = (event) => {
+    setToggleProductshowstep(!toggleProductshowstep);
+    setToggleProductstepButton(!toggleProductstepButton);
+  };
+
+  const handleStepRemove = (event) => {
+    setToggleProductshowstep(!toggleProductshowstep);
+    setToggleProductstepButton(!toggleProductstepButton);
+  };
 
   const handleCategorieChange = (e) => {
     setSubCategorie([]);
     // console.log(e.target.value);
-    setMainCategorie(e.target.value);
+    setMainCategorie([e.target.value]);
   };
   const handleSubCategorieChange = (e) => {
     e.preventDefault();
@@ -445,11 +572,11 @@ const AddProduct = () => {
   };
   const handleSizeChange = (e) => {
     e.preventDefault();
-    setSizeType(e.target.value);
+    setSizeType([e.target.value]);
   };
   const sizeSubmit = (e) => {
     e.preventDefault();
-    if (sizeType === "") {
+    if (sizeType.length <= 0) {
       return handleOpenalert("please select valid filled", "error");
     } else if (sizeInput === "") {
       return handleOpenalert("please Enter valid size", "error");
@@ -468,7 +595,7 @@ const AddProduct = () => {
   const handleChipDelete = (e, number) => {
     e.preventDefault();
 
-    const filteredArray = sizeAll.filter(
+    const filteredArray = sizeAll?.filter(
       (item) => sizeAll?.indexOf(item) !== number
     );
     setSizeAll(filteredArray);
@@ -476,7 +603,6 @@ const AddProduct = () => {
 
   const imageSubmit = (e) => {
     e.preventDefault();
-    console.log(imageInput[0]);
     if (imageInput === "") {
       return handleOpenalert("please Select Image", "error");
     } else {
@@ -488,7 +614,7 @@ const AddProduct = () => {
           setImagePrint([...imagePrint, e.target.result]);
         };
 
-        reader.readAsDataURL(imageInput[0]);
+        reader?.readAsDataURL(imageInput[0]);
       } else {
         console.log("Image Error");
       }
@@ -508,14 +634,58 @@ const AddProduct = () => {
     e.preventDefault();
     // console.log(number);
   };
+
+  const handleGenderSelectChange = (e) => {
+    setGenders(e.target.value);
+  };
+
+  const handleVieoSelectChange = (e) => {
+    setVideo(e.target.value);
+  };
+
+  const handledensitySelectChange = (e) => {
+    setDensity(!density);
+  };
+
+  const handledeleteStepSaved = (id) => {
+    console.log(id);
+    const data = stepsAll.filter((item) => item.id !== id);
+    setStepsAll([...data]);
+  };
+
+  const stepsSubmit = (e) => {
+    e.preventDefault();
+    console.log(stepsInputTitle);
+    if (stepsInputTitle === "") {
+      return handleOpenalert("please Enter valid Title", "error");
+    } else if (stepsInputDes === "") {
+      return handleOpenalert("please Enter valid Description", "error");
+    } else if (stepsInputLink === "") {
+      return handleOpenalert("please Enter valid Link", "error");
+    } else {
+      setStepsAll([
+        ...stepsAll,
+        {
+          title: stepsInputTitle,
+          description: stepsInputDes,
+          link: stepsInputLink,
+          id: countStep,
+        },
+      ]);
+      setToggleProductstepButton(!toggleProductstepButton);
+      setToggleProductshowstep(!toggleProductshowstep);
+      setCountStep(countStep + 1);
+    }
+  };
+
   const handleImageDelete = (e, number) => {
     e.preventDefault();
 
-    const filteredArray = imageAll.filter(
+    const filteredArray = imageAll?.filter(
       (item) => imageAll?.indexOf(item) !== number
     );
     setImageAll(filteredArray);
-    const filteredArrayImage = imagePrint.filter(
+    const filteredArrayImage = imagePrint?.filter(
       (item) => imagePrint?.indexOf(item) !== number
     );
     setImagePrint(filteredArrayImage);
@@ -564,43 +734,66 @@ const AddProduct = () => {
     // preImageDisplay.current.style.display = "none";
   };
   const handlePreImageDelete = (e, data) => {
-    const newImages = preLoadedImages.filter((image) => image !== data);
+    const newImages = preLoadedImages?.filter((image) => image !== data);
     setPreLoadedImages(newImages);
   };
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+    console.log("Heloo");
 
-    constantValues.productname === ""
+    constantValues?.productname === ""
       ? setToggleProductName(true)
       : setToggleProductName(false);
-    constantValues.producttagline === ""
+    constantValues?.producttagline === ""
       ? setToggleProductTagline(true)
       : setToggleProductTagline(false);
-    constantValues.productquantity > 0
+    constantValues?.productquantity === ""
       ? setToggleProductQty(false)
       : setToggleProductQty(true);
-    constantValues.productdescription === ""
+    constantValues?.productdescription === ""
       ? setToggleProductDes(true)
       : setToggleProductDes(false);
-    constantValues.productcostprice === ""
+    constantValues?.productcostprice === ""
       ? setToggleProductPrice(true)
       : setToggleProductPrice(false);
-    mainCategorie === ""
+    mainCategorie.length <= 0
       ? setToggleProductCategorie(true)
       : setToggleProductCategorie(false);
-    imageAll.length <= 0 && preLoadedImages.length === 0
+    constantValues?.productlength === "" || constantValues?.productlength <= 0.5
+      ? setToggleProductlength(true)
+      : setToggleProductlength(false);
+    constantValues?.productbreadth === "" ||
+    constantValues?.productbreadth <= 0.5
+      ? setToggleProductbreadth(false)
+      : setToggleProductbreadth(true);
+    constantValues?.productheight === "" || constantValues?.productheight <= 0.5
+      ? setToggleProductheight(true)
+      : setToggleProductheight(false);
+    constantValues?.productweight === "" || constantValues?.productweight <= 0
+      ? setToggleProductweight(true)
+      : setToggleProductweight(false);
+    genders === ""
+      ? setToggleProductgender(true)
+      : setToggleProductgender(false);
+    imageAll?.length <= 0 && preLoadedImages?.length === 0
       ? setToggleProductImage(true)
       : setToggleProductImage(false);
+
+    console.log("1");
     if (
-      constantValues.productname !== "" &&
-      constantValues.producttagline !== "" &&
-      constantValues.productquantity > 0 &&
-      constantValues.productdescription !== "" &&
-      constantValues.productcostprice !== "" &&
-      mainCategorie !== "" &&
-      (imageAll.length > 0 || preLoadedImages.length > 0)
+      constantValues?.productname !== "" &&
+      constantValues?.producttagline !== "" &&
+      constantValues?.productquantity > 0 &&
+      constantValues?.productdescription !== "" &&
+      constantValues?.productcostprice !== "" &&
+      constantValues?.productlength > 0.5 &&
+      constantValues?.productbreadth > 0.5 &&
+      constantValues?.productheight > 0.5 &&
+      constantValues?.productweight > 0 &&
+      (imageAll?.length > 0 || preLoadedImages?.length > 0)
     ) {
+      console.log("imageAll, preLoadedImages: ", imageAll, preLoadedImages);
       // -----------------------
       // -----------------------
       // -----------------------
@@ -608,7 +801,7 @@ const AddProduct = () => {
         return { name: data };
       });
       const tempCategorieData = {
-        name: CategorieData[mainCategorie].name,
+        name: CategorieData[mainCategorie[0]]?.name,
         subCategories: tempSubCategorieData,
       };
       const tempColorData = colorSelect?.map((data) => {
@@ -618,35 +811,53 @@ const AddProduct = () => {
       // -----------------------
       // -----------------------
       // -----------------------
+      console.log(constantValues);
       const finalData = {
-        product_title: constantValues.productname,
-        product_tagline: constantValues.producttagline,
-        product_qty: constantValues.productquantity,
-        product_description: constantValues.productdescription,
+        product_title: constantValues?.productname,
+        product_tagline: constantValues?.producttagline,
+        product_qty: constantValues?.productquantity,
+        product_description: constantValues?.productdescription,
         product_image: imageAll,
         product_color_tags: tempColorData,
         product_size_tags: sizeAll,
         product_categories: tempCategorieData,
-        product_price: constantValues.productcostprice,
-        product_discount: constantValues.productdiscount,
+        product_price: constantValues?.productcostprice,
+        product_discount: constantValues?.productdiscount,
         preImages: preLoadedImages,
+        product_length: constantValues?.productlength,
+        product_breadth: constantValues?.productbreadth,
+        product_height: constantValues?.productheight,
+        product_weight: constantValues?.productweight,
+        product_gender: genders,
+        product_density: density,
+        product_video: video,
+        product_steps: stepsAll,
       };
-      console.log("preLoadedImages: ", preLoadedImages);
-      dispatch(updateNewProduct(singleProduct._id, finalData));
-      // setConstantValues({
-      //   productname: "",
-      //   producttagline: "",
-      //   productdescription: "",
-      //   productcostprice: "",
-      //   productdiscount: "",
-      //   productquantity: "",
-      // });
-      // setSubCategorie([]);
-      // setColorSelect([]);
-      // setImageAll([]);
-      // setSizeAll([]);
-      // setSizeInput("");
-      // setSizeType("");
+      console.log("preLoadedImages: ", finalData);
+      dispatch(updateNewProduct(singleProduct?._id, finalData));
+      setConstantValues({
+        productname: "",
+        producttagline: "",
+        productdescription: "",
+        productcostprice: "",
+        productdiscount: "",
+        productquantity: "",
+        productlength: "",
+        productbreadth: "",
+        productheight: "",
+        productweight: "",
+        product_gender: "",
+        product_density: "",
+        product_video: "",
+        product_steps: [],
+      });
+      setSubCategorie([]);
+      setColorSelect([]);
+      setImageAll([]);
+      setSizeAll([]);
+      setSizeInput("");
+      setSizeType([]);
+      navigate("/products");
     }
   };
 
@@ -658,14 +869,14 @@ const AddProduct = () => {
       productdescription: "",
       productcostprice: "",
       productdiscount: "",
-      productquantity: 0,
+      productquantity: "",
     });
     setSubCategorie([]);
     setColorSelect([]);
     setImageAll([]);
     setSizeAll([]);
     setSizeInput("");
-    setSizeType("");
+    setSizeType([]);
   };
 
   useEffect(() => {
@@ -674,14 +885,13 @@ const AddProduct = () => {
   }, [dispatch]);
   useEffect(() => {
     const updatedColorData = ColorData?.map((item) => {
-      const n_match = ntc.name(item.colorname, "en");
-      const colorV = n_match.color.name;
-      return { id: item._id, colorname: colorV };
+      const n_match = ntc?.name(item?.colorname, "en");
+      const colorV = n_match?.color?.name;
+      return { id: item?._id, colorname: colorV };
     });
     setAllColorData(updatedColorData);
   }, [ColorData]);
-
-  useEffect(() => {
+  const firstDataFetch = async () => {
     setConstantValues({
       productname: singleProduct?.product_title,
       producttagline: singleProduct?.product_tagline,
@@ -689,36 +899,75 @@ const AddProduct = () => {
       productcostprice: singleProduct?.product_price,
       productdiscount: singleProduct?.product_discount,
       productquantity: singleProduct?.product_qty,
+      productlength: singleProduct?.product_length,
+      productbreadth: singleProduct?.product_breadth,
+      productheight: singleProduct?.product_height,
+      productweight: singleProduct?.product_weight,
     });
-    const tempSub = singleProduct?.product_categories[0].subCategories.map(
+    setDensity(
+      singleProduct?.product_density ? singleProduct?.product_density : ""
+    );
+    setGenders(
+      singleProduct?.product_gender ? singleProduct?.product_gender : ""
+    );
+    setVideo(singleProduct?.product_video ? singleProduct?.product_video : "");
+
+    const tempSub = singleProduct?.product_categories[0]?.subCategories?.map(
       (data) => {
-        return data.name;
+        return data?.name;
       }
     );
-    CategorieData.map((data, index) => {
-      if (data.name === singleProduct?.product_categories[0]?.name) {
-        setMainCategorie(index);
+    for (var i = 0; i < CategorieData?.length; i++) {
+      if (
+        CategorieData[i]?.name === singleProduct?.product_categories[0]?.name
+      ) {
+        setMainCategorie([i]);
+        console.log(i);
+        break;
       }
-    });
+    }
+    console.log("singleProduct: ", singleProduct);
+    // await CategorieData.map((data, index) => {
+    //   if (data.name === singleProduct?.product_categories[0]?.name) {
+    //     setMainCategorie(index);
+    //     break;
+    //   }
+    // });
     setSubCategorie(tempSub);
 
-    const tempColors = singleProduct?.product_color_tags.map((data) => {
+    const tempColors = singleProduct?.product_color_tags?.map((data) => {
       return data.name;
     });
     setColorSelect(tempColors);
 
-    const tempSizes = singleProduct?.product_size_tags.map((data) => {
-      return { size: data.size, type: data.type };
+    const tempSizes = singleProduct?.product_size_tags?.map((data) => {
+      return { size: data?.size, type: data?.type };
     });
     setSizeAll(tempSizes);
+
+    const tempSteps = singleProduct?.product_steps?.map((data, index) => {
+      return {
+        title: data?.title,
+        description: data?.description,
+        link: data?.link,
+        id: index + 1,
+      };
+    });
+    setStepsAll(tempSteps);
+    setCountStep(tempSteps?.length + 1);
 
     const newImages = singleProduct?.product_image?.map((data) => `${data}`);
     setPreLoadedImages(newImages);
 
     setImageAll([]);
     setSizeInput("");
-    setSizeType("");
+    setSizeType([]);
+  };
+  useEffect(() => {
+    firstDataFetch();
   }, [singleProduct, CategorieData]);
+
+  console.log("countStep:::::", countStep);
   return (
     <AddProducts>
       <Snackbar
@@ -745,7 +994,7 @@ const AddProduct = () => {
                   sx={{ width: 20, height: 20, color: "#2DB484" }}
                 />
               </span>
-              <span style={{ color: "#252F43" }}>ADD PRODUCTS</span>
+              <span style={{ color: "#252F43" }}>EDIT PRODUCTS</span>
             </Typography>
           </AddProductLogo>
           <Typography>
@@ -756,7 +1005,7 @@ const AddProduct = () => {
               type="text"
               placeholder="Enter Product name"
               name="productname"
-              value={constantValues.productname}
+              value={constantValues?.productname}
               onChange={(e) => handleConstantProductValues(e)}
             />
           </AddProductTitle>
@@ -771,7 +1020,7 @@ const AddProduct = () => {
               type="text"
               placeholder="Enter Taglines For Your Products"
               name="producttagline"
-              value={constantValues.producttagline}
+              value={constantValues?.producttagline}
               onChange={(e) => handleConstantProductValues(e)}
             />
           </AddProductTitle>
@@ -786,7 +1035,7 @@ const AddProduct = () => {
               type="number"
               placeholder="Enter Product Quantity in numbers"
               name="productquantity"
-              value={constantValues.productquantity}
+              value={constantValues?.productquantity}
               onChange={(e) => handleConstantProductValues(e)}
             />
           </AddProductTitle>
@@ -802,7 +1051,7 @@ const AddProduct = () => {
             <textarea
               placeholder="Enter Product Description..."
               name="productdescription"
-              value={constantValues.productdescription}
+              value={constantValues?.productdescription}
               onChange={(e) => handleConstantProductValues(e)}
             />
           </AddProductDes>
@@ -818,7 +1067,7 @@ const AddProduct = () => {
             <Box>
               <FormControl sx={{ m: 1, minWidth: 120 }}>
                 <Select
-                  value={mainCategorie}
+                  value={mainCategorie ? mainCategorie : []}
                   onChange={handleCategorieChange}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
@@ -826,9 +1075,9 @@ const AddProduct = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  {CategorieData.map((data, index) => (
-                    <MenuItem key={data.id} value={index}>
-                      {data.name}
+                  {CategorieData?.map((data, index) => (
+                    <MenuItem key={data?.id} value={index}>
+                      {data?.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -842,18 +1091,20 @@ const AddProduct = () => {
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
                   multiple
-                  value={subCategorie}
+                  value={subCategorie ? subCategorie : []}
                   onChange={handleSubCategorieChange}
                   input={<OutlinedInput label="Tag" />}
-                  renderValue={(selected) => selected.join(", ")}
+                  renderValue={(selected) => selected?.join(", ")}
                   MenuProps={MenuProps}
                 >
-                  {CategorieData[mainCategorie]?.subCategories?.map((data) => (
-                    <MenuItem key={data.id} value={data.name}>
+                  {CategorieData[
+                    mainCategorie ? mainCategorie : []
+                  ]?.subCategories?.map((data) => (
+                    <MenuItem key={data?.id} value={data?.name}>
                       <Checkbox
-                        checked={subCategorie?.indexOf(data.name) > -1}
+                        checked={subCategorie?.indexOf(data?.name) > -1}
                       />
-                      <ListItemText primary={data.name} />
+                      <ListItemText primary={data?.name} />
                     </MenuItem>
                   ))}
                 </Select>
@@ -864,6 +1115,36 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductCategorie ? "Please Select Product Categorie*" : null}
           </Typography>
+          <Typography>
+            Product Gender <span style={{ color: "red" }}>*</span>
+          </Typography>
+          <AddProductColor>
+            <FormControl>
+              <RadioGroup
+                aria-label="gender"
+                name="gender"
+                value={genders}
+                onChange={(e) => handleGenderSelectChange(e)}
+              >
+                <FormControlLabel
+                  value="Male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="Female"
+                  control={<Radio />}
+                  label="Female"
+                />
+              </RadioGroup>
+              <FormHelperText>
+                Select Gender <span style={{ color: "red" }}>*</span>
+              </FormHelperText>
+            </FormControl>
+          </AddProductColor>
+          <Typography style={{ fontSize: "12px", color: "red" }}>
+            {toggleProductgender ? "Product Gender required*" : null}
+          </Typography>
           <Typography>Product Colors</Typography>
           <AddProductColor>
             <FormControl>
@@ -872,25 +1153,25 @@ const AddProduct = () => {
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
-                value={colorSelect}
+                value={colorSelect ? colorSelect : []}
                 onChange={handleColorSelectChange}
                 input={<OutlinedInput label="Tag" />}
-                renderValue={(selected) => selected.join(", ")}
+                renderValue={(selected) => selected?.join(", ")}
                 MenuProps={MenuProps}
               >
                 {allColorData?.map((data, index) => (
                   <MenuItem
                     style={{
-                      backgroundColor: `${ColorData[index].colorname}`,
+                      backgroundColor: `${ColorData[index]?.colorname}`,
                       color: "#D9E0E6",
                     }}
-                    key={data._id}
-                    value={data.colorname}
+                    key={data?._id}
+                    value={data?.colorname}
                   >
                     <Checkbox
-                      checked={colorSelect?.indexOf(data.colorname) > -1}
+                      checked={colorSelect?.indexOf(data?.colorname) > -1}
                     />
-                    <ListItemText primary={data.colorname} />
+                    <ListItemText primary={data?.colorname} />
                   </MenuItem>
                 ))}
               </Select>
@@ -912,7 +1193,7 @@ const AddProduct = () => {
                   />
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <Select
-                      value={sizeType}
+                      value={sizeType ? sizeType : []}
                       onChange={handleSizeChange}
                       displayEmpty
                       inputProps={{ "aria-label": "Without label" }}
@@ -920,7 +1201,7 @@ const AddProduct = () => {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {SizeData.map((data, index) => (
+                      {SizeData?.map((data, index) => (
                         <MenuItem key={index} value={data}>
                           {data}
                         </MenuItem>
@@ -936,7 +1217,7 @@ const AddProduct = () => {
                 {sizeAll?.map((data, index) => (
                   <Chip
                     key={index}
-                    label={data.size + " " + data.type}
+                    label={data?.size + " " + data?.type}
                     onClick={(e) => handleChipClick(e, index)}
                     onDelete={(e) => handleChipDelete(e, index)}
                     deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
@@ -996,9 +1277,9 @@ const AddProduct = () => {
                     sx={{ height: "50px" }}
                     key={index}
                     label={
-                      (data.name.name.length > 7
-                        ? data.name.name.substring(0, 7) + "..."
-                        : data.name.name) +
+                      (data?.name?.name?.length > 7
+                        ? data?.name?.name?.substring(0, 7) + "..."
+                        : data?.name?.name) +
                       " => " +
                       "Image: " +
                       (index + 1)
@@ -1021,7 +1302,7 @@ const AddProduct = () => {
                   return (
                     <Box key={index}>
                       <img
-                        src={`http://localhost:5643/images/${data}`}
+                        src={`${process.env.REACT_APP_URL}/images/${data}`}
                         alt={data + index}
                         onMouseEnter={(e) => handleMouseEnterImage(e, index)}
                         onMouseLeave={(e) => handleMouseLeaveImage(e, index)}
@@ -1050,6 +1331,184 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductImage ? "Please Select atleast One Image*" : null}
           </Typography>
+
+          <Typography style={{ marginTop: "20px" }}>
+            Product Density:
+          </Typography>
+          <AddProductDensity>
+            <Box>
+              <Box>
+                <Typography style={{ color: "#252F43" }}>
+                  Density Present:
+                </Typography>
+                <input
+                  type="checkBox"
+                  value={density}
+                  onChange={() => handledensitySelectChange()}
+                  style={{ border: "none", outline: "none" }}
+                  placeholder={`Youtube Video Link  example: www.youtube.com`}
+                />
+              </Box>
+
+              <Box style={{ marginBottom: "20px" }}></Box>
+            </Box>
+          </AddProductDensity>
+          <Typography style={{ marginTop: "20px" }}>Product Video:</Typography>
+          <AddProductSteps>
+            <Box>
+              <Box>
+                <Typography style={{ color: "#252F43" }}>
+                  Enter Video Link
+                </Typography>
+                <input
+                  type="text"
+                  value={video}
+                  onChange={(e) => handleVieoSelectChange(e)}
+                  placeholder={`Youtube Video Link  example: www.youtube.com`}
+                  style={{ width: "98%" }}
+                />
+              </Box>
+
+              <Box style={{ marginBottom: "20px" }}></Box>
+            </Box>
+          </AddProductSteps>
+          <Typography>Steps Details:</Typography>
+          <AddProductSteps>
+            <Box>
+              <Box
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
+              >
+                {stepsAll?.length > 0
+                  ? stepsAll?.map((data, index) => {
+                      return (
+                        <Box
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                            padding: "10px",
+                            boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                            margin: "5px 0px",
+                          }}
+                        >
+                          <Typography>Title: {data.title}</Typography>
+                          <Typography>
+                            Video Link: <a href={data.link}>{data.link}</a>
+                          </Typography>
+                          <Typography>
+                            Description: {data.description}
+                          </Typography>
+                          <Button
+                            style={{ color: "red" }}
+                            onClick={() => handledeleteStepSaved(data.id)}
+                          >
+                            Delete
+                          </Button>
+                        </Box>
+                      );
+                    })
+                  : null}
+              </Box>
+              <Box>
+                {toggleProductshowstep ? (
+                  <>
+                    <hr
+                      style={{
+                        marginTop: "10px",
+                        color: "red",
+                        border: "1px solid #EEEFF1",
+                      }}
+                    />
+                    <Typography style={{ marginTop: "10px" }}>Step:</Typography>
+                    <Typography style={{ color: "#252F43" }}>
+                      Enter Title
+                    </Typography>
+                    <input
+                      type="text"
+                      value={stepsInputTitle}
+                      onChange={(e) => setStepsInputTitle(e.target.value)}
+                      placeholder={`Enter Title`}
+                      style={{ width: "98%" }}
+                    />
+                    <Typography style={{ color: "#252F43" }}>
+                      Enter Description
+                    </Typography>
+                    <textarea
+                      type="text"
+                      value={stepsInputDes}
+                      onChange={(e) => setStepsInputDes(e.target.value)}
+                      placeholder={`Enter Description`}
+                    />
+                    <Typography style={{ color: "#252F43" }}>
+                      Enter Video Link
+                    </Typography>
+                    <input
+                      type="text"
+                      value={stepsInputLink}
+                      onChange={(e) => setStepsInputLink(e.target.value)}
+                      placeholder={`Youtube Video Link  example: www.youtube.com`}
+                      style={{ width: "98%" }}
+                    />
+                  </>
+                ) : (
+                  ""
+                )}
+
+                <Box style={{ marginBottom: "20px" }}></Box>
+              </Box>
+              {toggleProductstepButton ? (
+                <>
+                  <Box>
+                    <Button
+                      onClick={stepsSubmit}
+                      style={{
+                        backgroundColor: "#2DB484",
+                        color: "#fff",
+                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Save Step
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button
+                      onClick={handleStepRemove}
+                      style={{
+                        backgroundColor: "#B73130",
+                        color: "#fff",
+                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Remove Step
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Box>
+                    <Button
+                      onClick={handleNumOfInputsChange}
+                      style={{
+                        backgroundColor: "#1976D2",
+                        color: "#fff",
+                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Add Steps
+                    </Button>
+                  </Box>
+                </>
+              )}
+            </Box>
+          </AddProductSteps>
+
           <AddProductPrice>
             <Box>
               <Box>
@@ -1069,7 +1528,7 @@ const AddProduct = () => {
                       label="Amount"
                       name="productcostprice"
                       type="number"
-                      value={constantValues.productcostprice}
+                      value={constantValues?.productcostprice}
                       onChange={(e) => handleConstantProductValues(e)}
                     />
                   </FormControl>
@@ -1086,7 +1545,7 @@ const AddProduct = () => {
                       }
                       label="Amount"
                       name="productdiscount"
-                      value={constantValues.productdiscount}
+                      value={constantValues?.productdiscount}
                       onChange={(e) => handleConstantProductValues(e)}
                       type="number"
                       inputProps={{ maxLength: 2 }}
@@ -1100,9 +1559,9 @@ const AddProduct = () => {
                   <span style={{ fontSize: "20px", color: "#5A73CD" }}>
                     ₹
                     {(
-                      constantValues.productcostprice -
-                      (constantValues.productcostprice *
-                        constantValues.productdiscount) /
+                      constantValues?.productcostprice -
+                      (constantValues?.productcostprice *
+                        constantValues?.productdiscount) /
                         100
                     ).toFixed(2)}
                   </span>
@@ -1113,12 +1572,110 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductPrice ? "Product Price required**" : null}
           </Typography>
+          <AddProductPrice>
+            <Box>
+              <Box>
+                <Typography>Product Dimension</Typography>
+              </Box>
+              <Box>
+                <AddProductPriceMoney>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      length<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">cms</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productlength"
+                      type="number"
+                      value={constantValues?.productlength}
+                      onChange={(e) => handleConstantProductValues(e)}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductlength ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceMoney>
+
+                <AddProductPriceDiscount>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      breadth<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">cms</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productbreadth"
+                      value={constantValues?.productbreadth}
+                      onChange={(e) => handleConstantProductValues(e)}
+                      type="number"
+                      inputProps={{ maxLength: 2 }}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductbreadth ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceDiscount>
+
+                <AddProductPriceMoney>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      height<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">cms</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productheight"
+                      type="number"
+                      value={constantValues?.productheight}
+                      onChange={(e) => handleConstantProductValues(e)}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductheight ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceMoney>
+
+                <AddProductPriceDiscount>
+                  <FormControl fullWidth sx={{ m: 1 }}>
+                    <InputLabel htmlFor="outlined-adornment-amount">
+                      weight<span style={{ color: "red" }}>*</span>
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      endAdornment={
+                        <InputAdornment position="end">Kg</InputAdornment>
+                      }
+                      label="Amount"
+                      name="productweight"
+                      value={constantValues?.productweight}
+                      onChange={(e) => handleConstantProductValues(e)}
+                      type="number"
+                      inputProps={{ maxLength: 2 }}
+                    />
+                  </FormControl>
+                  <Typography style={{ fontSize: "12px", color: "red" }}>
+                    {toggleProductweight ? "enter valid value*" : null}
+                  </Typography>
+                </AddProductPriceDiscount>
+              </Box>
+            </Box>
+          </AddProductPrice>
           <AddProductButtons>
             <button
               style={{ backgroundColor: "#2DB484" }}
               onClick={(e) => handleSubmitForm(e)}
             >
-              Submit
+              Save
             </button>
             <button
               style={{ backgroundColor: "#C6A762" }}

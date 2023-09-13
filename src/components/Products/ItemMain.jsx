@@ -8,7 +8,7 @@ import ImportExportIcon from "@mui/icons-material/ImportExport";
 import CategoryIcon from "@mui/icons-material/Category";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import ItemRow from "./ItemRow";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../../redux/actions/ProductAction";
@@ -268,9 +268,23 @@ const ItemMain = () => {
               </tr>
             </thead>
             <tbody>
-              {ProductData?.map((data) => (
-                <ItemRow data={data} />
-              ))}
+              {ProductData?.length > 0 ? (
+                ProductData?.map((data) => <ItemRow data={data} />)
+              ) : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <CircularProgress />
+                  <Typography style={{ color: "#BAC0C7" }}>
+                    Loading...
+                  </Typography>
+                </Box>
+              )}
             </tbody>
           </table>
         </ProductTable>

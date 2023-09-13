@@ -10,6 +10,8 @@ import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import ItemRow from "./ItemRow";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrders } from "../../redux/actions/OrdersAction";
 
 const ProductSearch = styled(Box)(({ theme }) => ({
   //   border: "1px solid black",
@@ -227,6 +229,7 @@ const ProductTable = styled(Box)(({ theme }) => ({
 }));
 
 const ItemMain = () => {
+  const dispatch = useDispatch();
   const [dateToggle, setDateToggle] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -234,6 +237,8 @@ const ItemMain = () => {
   const handleDate = () => {
     setDateToggle(!dateToggle);
   };
+
+  const { OrderData } = useSelector((state) => state.Orders);
   useEffect(() => {
     setDateData({ from: fromDate, to: toDate });
     if (dateData.from !== "" && dateData.to !== "") {
@@ -241,6 +246,11 @@ const ItemMain = () => {
     }
   }, [toDate, setToDate]);
   console.log(dateData);
+
+  useEffect(() => {
+    dispatch(getAllOrders());
+  }, [dispatch]);
+
   return (
     <>
       <ProductSearch>
@@ -344,18 +354,16 @@ const ItemMain = () => {
               </tr>
             </thead>
             <tbody>
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
-              <ItemRow Id={"#41231"} />
+              {OrderData?.map((data, index) => {
+                return (
+                  <ItemRow
+                    key={data._id}
+                    Number={index}
+                    Id={data._id}
+                    data={data}
+                  />
+                );
+              })}
             </tbody>
           </table>
         </ProductTable>

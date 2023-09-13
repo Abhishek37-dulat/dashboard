@@ -47,6 +47,7 @@ const CategorieMainCat = styled(Box)(({ theme }) => ({
 
 const PreExistData = ({ data }) => {
   const [open, setOpen] = useState(false);
+  console.log("Predata: ", data);
 
   const handleClickOpen = () => {
     setOpen(true);

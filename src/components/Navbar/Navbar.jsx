@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -15,6 +15,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import hairP from "../../assets/image/hair.png";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import Flags from "country-flag-icons/react/3x2";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { DataContext } from "../../context/authContext";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const StaticBar = styled(Box)(({ Theme }) => ({
   //   border: "1px solid black",
@@ -199,8 +202,38 @@ const NavBarContainerBottom = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
+const ProfileDropDown = styled(Box)(({ theme }) => ({
+  // border: "1px solid black",
+  width: "100px",
+  height: "50px",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  marginLeft: "-100px",
+  marginTop: "90px",
+  backgroundColor: "#fff",
+  boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
+  "&>div": {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    cursor: "pointer",
+    padding: "4px 2px",
+    ":hover": {
+      backgroundColor: "#BAC0C7",
+    },
+    ":active": {
+      transform: "scale(0.98)",
+    },
+  },
+}));
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const leftmainside = useRef();
   const dashboardRef = useRef();
   const productRef = useRef();
   const orderRef = useRef();
@@ -220,6 +253,8 @@ const Navbar = () => {
   const [sidebarmanager, setSidebarmanager] = useState(0);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [countryCode, setCountryCode] = useState("");
+  const [toggleLogout, setToggleLogout] = useState(false);
+  const { account, setAccountStatus } = useContext(DataContext);
 
   // const Flag = Flags['']
 
@@ -332,6 +367,15 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
     }
   };
+  const handleLogoutFunction = () => {
+    setToggleLogout(!toggleLogout);
+  };
+  const handleClearLocalHost = () => {
+    localStorage.removeItem("admintoken");
+    localStorage.removeItem("adminrefreshtoken");
+    setAccountStatus(false);
+    navigate("/login");
+  };
   const changeByStyling = (item, bitem) => {
     item.backgroundColor = "#5A73CD";
     item.color = "#fff";
@@ -350,6 +394,10 @@ const Navbar = () => {
     item.fontSize = "";
     bitem.borderRight = "";
   };
+  const handleScreenLeft = () => {
+    leftmainside.current.style.display = "block";
+    leftmainside.current.style.zIndex = "999";
+  };
 
   useEffect(() => {
     const getlocalvalue = async () => {
@@ -357,24 +405,30 @@ const Navbar = () => {
       console.log("V: ", value);
       if (value == 0) {
         changeByStyling(
-          dashboardRef.current.style,
-          bdashboardRef.current.style
+          dashboardRef?.current?.style,
+          bdashboardRef?.current?.style
         );
       }
       if (value == 1) {
-        changeByStyling(productRef.current.style, bproductRef.current.style);
+        changeByStyling(
+          productRef?.current?.style,
+          bproductRef?.current?.style
+        );
       }
       if (value == 2) {
-        changeByStyling(orderRef.current.style, borderRef.current.style);
+        changeByStyling(orderRef?.current?.style, borderRef?.current?.style);
       }
       if (value == 3) {
-        changeByStyling(cartRef.current.style, bcartRef.current.style);
+        changeByStyling(cartRef?.current?.style, bcartRef?.current?.style);
       }
       if (value == 4) {
-        changeByStyling(saveRef.current.style, bsaveRef.current.style);
+        changeByStyling(saveRef?.current?.style, bsaveRef?.current?.style);
       }
       if (value == 5) {
-        changeByStyling(commentRef.current.style, bcommentRef.current.style);
+        changeByStyling(
+          commentRef?.current?.style,
+          bcommentRef?.current?.style
+        );
       }
       setSidebarmanager(value);
     };
@@ -392,23 +446,22 @@ const Navbar = () => {
   useEffect(() => {
     fetch("http://ip-api.com/json")
       .then((response) => response.json())
-      .then((data) => setCountryCode(data.countryCode))
+      .then((data) => setCountryCode(data?.countryCode))
       .catch((error) => console.error("Error fetching country:", error));
   }, []);
 
   const { year, month, day, hours, minutes, seconds } = {
-    year: currentDateTime.getFullYear(),
-    month: currentDateTime.getMonth() + 1,
-    day: currentDateTime.getDate(),
-    hours: currentDateTime.getHours(),
-    minutes: currentDateTime.getMinutes(),
-    seconds: currentDateTime.getSeconds(),
+    year: currentDateTime?.getFullYear(),
+    month: currentDateTime?.getMonth() + 1,
+    day: currentDateTime?.getDate(),
+    hours: currentDateTime?.getHours(),
+    minutes: currentDateTime?.getMinutes(),
+    seconds: currentDateTime?.getSeconds(),
   };
 
   const timeZone = currentDateTime
-    .toLocaleString("en-US", { timeZoneName: "short" })
-    .split(" ")[2];
-
+    ?.toLocaleString("en-US", { timeZoneName: "short" })
+    ?.split(" ")[2];
   return (
     <>
       <StaticBar>
@@ -421,7 +474,10 @@ const Navbar = () => {
           <NavBarLeft>
             <LeftInitialBox>
               <IconButton aria-label="menu">
-                <WidgetsIcon sx={{ width: 36, height: 36 }} />
+                <WidgetsIcon
+                  onClick={() => handleScreenLeft()}
+                  sx={{ width: 36, height: 36 }}
+                />
               </IconButton>
             </LeftInitialBox>
             <LeftTimeBox>
@@ -472,19 +528,53 @@ const Navbar = () => {
                 <NotificationsIcon color="action" />
               </Badge>
             </IconButton>
-            <IconButton>
-              <Avatar
+            <IconButton
+              style={{
+                padding: "10px",
+                borderRadius: "5px",
+                boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                backgroundColor: "#5A73CD",
+                color: "#fff",
+                textTransform: "capitalize",
+                margin: "5px",
+              }}
+              onClick={() => handleLogoutFunction()}
+            >
+              {/* <Avatar
                 alt="Remy Sharp"
                 src={hairP}
                 sx={{ width: 24, height: 24 }}
-              />
-              <Typography style={{ marginLeft: "5px" }}>Hair man</Typography>
+              /> */}
+              <Typography
+                style={{
+                  marginLeft: "5px",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <span>{account[0]?.userExits?.first_name}</span>{" "}
+                <span style={{ marginTop: "5px" }}>
+                  {" "}
+                  <KeyboardArrowDownIcon />
+                </span>
+              </Typography>
             </IconButton>
+            {toggleLogout ? (
+              <ProfileDropDown>
+                <Box onClick={() => handleClearLocalHost()}>
+                  <LogoutIcon />
+                  &#160;
+                  <Typography>Logout</Typography>
+                </Box>
+              </ProfileDropDown>
+            ) : null}
           </NavBarRight>
         </NavBarContainerTop>
         <NavBarContainerBottom></NavBarContainerBottom>
       </OuterNavbar>
-      <SideBar>
+      <SideBar ref={leftmainside}>
         <LogoBox>
           <span></span>
           <p>Hair</p>

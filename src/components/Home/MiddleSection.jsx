@@ -1,9 +1,17 @@
 import { Box, IconButton, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import WindPowerIcon from "@mui/icons-material/WindPower";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DonutSmallIcon from "@mui/icons-material/DonutSmall";
 import FireTruckIcon from "@mui/icons-material/FireTruck";
+import { useDispatch, useSelector } from "react-redux";
+import { getTodayOrder } from "../../redux/actions/OrdersAction";
+import { useNavigate } from "react-router-dom";
+import { CA } from "country-flag-icons/react/3x2";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
+import AttachmentIcon from "@mui/icons-material/Attachment";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import { getAllUser } from "../../redux/actions/UserAction";
 
 const MiddleSectionBox = styled(Box)(({ theme }) => ({
   // border: "1px solid black",
@@ -18,11 +26,12 @@ const MiddleSectionTopall = styled(Box)(({ theme }) => ({
   flexDirection: "row",
   padding: "5px",
   marginTop: "10px",
+  flexWrap: "wrap",
 }));
 
 const MiddleSectionTop1 = styled(Box)(({ theme }) => ({
   // border: "1px solid black",
-  width: "33%",
+  width: "30%",
   height: "150px",
   margin: "1%",
   display: "flex",
@@ -115,6 +124,18 @@ const BoxBottomIcon = styled(Box)(({ theme }) => ({
 }));
 
 const MiddleSection = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { OrderData, CanceledOrder } = useSelector((state) => state.Orders);
+  const { UserData } = useSelector((state) => state.Users);
+
+  const handleViewAllOrder = (e) => {
+    navigate("/order");
+  };
+  useEffect(() => {
+    dispatch(getTodayOrder());
+    dispatch(getAllUser());
+  }, [dispatch]);
   return (
     <MiddleSectionBox>
       <MiddleSectionTopall>
@@ -132,13 +153,16 @@ const MiddleSection = () => {
               <Typography
                 sx={{ fontSize: "36px", color: "#1976D2", fontWeight: "500" }}
               >
-                #5000
+                #{OrderData?.length}
               </Typography>
             </Boxdetails>
           </BoxTop>
           <BoxBottom>
             <BoxButton>
-              <button style={{ backgroundColor: "#1976D2" }}>
+              <button
+                style={{ backgroundColor: "#1976D2" }}
+                onClick={(e) => handleViewAllOrder(e)}
+              >
                 View All Orders
               </button>
             </BoxButton>
@@ -177,13 +201,16 @@ const MiddleSection = () => {
               <Typography
                 sx={{ fontSize: "36px", color: "#2DB484", fontWeight: "500" }}
               >
-                #4875
+                #{UserData?.length}
               </Typography>
             </Boxdetails>
           </BoxTop>
           <BoxBottom>
             <BoxButton>
-              <button style={{ backgroundColor: "#2DB484" }}>
+              <button
+                style={{ backgroundColor: "#2DB484" }}
+                onClick={() => navigate("/allusers")}
+              >
                 View All Users
               </button>
             </BoxButton>
@@ -222,7 +249,7 @@ const MiddleSection = () => {
               <Typography
                 sx={{ fontSize: "36px", color: "#E93E3E", fontWeight: "500" }}
               >
-                #256
+                #{CanceledOrder?.length}
               </Typography>
             </Boxdetails>
           </BoxTop>
@@ -251,6 +278,88 @@ const MiddleSection = () => {
                 />
               </Typography>
             </BoxBottomIcon>
+          </BoxBottom>
+        </MiddleSectionTop1>
+        {/* <MiddleSectionTop1>
+          <BoxTop>
+            <BoxIcon>
+              <IconButton>
+                <AttachmentIcon
+                  sx={{ width: 42, height: 42, color: "#FDB308" }}
+                />
+              </IconButton>
+            </BoxIcon>
+            <Boxdetails>
+              <Typography sx={{ color: "#252F43" }}>New Logo</Typography>
+            </Boxdetails>
+          </BoxTop>
+          <BoxBottom
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <BoxButton onClick={() => navigate("/logo")}>
+              <button style={{ backgroundColor: "#FDB308" }}>ADD LOGO</button>
+            </BoxButton>
+          </BoxBottom>
+        </MiddleSectionTop1> */}
+        <MiddleSectionTop1>
+          <BoxTop>
+            <BoxIcon>
+              <IconButton>
+                <ViewCarouselIcon
+                  sx={{ width: 42, height: 42, color: "#252F43" }}
+                />
+              </IconButton>
+            </BoxIcon>
+            <Boxdetails>
+              <Typography sx={{ color: "#252F43" }}>All Banner's</Typography>
+            </Boxdetails>
+          </BoxTop>
+          <BoxBottom
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <BoxButton>
+              <button
+                style={{ backgroundColor: "#252F43" }}
+                onClick={() => navigate("/banner")}
+              >
+                ADD BANNER
+              </button>
+            </BoxButton>
+          </BoxBottom>
+        </MiddleSectionTop1>
+        <MiddleSectionTop1>
+          <BoxTop>
+            <BoxIcon>
+              <IconButton>
+                <DynamicFeedIcon
+                  sx={{ width: 42, height: 42, color: "#CEBCB2" }}
+                />
+              </IconButton>
+            </BoxIcon>
+            <Boxdetails>
+              <Typography sx={{ color: "#252F43" }}>Edit Pages</Typography>
+            </Boxdetails>
+          </BoxTop>
+          <BoxBottom
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <BoxButton>
+              <button
+                style={{ backgroundColor: "#CEBCB2" }}
+                onClick={() => navigate("/poster")}
+              >
+                Page Details
+              </button>
+            </BoxButton>
           </BoxBottom>
         </MiddleSectionTop1>
       </MiddleSectionTopall>

@@ -27,7 +27,6 @@ const DeleteBoxButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const ColorLists = ({ name, colorId }) => {
-  console.log("name: ", name);
   const n_match = ntc.name(name, "en");
   const dispatch = useDispatch();
 

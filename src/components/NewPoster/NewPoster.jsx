@@ -211,6 +211,7 @@ const NewPoster = () => {
     title: "",
     description: "",
     image: null,
+    location: "",
   });
   const { PostData } = useSelector((state) => state.Posts);
   const [deleteObjectData, setDeleteObjectData] = useState();
@@ -253,6 +254,25 @@ const NewPoster = () => {
       [index]: !predata[index],
     }));
   };
+
+  let imageRead = (formData1, selectedValueDisplay) => {
+    const reader = new FileReader();
+    if (formData1.image) {
+      reader.readAsDataURL(formData1.image);
+      reader.onloadend = () => {
+        const finalData = {
+          title: formData1.title,
+          description: formData1.description,
+          image: reader.result,
+          location: formData1.location,
+          categorie: selectedValueDisplay,
+        };
+        dispatch(addNewPost(finalData));
+      };
+    } else {
+      console.log("not found");
+    }
+  };
   const handleSaveToggle = (e) => {
     if (selectedValueDisplay === "") {
       toast.error("Please Select Valid Categorie!", {
@@ -266,13 +286,8 @@ const NewPoster = () => {
         style: customSuccessToastStyleError,
       });
     } else {
-      const finalData = {
-        title: formData1.title,
-        description: formData1.description,
-        image: formData1.image,
-        categorie: selectedValueDisplay,
-      };
-      dispatch(addNewPost(finalData));
+      imageRead(formData1, selectedValueDisplay);
+      // dispatch(addNewPost(finalData));
 
       setToggleChangeLogo(!toggleChangeLogo);
       setFormData1({
@@ -375,6 +390,7 @@ const NewPoster = () => {
               selectedValueDisplay !== "Mobile" &&
               selectedValueDisplay !== "Email" &&
               selectedValueDisplay !== "Address" &&
+              selectedValueDisplay !== "Location" &&
               selectedValueDisplay !== "FAQs" &&
               selectedValueDisplay !== "Before And After" &&
               selectedValueDisplay !== "Before And After Title" &&
@@ -687,6 +703,28 @@ const NewPoster = () => {
                     )}
                   </Box>
                 </FieldBox>
+              ) : selectedValueDisplay === "Location" ? (
+                <FieldBox>
+                  <Box>
+                    <Typography>Enter Location</Typography>
+                    <input
+                      type="text"
+                      placeholder="Enter Location"
+                      name="title"
+                      value={formData1.location}
+                      onChange={(e) => handleFormDataChange(e)}
+                    />
+                    {errorTitle ? (
+                      <Typography
+                        style={{ color: "#E83E3E", fontSize: "14px" }}
+                      >
+                        please enter Location*
+                      </Typography>
+                    ) : (
+                      ""
+                    )}
+                  </Box>
+                </FieldBox>
               ) : selectedValueDisplay === "Address" ? (
                 <FieldBox>
                   <Box>
@@ -855,7 +893,7 @@ const NewPoster = () => {
                             data?.post_image?.length > 0 ? (
                               <img
                                 style={{ maxHeight: "150px" }}
-                                src={`${process.env.REACT_APP_URL}/images/${data?.post_image[0]}`}
+                                src={data?.post_image[0]?.url}
                                 alt="img1"
                               />
                             ) : (

@@ -39,10 +39,7 @@ const ProductDetailSingle = ({ Number, data }) => {
     <Ticket3>
       <Typography>
         {Number + 1}
-        <img
-          src={`${process.env.REACT_APP_URL}/images/${productDetails?.product_image[0]}`}
-          alt=""
-        />
+        <img src={productDetails?.product_image[0]?.url} alt="" />
       </Typography>
       <Typography>
         {productDetails?.product_title?.substring(0, 10) + "..."}

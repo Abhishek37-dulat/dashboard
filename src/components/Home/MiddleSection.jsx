@@ -11,6 +11,7 @@ import { CA } from "country-flag-icons/react/3x2";
 import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import AnimationIcon from "@mui/icons-material/Animation";
 import { getAllUser } from "../../redux/actions/UserAction";
 
 const MiddleSectionBox = styled(Box)(({ theme }) => ({
@@ -329,6 +330,35 @@ const MiddleSection = () => {
                 onClick={() => navigate("/banner")}
               >
                 ADD BANNER
+              </button>
+            </BoxButton>
+          </BoxBottom>
+        </MiddleSectionTop1>
+        <MiddleSectionTop1>
+          <BoxTop>
+            <BoxIcon>
+              <IconButton>
+                <AnimationIcon
+                  sx={{ width: 42, height: 42, color: "#252F43" }}
+                />
+              </IconButton>
+            </BoxIcon>
+            <Boxdetails>
+              <Typography sx={{ color: "#252F43" }}>Contact us</Typography>
+            </Boxdetails>
+          </BoxTop>
+          <BoxBottom
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <BoxButton>
+              <button
+                style={{ backgroundColor: "#252F43" }}
+                onClick={() => navigate("/contact")}
+              >
+                Contact Us
               </button>
             </BoxButton>
           </BoxBottom>

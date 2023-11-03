@@ -23,6 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAllCategories } from "../../redux/actions/CategoriesAction";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -109,6 +111,7 @@ const AllBanner = () => {
   const dispatch = useDispatch();
   const logoRef = useRef();
   const [logoImage, setLogoImage] = useState(null); // Store the uploaded image
+  const [finallogoImage, setfinalLogoImage] = useState(null);
   const [toggleChangeLogo, setToggleChangeLogo] = useState(false);
   const [toggleDelete, setToggleDelete] = useState(false);
   const [bannerTitle, setBannerTitle] = useState("");
@@ -119,6 +122,8 @@ const AllBanner = () => {
   const { CategorieData } = useSelector((state) => state.Categories);
   const [mainCategorie, setMainCategorie] = useState("");
   const [subCategorie, setSubCategorie] = useState([]);
+  const [value, setValue] = useState("");
+  console.log("value: ", value);
 
   const handleLogo = (e) => {
     if (logoRef.current) {
@@ -132,7 +137,25 @@ const AllBanner = () => {
       setToggleChangeLogo(true);
     }
   };
-
+  let imageRead = (img, bannerTitle, bannerDescription, tempCategorieData) => {
+    const reader = new FileReader();
+    if (img) {
+      reader.readAsDataURL(img);
+      reader.onloadend = () => {
+        setfinalLogoImage(reader.result);
+        dispatch(
+          addNewBanner({
+            image: reader.result,
+            title: bannerTitle,
+            description: bannerDescription,
+            categories: tempCategorieData,
+          })
+        );
+      };
+    } else {
+      console.log("not found");
+    }
+  };
   const handleSaveToggle = (e) => {
     if (mainCategorie === "") {
       toast.error("Please Select Categorie!", {
@@ -154,14 +177,14 @@ const AllBanner = () => {
           name: CategorieData[mainCategorie].name,
           subCategories: tempSubCategorieData,
         };
-        dispatch(
-          addNewBanner({
-            image: logoImage,
-            title: bannerTitle,
-            description: bannerDescription,
-            categories: tempCategorieData,
-          })
+        console.log(
+          logoImage,
+          bannerTitle,
+          bannerDescription,
+          tempCategorieData
         );
+        imageRead(logoImage, bannerTitle, bannerDescription, tempCategorieData);
+
         setToggleChangeLogo(!toggleChangeLogo);
       } else {
         toast.error("Please Select image!", {
@@ -196,7 +219,7 @@ const AllBanner = () => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
-  console.log(BannerData);
+  console.log(BannerData, logoImage);
 
   return (
     <BannerMainBox>
@@ -383,7 +406,7 @@ const AllBanner = () => {
               <Typography>{data?.title}</Typography>
               <img
                 style={{ maxHeight: "200px" }}
-                src={`${process.env.REACT_APP_URL}/images/${data?.banner_image[0]}`}
+                src={data?.banner_image[0]?.url}
                 alt={`banner-img-${index}`}
               />
               <IconButton

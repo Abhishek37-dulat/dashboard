@@ -187,7 +187,7 @@ const ItemMain = () => {
   const { ProductData } = useSelector((state) => state.Products);
   useEffect(() => {
     dispatch(getAllProduct());
-  }, [dispatch]);
+  }, []);
   return (
     <>
       <ProductSearch>

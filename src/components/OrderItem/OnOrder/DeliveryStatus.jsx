@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { Box, Typography, styled } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Typography, styled, Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { ListItems } from "../../../constant/db";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import "./DeliveryStatus.css";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import { ConditionDelete } from "../ConditionDelete";
 
 const CommetPageTitle = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -26,7 +30,6 @@ const Ticket1 = styled(Box)(({ theme }) => ({
 const Ticket2 = styled(Box)(({ theme }) => ({
   borderBottom: "1px solid #D9E0E6",
   width: "100%",
-  height: "50px",
   display: "flex",
   justifyContent: "flex-start",
   alignItems: "center",
@@ -40,19 +43,19 @@ const Ticket2 = styled(Box)(({ theme }) => ({
     position: "relative",
     width: "100%",
     "& > div": {
-      position: "absolute",
-      top: "-18px",
-      left: "0px",
-      // border: "1px solid #000",
-      boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
-
-      width: "200px",
-      height: "30px",
       display: "flex",
-      justifyContent: "center",
+      flexDirection: "row",
+      justifyContent: "space-between",
       alignItems: "center",
-      backgroundColor: "#fff",
-      cursor: "pointer",
+      width: "100%",
+      "& > div": {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        width: "50%",
+        marginLeft: "10%",
+      },
       "& > p": { color: "#252F43", marginRight: "8px", padding: "5px" },
       "& > ul": {
         // border: "1px solid #000",
@@ -153,14 +156,33 @@ const Ticket4 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const DeliveryStatus = () => {
+const DeliveryStatus = ({ orderDetails }) => {
   const [listDisplay, setListDisplay] = useState(false);
   const [listValue, setListValue] = useState();
+  const [approveStatus, setApproveStatus] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const [deleteObjectData, setDeleteObjectData] = useState();
+  const [requestStatus, setRequestStatus] = useState("");
 
   const handleListKeyValue = (key) => {
     setListValue(ListItems[key]);
     setListDisplay(false);
   };
+
+  const handleClickOpen = (data, statement) => {
+    setDeleteObjectData(data);
+    setRequestStatus(statement);
+    setOpen(true);
+  };
+  const handleCancelRequest = () => {
+    setApproveStatus(false);
+  };
+  useEffect(() => {
+    orderDetails?.order_status === "PENDING"
+      ? setApproveStatus("Request")
+      : setApproveStatus("");
+  }, [setApproveStatus, orderDetails]);
+  console.log(orderDetails);
 
   return (
     <CommetPageTitle>
@@ -169,56 +191,115 @@ const DeliveryStatus = () => {
       </Ticket1>
       <Ticket2>
         <Box>
-          <Box
-            style={{ padding: "5px" }}
-            onClick={() => setListDisplay(!listDisplay)}
-          >
-            <Typography>{listValue ? listValue : "Change Status"}</Typography>
-            <Typography style={{ position: "absolute", right: "4px" }}>
-              <FontAwesomeIcon icon={faCaretDown} />
-            </Typography>
-          </Box>
-          <Box
-            style={{
-              marginTop: "40px",
-              display: listDisplay ? "flex" : "none",
-            }}
-          >
-            <ul>
-              {ListItems.map((ListData, index) => (
-                <li key={index} onClick={() => handleListKeyValue(index)}>
-                  <Typography>{ListData}</Typography>
-                </li>
-              ))}
-            </ul>
+          <Typography>Order Details</Typography>
+          <Box>
+            <Box>
+              <Typography
+                style={{
+                  padding: "2px 20px",
+                  backgroundColor: "rgba(25,118,210,0.5)",
+                  color: "#fff",
+                  borderRadius: "7px",
+                }}
+              >
+                New
+              </Typography>
+            </Box>
+            <Box style={{ justifyContent: "flex-end", marginRight: "10%" }}>
+              <Button>CANCEL ORDER</Button>
+            </Box>
           </Box>
         </Box>
       </Ticket2>
-      <Ticket3>
-        <Box>
+      {orderDetails?.order_status === "CANCELED" ||
+      orderDetails?.order_status === "PENDING" ? (
+        <Ticket2>
           <Box>
-            <Typography>Length</Typography>
-            <input type="number" placeholder="Enter Length" />
+            <Typography>Payment Refund</Typography>
+            {approveStatus === "Request" ? (
+              <Typography
+                style={{
+                  padding: "10px",
+                  backgroundColor: "rgba(233,62,62,0.7)",
+                  color: "#fff",
+                  borderRadius: "5px",
+                }}
+              >
+                order cancellation request from user{" "}
+                <NewReleasesIcon
+                  className="blink"
+                  style={{ color: "rgba(233,62,62,1)" }}
+                />
+              </Typography>
+            ) : approveStatus === "Approved" ? (
+              <Typography
+                style={{
+                  padding: "10px",
+                  backgroundColor: "rgba(45,62,62,0.7)",
+                  color: "#fff",
+                  borderRadius: "5px",
+                }}
+              >
+                order cancellation Approved{" "}
+                <VerifiedIcon style={{ color: "rgba(45,62,62,1)" }} />
+              </Typography>
+            ) : approveStatus === "Denied" ? (
+              <Typography
+                style={{
+                  padding: "10px",
+                  backgroundColor: "rgba(198,167,98,0.7)",
+                  color: "#fff",
+                  borderRadius: "5px",
+                }}
+              >
+                Request Denied{" "}
+                <VerifiedIcon style={{ color: "rgba(198,167,98,1)" }} />
+              </Typography>
+            ) : null}
+
+            <Box>
+              <Box>
+                <Typography
+                  style={{
+                    padding: "2px 20px",
+                    backgroundColor: "rgba(25,118,210,0.5)",
+                    color: "#fff",
+                    borderRadius: "7px",
+                  }}
+                >
+                  ₹ {orderDetails?.total_amount?.toFixed()}
+                </Typography>
+              </Box>
+              <Box style={{ justifyContent: "flex-end", marginRight: "10%" }}>
+                <Button
+                  onClick={() => handleClickOpen(orderDetails, "Approved")}
+                >
+                  Approve
+                </Button>
+                <Button
+                  style={{ color: "#E75758" }}
+                  onClick={() => handleClickOpen(orderDetails, "Canceled")}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
           </Box>
-          <Box>
-            <Typography>Breadth</Typography>
-            <input type="number" placeholder="Enter breadth" />
-          </Box>
-          <Box>
-            <Typography>Height</Typography>
-            <input type="number" placeholder="Enter height" />
-          </Box>
-          <Box>
-            <Typography>Weight</Typography>
-            <input type="number" placeholder="Enter Weight" />
-          </Box>
-        </Box>
-      </Ticket3>
-      <Ticket4>
-        <Box>
-          <button>Submit</button>
-        </Box>
-      </Ticket4>
+        </Ticket2>
+      ) : (
+        ""
+      )}
+
+      <ConditionDelete
+        open={open}
+        setOpen={setOpen}
+        requestStatus={requestStatus}
+        handleClickOpen={handleClickOpen}
+        deleteObjectData={deleteObjectData}
+        approveStatus={approveStatus}
+        setApproveStatus={setApproveStatus}
+        orderId={orderDetails?._id}
+      />
     </CommetPageTitle>
   );
 };

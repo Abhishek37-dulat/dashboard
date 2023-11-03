@@ -195,11 +195,11 @@ const Logins = () => {
     !userDetails.password ? setpassword(true) : setpassword(false);
     if (userDetails.username && userDetails.password) {
       const data = await authenticatesLogin(userDetails);
-      if (data.status === 200) {
+      if (data?.status === 200) {
         setOpen(true);
         setConUserPas(false);
         setMessageColor("success");
-        setMessage(data.data.msg);
+        setMessage(data?.data?.msg);
         setAccountStatus(true);
         navigate("/");
       } else {
@@ -207,7 +207,7 @@ const Logins = () => {
         setOpen(true);
         setAccountStatus(false);
         setMessageColor("error");
-        setMessage(data.response.data.msg);
+        setMessage(data?.response?.data?.msg);
       }
     } else {
       setConUserPas(false);

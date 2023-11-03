@@ -530,6 +530,7 @@ const AddProduct = () => {
   const [preLoadedImages, setPreLoadedImages] = useState([]);
   const [preLoadedImagesBoolean, setPreLoadedImagesBoolean] = useState(false);
   const [preLoadedImagesIndex, setPreLoadedImagesIndex] = useState("");
+  const [preimageAll, setPreImageAll] = useState([]);
   const [genders, setGenders] = useState("");
   const [video, setVideo] = useState("");
   const [stepsAll, setStepsAll] = useState([]);
@@ -551,6 +552,27 @@ const AddProduct = () => {
     productheight: "",
     productweight: "",
   });
+
+  const uploadimage = (e) => {
+    const imdata = e.target.files;
+    console.log(imdata);
+    for (let x = 0; x < imdata.length; x++) {
+      imageRead(imdata[x]);
+    }
+  };
+  const imageRead = (img) => {
+    console.log(img);
+    const reader = new FileReader();
+    if (img) {
+      reader.readAsDataURL(img);
+      reader.onloadend = () => {
+        setImageAll((pre) => [...pre, reader.result]);
+      };
+    } else {
+      console.log("not found");
+    }
+  };
+
   const handleNumOfInputsChange = (event) => {
     setToggleProductshowstep(!toggleProductshowstep);
     setToggleProductstepButton(!toggleProductstepButton);
@@ -685,10 +707,10 @@ const AddProduct = () => {
       (item) => imageAll?.indexOf(item) !== number
     );
     setImageAll(filteredArray);
-    const filteredArrayImage = imagePrint?.filter(
-      (item) => imagePrint?.indexOf(item) !== number
-    );
-    setImagePrint(filteredArrayImage);
+    // const filteredArrayImage = imagePrint?.filter(
+    //   (item) => imagePrint?.indexOf(item) !== number
+    // );
+    // setImagePrint(filteredArrayImage);
   };
   const imageClearAll = (e) => {
     e.preventDefault();
@@ -734,8 +756,9 @@ const AddProduct = () => {
     // preImageDisplay.current.style.display = "none";
   };
   const handlePreImageDelete = (e, data) => {
-    const newImages = preLoadedImages?.filter((image) => image !== data);
-    setPreLoadedImages(newImages);
+    console.log(data);
+    const newImages = preimageAll?.filter((image) => image !== data);
+    setPreImageAll(newImages);
   };
 
   const handleSubmitForm = async (e) => {
@@ -765,8 +788,8 @@ const AddProduct = () => {
       : setToggleProductlength(false);
     constantValues?.productbreadth === "" ||
     constantValues?.productbreadth <= 0.5
-      ? setToggleProductbreadth(false)
-      : setToggleProductbreadth(true);
+      ? setToggleProductbreadth(true)
+      : setToggleProductbreadth(false);
     constantValues?.productheight === "" || constantValues?.productheight <= 0.5
       ? setToggleProductheight(true)
       : setToggleProductheight(false);
@@ -776,7 +799,7 @@ const AddProduct = () => {
     genders === ""
       ? setToggleProductgender(true)
       : setToggleProductgender(false);
-    imageAll?.length <= 0 && preLoadedImages?.length === 0
+    imageAll?.length <= 0 && preimageAll?.length === 0
       ? setToggleProductImage(true)
       : setToggleProductImage(false);
 
@@ -791,9 +814,9 @@ const AddProduct = () => {
       constantValues?.productbreadth > 0.5 &&
       constantValues?.productheight > 0.5 &&
       constantValues?.productweight > 0 &&
-      (imageAll?.length > 0 || preLoadedImages?.length > 0)
+      (imageAll?.length > 0 || preimageAll?.length > 0)
     ) {
-      console.log("imageAll, preLoadedImages: ", imageAll, preLoadedImages);
+      console.log("imageAll, preLoadedImages: ", imageAll, preimageAll);
       // -----------------------
       // -----------------------
       // -----------------------
@@ -823,7 +846,7 @@ const AddProduct = () => {
         product_categories: tempCategorieData,
         product_price: constantValues?.productcostprice,
         product_discount: constantValues?.productdiscount,
-        preImages: preLoadedImages,
+        preImages: preimageAll,
         product_length: constantValues?.productlength,
         product_breadth: constantValues?.productbreadth,
         product_height: constantValues?.productheight,
@@ -857,7 +880,8 @@ const AddProduct = () => {
       setSizeAll([]);
       setSizeInput("");
       setSizeType([]);
-      navigate("/products");
+      setPreImageAll([]);
+      navigate("/product");
     }
   };
 
@@ -905,7 +929,7 @@ const AddProduct = () => {
       productweight: singleProduct?.product_weight,
     });
     setDensity(
-      singleProduct?.product_density ? singleProduct?.product_density : ""
+      singleProduct?.product_density ? singleProduct?.product_density : false
     );
     setGenders(
       singleProduct?.product_gender ? singleProduct?.product_gender : ""
@@ -956,10 +980,10 @@ const AddProduct = () => {
     setStepsAll(tempSteps);
     setCountStep(tempSteps?.length + 1);
 
-    const newImages = singleProduct?.product_image?.map((data) => `${data}`);
+    const newImages = singleProduct?.product_image?.map((data) => data);
     setPreLoadedImages(newImages);
+    setPreImageAll(singleProduct?.product_image);
 
-    setImageAll([]);
     setSizeInput("");
     setSizeType([]);
   };
@@ -967,7 +991,7 @@ const AddProduct = () => {
     firstDataFetch();
   }, [singleProduct, CategorieData]);
 
-  console.log("countStep:::::", countStep);
+  console.log("countStep:::::", imageAll);
   return (
     <AddProducts>
       <Snackbar
@@ -1235,7 +1259,7 @@ const AddProduct = () => {
               </Box>
 
               <Box>
-                <form onSubmit={() => imageSubmit()}>
+                <form>
                   <Box
                     style={{
                       display: "flex",
@@ -1264,11 +1288,12 @@ const AddProduct = () => {
                     ref={ImageInputRef}
                     type="file"
                     accept="image/*"
+                    multiple
                     placeholder="Enter size in Inces"
-                    onChange={(e) => setImageInput(e.target.files)}
+                    onChange={(e) => uploadimage(e)}
                   />
-                  <button onClick={(e) => imageSubmit(e)}>ADD</button>
-                  <button onClick={(e) => imageClearAll(e)}>Clear All</button>
+                  {/* <button onClick={(e) => imageSubmit(e)}>ADD</button>
+                  <button onClick={(e) => imageClearAll(e)}>Clear All</button> */}
                 </form>
               </Box>
               <Box>
@@ -1276,21 +1301,12 @@ const AddProduct = () => {
                   <Chip
                     sx={{ height: "50px" }}
                     key={index}
-                    label={
-                      (data?.name?.name?.length > 7
-                        ? data?.name?.name?.substring(0, 7) + "..."
-                        : data?.name?.name) +
-                      " => " +
-                      "Image: " +
-                      (index + 1)
-                    }
-                    onClick={(e) => handleImageClick(e, index)}
                     onDelete={(e) => handleImageDelete(e, index)}
                     deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
                     avatar={
                       <img
-                        alt="Natacha"
-                        src={imagePrint[index]}
+                        alt={`Natacha${index}`}
+                        src={data}
                         style={{ width: "30px", height: "30px" }}
                       />
                     }
@@ -1298,33 +1314,21 @@ const AddProduct = () => {
                 ))}
               </Box>
               <BoxforPreImg>
-                {preLoadedImages?.map((data, index) => {
-                  return (
-                    <Box key={index}>
+                {preimageAll?.map((data, index) => (
+                  <Chip
+                    sx={{ height: "50px" }}
+                    key={index}
+                    onDelete={(e) => handlePreImageDelete(e, data)}
+                    deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
+                    avatar={
                       <img
-                        src={`${process.env.REACT_APP_URL}/images/${data}`}
-                        alt={data + index}
-                        onMouseEnter={(e) => handleMouseEnterImage(e, index)}
-                        onMouseLeave={(e) => handleMouseLeaveImage(e, index)}
+                        alt={`Natacha${index}`}
+                        src={data?.url}
+                        style={{ width: "30px", height: "30px" }}
                       />
-                      {preLoadedImagesBoolean &&
-                      preLoadedImagesIndex === index ? (
-                        <span
-                          id={index}
-                          style={{
-                            position: "absolute",
-                            cursor: "pointer",
-                          }}
-                          onClick={(e) => handlePreImageDelete(e, data)}
-                          onMouseEnter={(e) => handleMouseEnterImage(e, index)}
-                          onMouseLeave={(e) => handleMouseLeaveImage(e, index)}
-                        >
-                          <CancelIcon style={{ color: "#fff" }} />
-                        </span>
-                      ) : null}
-                    </Box>
-                  );
-                })}
+                    }
+                  />
+                ))}
               </BoxforPreImg>
             </Box>
           </AddProductSize>

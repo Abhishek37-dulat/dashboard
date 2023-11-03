@@ -75,6 +75,7 @@ const Ticket5 = styled(Box)(({ theme }) => ({
 }));
 
 const OrderDetail = ({ orderDetails }) => {
+  console.log(orderDetails);
   return (
     <CommetPageTitle>
       <Ticket1>

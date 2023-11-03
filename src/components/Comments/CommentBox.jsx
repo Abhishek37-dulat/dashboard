@@ -239,16 +239,7 @@ const CommentBox = ({ data }) => {
           <CommentProductBox>
             <CommentProductBoxLeft>
               <CommentProductBoxImage>
-                <img
-                  src={
-                    product?.product_image
-                      ? product?.product_image.length > 0
-                        ? `${process.env.REACT_APP_URL}/images/${product?.product_image[0]}`
-                        : noimage
-                      : noimage
-                  }
-                  alt="imagenew"
-                />
+                <img src={product?.product_image[0]?.url} alt="imagenew" />
               </CommentProductBoxImage>
             </CommentProductBoxLeft>
             <CommentProductBoxRight>
@@ -278,16 +269,7 @@ const CommentBox = ({ data }) => {
                 }}
               >
                 <CommentClientBoxUserImage>
-                  <img
-                    src={
-                      profile?.image
-                        ? profile?.image?.length > 0
-                          ? `${process.env.REACT_APP_URL}/images/${profile?.image[0]}`
-                          : noimage
-                        : noimage
-                    }
-                    alt="usernew"
-                  />
+                  <img src={profile?.image[0]?.url} alt="usernew" />
                 </CommentClientBoxUserImage>
                 <CommentClientBoxUserName>
                   <Typography>
@@ -296,16 +278,7 @@ const CommentBox = ({ data }) => {
                 </CommentClientBoxUserName>
               </Box>
               <CommentClientBoxUserProduct>
-                <img
-                  src={
-                    data?.image
-                      ? data?.image?.length > 0 && data?.image[0] !== ""
-                        ? `${process.env.REACT_APP_URL}/images/${data?.image[0]}`
-                        : noimage
-                      : noimage
-                  }
-                  alt="usernew"
-                />
+                <img src={data?.image[0]?.url} alt="usernew" />
               </CommentClientBoxUserProduct>
             </CommentClientBoxLeft>
             <CommentClientBoxRight>

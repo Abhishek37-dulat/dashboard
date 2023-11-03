@@ -11,6 +11,9 @@ import { PostReducer } from "./reducers/PostReducer";
 import { CommentReducer } from "./reducers/CommentReducer";
 import { CartReducer } from "./reducers/CartReducer";
 import { SaveReducer } from "./reducers/SaveReducer";
+import { BlogReducer } from "./reducers/BlogReducer";
+import { SeoReducer } from "./reducers/SeoReducer";
+import { ContactReducer } from "./reducers/ContactReducer";
 
 const reducer = combineReducers({
   Colors: ColorReducer,
@@ -23,6 +26,9 @@ const reducer = combineReducers({
   Comments: CommentReducer,
   Carts: CartReducer,
   Saves: SaveReducer,
+  Blogs: BlogReducer,
+  Seos: SeoReducer,
+  Contacts: ContactReducer,
 });
 
 const middleware = [thunk];

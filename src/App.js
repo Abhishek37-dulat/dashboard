@@ -34,6 +34,13 @@ import NewPosterPage from "./pages/NewPosterPage/NewPosterPage";
 import { getAllBanner } from "./redux/actions/BannerAction";
 import { getAllPost } from "./redux/actions/PostAction";
 import { getAllUser, getAllUserProfile } from "./redux/actions/UserAction";
+import Upload from "./Upload";
+import BlogPage from "./pages/Blog/BlogPage";
+import AddBlogPage from "./pages/Blog/AddBlogPage";
+import Seo from "./pages/Seo/Seo";
+import UpdateSeo from "./components/Seo/UpdateSeo/UpdateSeo";
+import USeo from "./pages/Seo/USeo";
+import ContactPage from "./pages/ContactPage/ContactPage";
 
 function App() {
   const location = useLocation();
@@ -105,13 +112,19 @@ function App() {
             <Route path="/product/add" element={<AddP />} exact />
             <Route path="/cart" element={<Cart />} exact />
             <Route path="/save" element={<Save />} exact />
+            <Route path="/seo/update/:id" element={<USeo />} exact />
+            <Route path="/seo/:id" element={<Seo />} exact />
             <Route path="/comment" element={<Comment />} exact />
             <Route path="/categories" element={<Categories />} exact />
             <Route path="/colors" element={<ColorPage />} />
+            <Route path="/blogs" element={<BlogPage />} exact />
+            <Route path="/blogs/add" element={<AddBlogPage />} exact />
             <Route path="/allusers" element={<AllUserPage />} />
             <Route path="/logo" element={<LogoPage />} />
             <Route path="/banner" element={<AllBannerPage />} />
             <Route path="/poster" element={<NewPosterPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/upload" element={<Upload />} />
             <Route
               path="*"
               element={

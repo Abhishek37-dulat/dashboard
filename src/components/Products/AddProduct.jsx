@@ -492,8 +492,10 @@ const AddProduct = () => {
   const [colorSelect, setColorSelect] = useState([]);
   const [sizeType, setSizeType] = useState("");
   const [sizeInput, setSizeInput] = useState("");
+  const [lengthInput, setLengthInput] = useState("");
   const [imageInput, setImageInput] = useState("");
   const [sizeAll, setSizeAll] = useState([]);
+  const [lengthAll, setLengthAll] = useState([]);
   const [imageAll, setImageAll] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -507,6 +509,7 @@ const AddProduct = () => {
   const [stepsInputDes, setStepsInputDes] = useState("");
   const [stepsInputLink, setStepsInputLink] = useState("");
   const [countStep, setCountStep] = useState(1);
+  const [c_price, setC_Price] = useState(0);
 
   const [constantValues, setConstantValues] = useState({
     productname: "",
@@ -522,6 +525,26 @@ const AddProduct = () => {
   });
 
   const [numOfInputs, setNumOfInputs] = useState(0); // Initial number of input boxes
+
+  const uploadimage = (e) => {
+    const imdata = e.target.files;
+    console.log(imdata);
+    for (let x = 0; x < imdata.length; x++) {
+      imageRead(imdata[x]);
+    }
+  };
+  const imageRead = (img) => {
+    console.log(img);
+    const reader = new FileReader();
+    if (img) {
+      reader.readAsDataURL(img);
+      reader.onloadend = () => {
+        setImageAll((pre) => [...pre, reader.result]);
+      };
+    } else {
+      console.log("not found");
+    }
+  };
 
   const handleNumOfInputsChange = (event) => {
     setToggleProductshowstep(!toggleProductshowstep);
@@ -545,6 +568,7 @@ const AddProduct = () => {
     e.preventDefault();
     setSizeType(e.target.value);
   };
+
   const sizeSubmit = (e) => {
     e.preventDefault();
     if (sizeType === "") {
@@ -554,6 +578,18 @@ const AddProduct = () => {
     } else {
       setSizeAll([...sizeAll, { size: sizeInput, type: sizeType }]);
     }
+  };
+  const lengthSubmit = (e) => {
+    e.preventDefault();
+    if (lengthInput === "") {
+      return handleOpenalert("please Enter valid length", "error");
+    } else {
+      setLengthAll((prev) => [...prev, lengthInput]);
+    }
+  };
+  const lengthClearAll = (e) => {
+    e.preventDefault();
+    setLengthAll([]);
   };
   const sizeClearAll = (e) => {
     e.preventDefault();
@@ -570,6 +606,21 @@ const AddProduct = () => {
       (item) => sizeAll.indexOf(item) !== number
     );
     setSizeAll(filteredArray);
+  };
+  const handlelengthChipDelete = (e, number) => {
+    e.preventDefault();
+    console.log(lengthAll);
+    const filteredArray = lengthAll.map((data, index) => {
+      if (index !== number) {
+        return data;
+      }
+    });
+    const filteredArrayfinal = filteredArray.filter(
+      (data) => data !== undefined
+    );
+
+    console.log(filteredArrayfinal);
+    setLengthAll(filteredArrayfinal);
   };
 
   const imageSubmit = (e) => {
@@ -602,10 +653,6 @@ const AddProduct = () => {
     setMessageColor(messageColor);
   };
 
-  const handleImageClick = (e, number) => {
-    e.preventDefault();
-    // console.log(number);
-  };
   const handleImageDelete = (e, number) => {
     e.preventDefault();
 
@@ -613,10 +660,6 @@ const AddProduct = () => {
       (item) => imageAll.indexOf(item) !== number
     );
     setImageAll(filteredArray);
-    const filteredArrayImage = imagePrint.filter(
-      (item) => imagePrint.indexOf(item) !== number
-    );
-    setImagePrint(filteredArrayImage);
   };
   const imageClearAll = (e) => {
     e.preventDefault();
@@ -657,8 +700,12 @@ const AddProduct = () => {
   const handleVieoSelectChange = (e) => {
     setVideo(e.target.value);
   };
+  const handleCSelectChange = (e) => {
+    setC_Price(e.target.value);
+  };
 
   const handledensitySelectChange = (e) => {
+    console.log(e);
     setDensity(!density);
   };
 
@@ -694,7 +741,7 @@ const AddProduct = () => {
   };
 
   const handleSubmitForm = async (e) => {
-    console.log("imageAll:::", imageAll);
+    console.log("imageAll:::", density);
     e.preventDefault();
 
     constantValues.productname === ""
@@ -782,8 +829,10 @@ const AddProduct = () => {
         product_density: density,
         product_video: video,
         product_steps: stepsAll,
+        product_hair_length: lengthAll,
+        product_customization_price: c_price,
       };
-      console.log("finalData::::::::", finalData);
+      console.log("finalData::::::::", finalData, density);
       dispatch(addNewProduct(finalData));
       setConstantValues({
         productname: "",
@@ -808,6 +857,8 @@ const AddProduct = () => {
       setDensity("");
       setStepsAll([]);
       setGenders("");
+      setLengthAll([]);
+      setC_Price(0);
     }
   };
 
@@ -854,7 +905,10 @@ const AddProduct = () => {
     " Video: ",
     video,
     "gender: ",
-    genders
+    genders,
+    "Images:",
+    imageAll,
+    lengthAll
   );
   return (
     <AddProducts>
@@ -900,6 +954,7 @@ const AddProduct = () => {
           <Typography style={{ fontSize: "12px", color: "red" }}>
             {toggleProductName ? "Product name is required*" : null}
           </Typography>
+
           <Typography>
             TagLine for Product <span style={{ color: "red" }}>*</span>
           </Typography>
@@ -1114,13 +1169,43 @@ const AddProduct = () => {
           <AddProductSize>
             <Box>
               <Box>
+                <Typography>ADD PRODUCT LENGTH</Typography>
+              </Box>
+              <Box>
+                <form onSubmit={() => lengthSubmit()}>
+                  <input
+                    type="text"
+                    placeholder="Enter Length with units"
+                    value={lengthInput}
+                    onChange={(e) => setLengthInput(e.target.value)}
+                  />
+
+                  <button onClick={(e) => lengthSubmit(e)}>ADD</button>
+                  <button onClick={(e) => lengthClearAll(e)}>Clear All</button>
+                </form>
+              </Box>
+              <Box>
+                {lengthAll?.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    onDelete={(e) => handlelengthChipDelete(e, index)}
+                    deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
+                  />
+                ))}
+              </Box>
+            </Box>
+          </AddProductSize>
+          <AddProductSize>
+            <Box>
+              <Box>
                 <Typography>
                   ADD IMAGES <span style={{ color: "red" }}>*</span>
                 </Typography>
               </Box>
 
               <Box>
-                <form onSubmit={() => imageSubmit()}>
+                <form>
                   <Box
                     style={{
                       display: "flex",
@@ -1149,11 +1234,12 @@ const AddProduct = () => {
                     ref={ImageInputRef}
                     type="file"
                     accept="image/*"
+                    multiple
                     placeholder="Enter size in Inces"
-                    onChange={(e) => setImageInput(e.target.files)}
+                    onChange={(e) => uploadimage(e)}
                   />
-                  <button onClick={(e) => imageSubmit(e)}>ADD</button>
-                  <button onClick={(e) => imageClearAll(e)}>Clear All</button>
+                  {/* <button onClick={(e) => imageSubmit(e)}>ADD</button>
+                  <button onClick={(e) => imageClearAll(e)}>Clear All</button> */}
                 </form>
               </Box>
               <Box>
@@ -1161,21 +1247,12 @@ const AddProduct = () => {
                   <Chip
                     sx={{ height: "50px" }}
                     key={index}
-                    label={
-                      (data.name.name.length > 7
-                        ? data.name.name.substring(0, 7) + "..."
-                        : data.name.name) +
-                      " => " +
-                      "Image: " +
-                      (index + 1)
-                    }
-                    onClick={(e) => handleImageClick(e, index)}
                     onDelete={(e) => handleImageDelete(e, index)}
                     deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
                     avatar={
                       <img
                         alt="Natacha"
-                        src={imagePrint[index]}
+                        src={data}
                         style={{ width: "30px", height: "30px" }}
                       />
                     }
@@ -1199,7 +1276,7 @@ const AddProduct = () => {
                 <input
                   type="checkBox"
                   value={density}
-                  onChange={() => handledensitySelectChange()}
+                  onChange={(e) => handledensitySelectChange(e)}
                   style={{ border: "none", outline: "none" }}
                   placeholder={`Youtube Video Link  example: www.youtube.com`}
                 />
@@ -1208,6 +1285,28 @@ const AddProduct = () => {
               <Box style={{ marginBottom: "20px" }}></Box>
             </Box>
           </AddProductDensity>
+
+          <Typography style={{ marginTop: "20px" }}>
+            Product customization Price:
+          </Typography>
+          <AddProductSteps>
+            <Box>
+              <Box>
+                <Typography style={{ color: "#252F43" }}>
+                  Enter Price
+                </Typography>
+                <input
+                  type="text"
+                  value={c_price}
+                  onChange={(e) => handleCSelectChange(e)}
+                  placeholder={`Enter Customization Price`}
+                  style={{ width: "98%" }}
+                />
+              </Box>
+
+              <Box style={{ marginBottom: "20px" }}></Box>
+            </Box>
+          </AddProductSteps>
           <Typography style={{ marginTop: "20px" }}>Product Video:</Typography>
           <AddProductSteps>
             <Box>

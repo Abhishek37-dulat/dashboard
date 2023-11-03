@@ -23,9 +23,10 @@ const Ticket2 = styled(Box)(({ theme }) => ({
   borderBottom: "1px solid #D9E0E6",
   width: "100%",
   display: "flex",
+  flexDirection: "column",
   flex: 1,
   justifyContent: "center",
-  alignItems: "center",
+  alignItems: "flex-start",
   marginTop: "15px",
   "& > p": {
     flex: 1,
@@ -65,7 +66,8 @@ const Ticket3 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UserAddressDetails = () => {
+const UserAddressDetails = ({ orderDetails }) => {
+  console.log(orderDetails?.delivery_address);
   return (
     <CommetPageTitle>
       <Ticket1>
@@ -73,8 +75,15 @@ const UserAddressDetails = () => {
       </Ticket1>
       <Ticket2>
         <Typography>
-          Plot No 7 First Floor, IT Park Twin Tower, Sector 22, Budanpur,
-          Panchkula, Chaunki, Haryana 134109
+          Address: {orderDetails?.delivery_address?.address},
+          {orderDetails?.delivery_address?.city},
+          {orderDetails?.delivery_address?.state},
+          {orderDetails?.delivery_address?.pin_code}{" "}
+        </Typography>
+        <Typography>City: {orderDetails?.delivery_address?.city}</Typography>
+        <Typography>State: {orderDetails?.delivery_address?.state}</Typography>
+        <Typography style={{ color: "#5A73CD" }}>
+          Pin Code: {orderDetails?.delivery_address?.pin_code}
         </Typography>
       </Ticket2>
     </CommetPageTitle>

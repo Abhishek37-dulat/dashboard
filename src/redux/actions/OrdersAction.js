@@ -12,6 +12,9 @@ export const getAllOrders = () => async (dispatch) => {
     };
     const data = await axios.get(`${url}/checkout/admin`, { headers });
 
+    // const datanew = await axios.get(`${url}/order/orders`);
+    console.log("LLLLLLL:::::", data);
+    // console.log("NNNNNNN:::::", datanew);
     dispatch({ type: actionType.GET_ALL_ORDERS, payload: data.data });
   } catch (error) {
     dispatch({ type: actionType.ERROR_GET_ALL_ORDERS, error: error });
@@ -70,6 +73,44 @@ export const getCanceledOrder = () => async (dispatch) => {
     dispatch({ type: actionType.GET_CANCELED_ORDERS, payload: canceledData });
   } catch (error) {
     dispatch({ type: actionType.ERROR_GET_CANCELED_ORDERS, error: error });
+  }
+};
+
+export const DeniedOrder = (id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("admintoken");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const data = await axios.put(
+      `${url}/order/order/admin/denied/${id}`,
+      null,
+      {
+        headers,
+      }
+    );
+    console.log(data);
+
+    dispatch({ type: actionType.GET_DENIED_ORDERS, payload: data.data.data });
+  } catch (error) {
+    dispatch({ type: actionType.ERROR_GET_DENIED_ORDERS, error: error });
+  }
+};
+
+export const ApproveCancelOrder = (id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("admintoken");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const data = await axios.put(`${url}/order/order/admin/${id}`, null, {
+      headers,
+    });
+    console.log(data);
+
+    dispatch({ type: actionType.GET_DENIED_ORDERS, payload: data.data.data });
+  } catch (error) {
+    dispatch({ type: actionType.ERROR_GET_DENIED_ORDERS, error: error });
   }
 };
 

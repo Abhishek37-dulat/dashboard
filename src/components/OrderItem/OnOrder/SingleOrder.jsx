@@ -141,8 +141,8 @@ const SingleOrder = () => {
         <OrderDetail orderDetails={orderDetails} />
         <ProductDetail orderDetails={orderDetails} />
         <UserDetails SingleUser={orderUsers} />
-        <UserAddressDetails />
-        <DeliveryStatus />
+        <UserAddressDetails orderDetails={orderDetails} />
+        <DeliveryStatus orderDetails={orderDetails} />
       </AllCommentBox>
     </>
   );

@@ -127,10 +127,7 @@ const SingleProductView = () => {
           </IconButton>
         </BoxImageLeft>
         <BoxImageMid>
-          <img
-            src={`${process.env.REACT_APP_URL}/images/${dataFromLocal?.product_image[count]}`}
-            alt={count}
-          />
+          <img src={dataFromLocal?.product_image[count].url} alt={count} />
         </BoxImageMid>
         <BoxImageRight>
           <IconButton onClick={(e) => handleRightClick(e)}>

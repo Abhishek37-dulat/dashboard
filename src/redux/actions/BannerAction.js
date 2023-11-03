@@ -24,16 +24,8 @@ export const addNewBanner = (newData) => async (dispatch) => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const formData = new FormData();
-    formData.append("title", newData?.title);
-    formData.append("description", newData?.description);
-    formData.append(`categories[name]`, newData.categories.name);
 
-    newData?.categories?.subCategories?.map((data, index) => {
-      formData.append(`categories[subCategories][${index}][name]`, data.name);
-    });
-    formData.append("banner_image", newData.image);
-    const data = await axios.post(`${url}/banner`, formData, { headers });
+    const data = await axios.post(`${url}/banner`, newData, { headers });
     console.log(data);
     dispatch({ type: actionType.POST_BANNER, payload: data.data.data });
   } catch (error) {
@@ -57,7 +49,6 @@ export const deleteBanner = (newData) => async (dispatch) => {
 
 {
   /* 
-
 
 */
 }

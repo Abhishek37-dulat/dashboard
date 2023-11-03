@@ -242,6 +242,7 @@ const Navbar = () => {
   const commentRef = useRef();
   const categoriesRef = useRef();
   const colorRef = useRef();
+  const blogRef = useRef();
   const bdashboardRef = useRef();
   const bproductRef = useRef();
   const borderRef = useRef();
@@ -250,6 +251,7 @@ const Navbar = () => {
   const bcommentRef = useRef();
   const bcategoriesRef = useRef();
   const bcolorRef = useRef();
+  const bblogRef = useRef();
   const [sidebarmanager, setSidebarmanager] = useState(0);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [countryCode, setCountryCode] = useState("");
@@ -270,6 +272,7 @@ const Navbar = () => {
     const commentStyling = commentRef.current.style;
     const categoriesStyling = categoriesRef.current.style;
     const colorStyling = colorRef.current.style;
+    const blogStyling = blogRef.current.style;
     const bdashboardStyling = bdashboardRef.current.style;
     const bproductStyling = bproductRef.current.style;
     const borderStyling = borderRef.current.style;
@@ -278,6 +281,7 @@ const Navbar = () => {
     const bcommentStyling = bcommentRef.current.style;
     const bcategoriesStyling = bcategoriesRef.current.style;
     const bcolorStyling = bcolorRef.current.style;
+    const bblogStyling = bblogRef.current.style;
     if (e.target === dashboardRef.current) {
       navigate("/");
       changeByStyling(dashboardStyling, bdashboardStyling);
@@ -288,6 +292,7 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === productRef.current) {
       navigate("/product");
@@ -299,6 +304,7 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === orderRef.current) {
       navigate("/order");
@@ -310,6 +316,7 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === cartRef.current) {
       navigate("/cart");
@@ -321,6 +328,7 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === saveRef.current) {
       navigate("/save");
@@ -332,6 +340,7 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === commentRef.current) {
       navigate("/comment");
@@ -343,6 +352,7 @@ const Navbar = () => {
       backToNormalStyling(dashboardStyling, bdashboardStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === categoriesRef.current) {
       navigate("/categories");
@@ -354,6 +364,7 @@ const Navbar = () => {
       backToNormalStyling(dashboardStyling, bdashboardStyling);
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
     if (e.target === colorRef.current) {
       navigate("/colors");
@@ -365,6 +376,19 @@ const Navbar = () => {
       backToNormalStyling(dashboardStyling, bdashboardStyling);
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
+    }
+    if (e.target === blogRef.current) {
+      navigate("/blogs");
+      changeByStyling(blogStyling, bblogStyling);
+      backToNormalStyling(productStyling, bproductStyling);
+      backToNormalStyling(orderStyling, borderStyling);
+      backToNormalStyling(cartStyling, bcartStyling);
+      backToNormalStyling(saveStyling, bsaveStyling);
+      backToNormalStyling(dashboardStyling, bdashboardStyling);
+      backToNormalStyling(commentStyling, bcommentStyling);
+      backToNormalStyling(categoriesStyling, bcategoriesStyling);
+      backToNormalStyling(colorStyling, bcolorStyling);
     }
   };
   const handleLogoutFunction = () => {
@@ -429,6 +453,18 @@ const Navbar = () => {
           commentRef?.current?.style,
           bcommentRef?.current?.style
         );
+      }
+      if (value == 6) {
+        changeByStyling(
+          categoriesRef?.current?.style,
+          bcategoriesRef?.current?.style
+        );
+      }
+      if (value == 7) {
+        changeByStyling(colorRef?.current?.style, bcolorRef?.current?.style);
+      }
+      if (value == 8) {
+        changeByStyling(blogRef?.current?.style, bblogRef?.current?.style);
       }
       setSidebarmanager(value);
     };
@@ -650,6 +686,15 @@ const Navbar = () => {
             onClick={(e) => handleSideBarClick(e, 7)}
           >
             Colors
+          </Button>
+        </BoardBox>
+        <BoardBox ref={bblogRef}>
+          <Button
+            value="6"
+            ref={blogRef}
+            onClick={(e) => handleSideBarClick(e, 8)}
+          >
+            Blogs
           </Button>
         </BoardBox>
       </SideBar>

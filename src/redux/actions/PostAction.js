@@ -24,20 +24,8 @@ export const addNewPost = (newData) => async (dispatch) => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const formData = new FormData();
-    if (newData?.title !== "") {
-      formData.append("title", newData.title);
-    }
-    if (newData?.description !== "") {
-      formData.append("description", newData.description);
-    }
-    if (newData?.categorie !== "") {
-      formData.append("categorie", newData.categorie);
-    }
-    if (newData?.image !== "") {
-      formData.append("post_image", newData.image);
-    }
-    const data = await axios.post(`${url}/posts`, formData, { headers });
+
+    const data = await axios.post(`${url}/posts`, newData, { headers });
     console.log(data);
     dispatch({ type: actionType.POST_POSTS, payload: data.data.data });
   } catch (error) {

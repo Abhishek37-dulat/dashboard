@@ -256,6 +256,7 @@ const NewPoster = () => {
   };
 
   let imageRead = (formData1, selectedValueDisplay) => {
+    console.log(formData1, selectedValueDisplay);
     const reader = new FileReader();
     if (formData1.image) {
       reader.readAsDataURL(formData1.image);
@@ -269,6 +270,14 @@ const NewPoster = () => {
         };
         dispatch(addNewPost(finalData));
       };
+    } else if (formData1.title) {
+      const finalData = {
+        title: formData1.title,
+        description: formData1.description,
+        location: formData1.location,
+        categorie: selectedValueDisplay,
+      };
+      dispatch(addNewPost(finalData));
     } else {
       console.log("not found");
     }
@@ -618,10 +627,10 @@ const NewPoster = () => {
               ) : selectedValueDisplay === "Before And After Title" ? (
                 <FieldBox>
                   <Box>
-                    <Typography>Enter Marquee</Typography>
+                    <Typography>Enter Before And After Title</Typography>
                     <input
                       type="text"
-                      placeholder="Enter Marquee"
+                      placeholder="Enter Title"
                       name="title"
                       value={formData1.title}
                       onChange={(e) => handleFormDataChange(e)}

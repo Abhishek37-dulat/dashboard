@@ -750,9 +750,9 @@ const AddProduct = () => {
     constantValues.producttagline === ""
       ? setToggleProductTagline(true)
       : setToggleProductTagline(false);
-    constantValues.productquantity > 0
-      ? setToggleProductQty(false)
-      : setToggleProductQty(true);
+    constantValues.productquantity === ""
+      ? setToggleProductQty(true)
+      : setToggleProductQty(false);
     constantValues.productdescription === ""
       ? setToggleProductDes(true)
       : setToggleProductDes(false);
@@ -783,7 +783,7 @@ const AddProduct = () => {
     if (
       constantValues.productname !== "" &&
       constantValues.producttagline !== "" &&
-      constantValues.productquantity > 0 &&
+      constantValues.productquantity !== "" &&
       constantValues.productdescription !== "" &&
       constantValues.productcostprice !== "" &&
       constantValues.productlength > 0.5 &&

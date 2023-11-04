@@ -834,31 +834,31 @@ const AddProduct = () => {
       };
       console.log("finalData::::::::", finalData, density);
       dispatch(addNewProduct(finalData));
-      setConstantValues({
-        productname: "",
-        producttagline: "",
-        productdescription: "",
-        productcostprice: "",
-        productdiscount: "",
-        productquantity: "",
-        productlength: "",
-        productbreadth: "",
-        productheight: "",
-        productweight: "",
-      });
-      setMainCategorie("");
-      setSubCategorie([]);
-      setColorSelect([]);
-      setImageAll([]);
-      setSizeAll([]);
-      setSizeInput("");
-      setSizeType("");
-      setVideo("");
-      setDensity("");
-      setStepsAll([]);
-      setGenders("");
-      setLengthAll([]);
-      setC_Price(0);
+      // setConstantValues({
+      //   productname: "",
+      //   producttagline: "",
+      //   productdescription: "",
+      //   productcostprice: "",
+      //   productdiscount: "",
+      //   productquantity: "",
+      //   productlength: "",
+      //   productbreadth: "",
+      //   productheight: "",
+      //   productweight: "",
+      // });
+      // setMainCategorie("");
+      // setSubCategorie([]);
+      // setColorSelect([]);
+      // setImageAll([]);
+      // setSizeAll([]);
+      // setSizeInput("");
+      // setSizeType("");
+      // setVideo("");
+      // setDensity("");
+      // setStepsAll([]);
+      // setGenders("");
+      // setLengthAll([]);
+      // setC_Price(0);
     }
   };
 

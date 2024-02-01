@@ -41,13 +41,17 @@ import Seo from "./pages/Seo/Seo";
 import UpdateSeo from "./components/Seo/UpdateSeo/UpdateSeo";
 import USeo from "./pages/Seo/USeo";
 import ContactPage from "./pages/ContactPage/ContactPage";
+import AddUsersPage from "./pages/AddUsersPage/AddUsersPage";
+import LoadingBox from "./LoadingBox";
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const [openLoading, setOpenLoading] = useState(false);
   const showNavbarPaths = ["/login", "/register"];
   const { account, setAccount, setAccountStatus, accountStatus } =
     useContext(DataContext);
+  const { LoadingCondition } = useSelector((state) => state.Contacts);
   const [tokenChecked, setTokenChecked] = useState(false);
 
   const getUserFromToken = (token) => {
@@ -95,9 +99,13 @@ function App() {
     dispatch(getAllUserProfile());
   }, [dispatch]);
   console.log(tokenChecked, accountStatus);
+  useEffect(() => {
+    setOpenLoading(LoadingCondition);
+  }, [LoadingCondition]);
   return (
     <>
       {accountStatus ? tokenChecked ? <Navbar /> : null : null}
+      <LoadingBox openLoading={openLoading} setOpenLoading={setOpenLoading} />
       <Routes>
         {accountStatus ? (
           <>
@@ -125,6 +133,7 @@ function App() {
             <Route path="/poster" element={<NewPosterPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/upload" element={<Upload />} />
+            <Route path="/adduser" element={<AddUsersPage />} />
             <Route
               path="*"
               element={

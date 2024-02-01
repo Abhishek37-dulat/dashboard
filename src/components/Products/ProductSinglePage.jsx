@@ -20,9 +20,13 @@ import {
   FormControlLabel,
   Radio,
   Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
 } from "@mui/material";
 import ntc from "ntc-hi-js";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddColor from "./AddColor";
 import { CategoriesData, ColorList, SizeData } from "../../constant/db";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -486,7 +490,7 @@ const AddProduct = () => {
   const navigate = useNavigate();
   const { CategorieData } = useSelector((state) => state?.Categories);
   const { ColorData } = useSelector((state) => state?.Colors);
-  const { singleProduct } = useSelector((state) => state?.Products);
+  const { singleProduct, loading } = useSelector((state) => state?.Products);
   const preImageDisplay = useRef();
   // ***********************************
   // ***********************************
@@ -603,7 +607,7 @@ const AddProduct = () => {
     } else if (sizeInput === "") {
       return handleOpenalert("please Enter valid size", "error");
     } else {
-      setSizeAll([...sizeAll, { size: sizeInput, type: sizeType }]);
+      setSizeAll([...sizeAll, { size: sizeInput, type: sizeType[0] }]);
     }
   };
   const sizeClearAll = (e) => {
@@ -993,704 +997,731 @@ const AddProduct = () => {
 
   console.log("countStep:::::", imageAll);
   return (
-    <AddProducts>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={open}
-        key={"top" + "right"}
-        autoHideDuration={2000}
-        onClose={handleClose}
-      >
-        <Alert
+    <>
+      <AddProducts>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          open={open}
+          key={"top" + "right"}
+          autoHideDuration={2000}
           onClose={handleClose}
-          severity={messageColor}
-          sx={{ width: "100%" }}
         >
-          {message}
-        </Alert>
-      </Snackbar>
-      <AddProductall>
-        <form>
-          <AddProductLogo>
-            <Typography>
-              <span>
-                <AccountTreeIcon
-                  sx={{ width: 20, height: 20, color: "#2DB484" }}
-                />
-              </span>
-              <span style={{ color: "#252F43" }}>EDIT PRODUCTS</span>
-            </Typography>
-          </AddProductLogo>
-          <Typography>
-            Product Name <span style={{ color: "red" }}>*</span>
-          </Typography>
-          <AddProductTitle>
-            <input
-              type="text"
-              placeholder="Enter Product name"
-              name="productname"
-              value={constantValues?.productname}
-              onChange={(e) => handleConstantProductValues(e)}
-            />
-          </AddProductTitle>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductName ? "Product name is required*" : null}
-          </Typography>
-          <Typography>
-            TagLine for Product <span style={{ color: "red" }}>*</span>
-          </Typography>
-          <AddProductTitle>
-            <input
-              type="text"
-              placeholder="Enter Taglines For Your Products"
-              name="producttagline"
-              value={constantValues?.producttagline}
-              onChange={(e) => handleConstantProductValues(e)}
-            />
-          </AddProductTitle>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductTagline ? "Product tag line is required*" : null}
-          </Typography>
-          <Typography>
-            Product Quantity <span style={{ color: "red" }}>*</span>
-          </Typography>
-          <AddProductTitle>
-            <input
-              type="number"
-              placeholder="Enter Product Quantity in numbers"
-              name="productquantity"
-              value={constantValues?.productquantity}
-              onChange={(e) => handleConstantProductValues(e)}
-            />
-          </AddProductTitle>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductQty
-              ? "Product quantity is required and should be greater then 0*"
-              : null}
-          </Typography>
-          <Typography>
-            Product Description <span style={{ color: "red" }}>*</span>
-          </Typography>
-          <AddProductDes>
-            <textarea
-              placeholder="Enter Product Description..."
-              name="productdescription"
-              value={constantValues?.productdescription}
-              onChange={(e) => handleConstantProductValues(e)}
-            />
-          </AddProductDes>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductDes ? "Product description is required*" : null}
-          </Typography>
-          <AddProductCategorie>
-            <Box>
+          <Alert
+            onClose={handleClose}
+            severity={messageColor}
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        </Snackbar>
+        <AddProductall>
+          <form>
+            <AddProductLogo>
               <Typography>
-                Select Categories <span style={{ color: "red" }}>*</span>
+                <span>
+                  <AccountTreeIcon
+                    sx={{ width: 20, height: 20, color: "#2DB484" }}
+                  />
+                </span>
+                <span style={{ color: "#252F43" }}>EDIT PRODUCTS</span>
               </Typography>
-            </Box>
-            <Box>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <Select
-                  value={mainCategorie ? mainCategorie : []}
-                  onChange={handleCategorieChange}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {CategorieData?.map((data, index) => (
-                    <MenuItem key={data?.id} value={index}>
-                      {data?.name}
+            </AddProductLogo>
+            <Typography>
+              Product Name <span style={{ color: "red" }}>*</span>
+            </Typography>
+            <AddProductTitle>
+              <input
+                type="text"
+                placeholder="Enter Product name"
+                name="productname"
+                value={constantValues?.productname}
+                onChange={(e) => handleConstantProductValues(e)}
+              />
+            </AddProductTitle>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductName ? "Product name is required*" : null}
+            </Typography>
+            <Typography>
+              TagLine for Product <span style={{ color: "red" }}>*</span>
+            </Typography>
+            <AddProductTitle>
+              <input
+                type="text"
+                placeholder="Enter Taglines For Your Products"
+                name="producttagline"
+                value={constantValues?.producttagline}
+                onChange={(e) => handleConstantProductValues(e)}
+              />
+            </AddProductTitle>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductTagline ? "Product tag line is required*" : null}
+            </Typography>
+            <Typography>
+              Product Quantity <span style={{ color: "red" }}>*</span>
+            </Typography>
+            <AddProductTitle>
+              <input
+                type="number"
+                placeholder="Enter Product Quantity in numbers"
+                name="productquantity"
+                value={constantValues?.productquantity}
+                onChange={(e) => handleConstantProductValues(e)}
+              />
+            </AddProductTitle>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductQty
+                ? "Product quantity is required and should be greater then 0*"
+                : null}
+            </Typography>
+            <Typography>
+              Product Description <span style={{ color: "red" }}>*</span>
+            </Typography>
+            <AddProductDes>
+              <textarea
+                placeholder="Enter Product Description..."
+                name="productdescription"
+                value={constantValues?.productdescription}
+                onChange={(e) => handleConstantProductValues(e)}
+              />
+            </AddProductDes>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductDes ? "Product description is required*" : null}
+            </Typography>
+            <AddProductCategorie>
+              <Box>
+                <Typography>
+                  Select Categories <span style={{ color: "red" }}>*</span>
+                </Typography>
+              </Box>
+              <Box>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    value={mainCategorie ? mainCategorie : []}
+                    onChange={handleCategorieChange}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
                     </MenuItem>
-                  ))}
-                </Select>
+                    {CategorieData?.map((data, index) => (
+                      <MenuItem key={data?.id} value={index}>
+                        {data?.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
 
-                <FormHelperText>Select Main Categorie</FormHelperText>
-              </FormControl>
+                  <FormHelperText>Select Main Categorie</FormHelperText>
+                </FormControl>
 
+                <FormControl>
+                  <InputLabel id="demo-multiple-checkbox-label">
+                    Ca...
+                  </InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={subCategorie ? subCategorie : []}
+                    onChange={handleSubCategorieChange}
+                    input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) => selected?.join(", ")}
+                    MenuProps={MenuProps}
+                  >
+                    {CategorieData[
+                      mainCategorie ? mainCategorie : []
+                    ]?.subCategories?.map((data) => (
+                      <MenuItem key={data?.id} value={data?.name}>
+                        <Checkbox
+                          checked={subCategorie?.indexOf(data?.name) > -1}
+                        />
+                        <ListItemText primary={data?.name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>Select SubCategories</FormHelperText>
+                </FormControl>
+              </Box>
+            </AddProductCategorie>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductCategorie
+                ? "Please Select Product Categorie*"
+                : null}
+            </Typography>
+            <Typography>
+              Product Gender <span style={{ color: "red" }}>*</span>
+            </Typography>
+            <AddProductColor>
               <FormControl>
-                <InputLabel id="demo-multiple-checkbox-label">Ca...</InputLabel>
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender"
+                  value={genders}
+                  onChange={(e) => handleGenderSelectChange(e)}
+                >
+                  <FormControlLabel
+                    value="Male"
+                    control={<Radio />}
+                    label="Male"
+                  />
+                  <FormControlLabel
+                    value="Female"
+                    control={<Radio />}
+                    label="Female"
+                  />
+                </RadioGroup>
+                <FormHelperText>
+                  Select Gender <span style={{ color: "red" }}>*</span>
+                </FormHelperText>
+              </FormControl>
+            </AddProductColor>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductgender ? "Product Gender required*" : null}
+            </Typography>
+            <Typography>Product Colors</Typography>
+            <AddProductColor>
+              <FormControl>
+                <InputLabel id="demo-multiple-checkbox-label">
+                  Colors
+                </InputLabel>
                 <Select
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
                   multiple
-                  value={subCategorie ? subCategorie : []}
-                  onChange={handleSubCategorieChange}
+                  value={colorSelect ? colorSelect : []}
+                  onChange={handleColorSelectChange}
                   input={<OutlinedInput label="Tag" />}
                   renderValue={(selected) => selected?.join(", ")}
                   MenuProps={MenuProps}
                 >
-                  {CategorieData[
-                    mainCategorie ? mainCategorie : []
-                  ]?.subCategories?.map((data) => (
-                    <MenuItem key={data?.id} value={data?.name}>
+                  {allColorData?.map((data, index) => (
+                    <MenuItem
+                      style={{
+                        backgroundColor: `${ColorData[index]?.colorname}`,
+                        color: "#D9E0E6",
+                      }}
+                      key={data?._id}
+                      value={data?.colorname}
+                    >
                       <Checkbox
-                        checked={subCategorie?.indexOf(data?.name) > -1}
+                        checked={colorSelect?.indexOf(data?.colorname) > -1}
                       />
-                      <ListItemText primary={data?.name} />
+                      <ListItemText primary={data?.colorname} />
                     </MenuItem>
                   ))}
                 </Select>
                 <FormHelperText>Select SubCategories</FormHelperText>
               </FormControl>
-            </Box>
-          </AddProductCategorie>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductCategorie ? "Please Select Product Categorie*" : null}
-          </Typography>
-          <Typography>
-            Product Gender <span style={{ color: "red" }}>*</span>
-          </Typography>
-          <AddProductColor>
-            <FormControl>
-              <RadioGroup
-                aria-label="gender"
-                name="gender"
-                value={genders}
-                onChange={(e) => handleGenderSelectChange(e)}
-              >
-                <FormControlLabel
-                  value="Male"
-                  control={<Radio />}
-                  label="Male"
-                />
-                <FormControlLabel
-                  value="Female"
-                  control={<Radio />}
-                  label="Female"
-                />
-              </RadioGroup>
-              <FormHelperText>
-                Select Gender <span style={{ color: "red" }}>*</span>
-              </FormHelperText>
-            </FormControl>
-          </AddProductColor>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductgender ? "Product Gender required*" : null}
-          </Typography>
-          <Typography>Product Colors</Typography>
-          <AddProductColor>
-            <FormControl>
-              <InputLabel id="demo-multiple-checkbox-label">Colors</InputLabel>
-              <Select
-                labelId="demo-multiple-checkbox-label"
-                id="demo-multiple-checkbox"
-                multiple
-                value={colorSelect ? colorSelect : []}
-                onChange={handleColorSelectChange}
-                input={<OutlinedInput label="Tag" />}
-                renderValue={(selected) => selected?.join(", ")}
-                MenuProps={MenuProps}
-              >
-                {allColorData?.map((data, index) => (
-                  <MenuItem
-                    style={{
-                      backgroundColor: `${ColorData[index]?.colorname}`,
-                      color: "#D9E0E6",
-                    }}
-                    key={data?._id}
-                    value={data?.colorname}
-                  >
-                    <Checkbox
-                      checked={colorSelect?.indexOf(data?.colorname) > -1}
+            </AddProductColor>
+            <AddProductSize>
+              <Box>
+                <Box>
+                  <Typography>ADD SIZES</Typography>
+                </Box>
+                <Box>
+                  <form onSubmit={() => sizeSubmit()}>
+                    <input
+                      type="text"
+                      placeholder="Enter size in Inces"
+                      value={sizeInput}
+                      onChange={(e) => setSizeInput(e.target.value)}
                     />
-                    <ListItemText primary={data?.colorname} />
-                  </MenuItem>
-                ))}
-              </Select>
-              <FormHelperText>Select SubCategories</FormHelperText>
-            </FormControl>
-          </AddProductColor>
-          <AddProductSize>
-            <Box>
-              <Box>
-                <Typography>ADD SIZES</Typography>
-              </Box>
-              <Box>
-                <form onSubmit={() => sizeSubmit()}>
-                  <input
-                    type="text"
-                    placeholder="Enter size in Inces"
-                    value={sizeInput}
-                    onChange={(e) => setSizeInput(e.target.value)}
-                  />
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <Select
-                      value={sizeType ? sizeType : []}
-                      onChange={handleSizeChange}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {SizeData?.map((data, index) => (
-                        <MenuItem key={index} value={data}>
-                          {data}
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                      <Select
+                        value={sizeType ? sizeType : []}
+                        onChange={handleSizeChange}
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
                         </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>Select size type</FormHelperText>
-                  </FormControl>
-                  <button onClick={(e) => sizeSubmit(e)}>ADD</button>
-                  <button onClick={(e) => sizeClearAll(e)}>Clear All</button>
-                </form>
+                        {SizeData?.map((data, index) => (
+                          <MenuItem key={index} value={data}>
+                            {data}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>Select size type</FormHelperText>
+                    </FormControl>
+                    <button onClick={(e) => sizeSubmit(e)}>ADD</button>
+                    <button onClick={(e) => sizeClearAll(e)}>Clear All</button>
+                  </form>
+                </Box>
+                <Box>
+                  {sizeAll?.map((data, index) => (
+                    <Chip
+                      key={index}
+                      label={data?.size + " " + data?.type}
+                      onClick={(e) => handleChipClick(e, index)}
+                      onDelete={(e) => handleChipDelete(e, index)}
+                      deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
+                    />
+                  ))}
+                </Box>
               </Box>
+            </AddProductSize>
+            <AddProductSize>
               <Box>
-                {sizeAll?.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data?.size + " " + data?.type}
-                    onClick={(e) => handleChipClick(e, index)}
-                    onDelete={(e) => handleChipDelete(e, index)}
-                    deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
-                  />
-                ))}
-              </Box>
-            </Box>
-          </AddProductSize>
-          <AddProductSize>
-            <Box>
-              <Box>
-                <Typography>
-                  ADD IMAGES <span style={{ color: "red" }}>*</span>
-                </Typography>
-              </Box>
+                <Box>
+                  <Typography>
+                    ADD IMAGES <span style={{ color: "red" }}>*</span>
+                  </Typography>
+                </Box>
 
-              <Box>
-                <form>
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "200px",
-                      height: "56px",
-                      borderRadius: "5px",
-                      border: "none",
-                      outline: "none",
-                      boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
-                      padding: "0px 15px",
-                      fontSize: "16px",
-                      fontFamily: "'Tektur', cursive",
-                      fontWeight: "500",
-                      marginTop: "8px",
-                    }}
-                    onClick={() => handleChooseImage()}
-                  >
-                    <Typography>
-                      {imageInput ? "Click Add" : "Choose Image"}
-                    </Typography>
-                  </Box>
-                  <input
-                    style={{ display: "none" }}
-                    ref={ImageInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    placeholder="Enter size in Inces"
-                    onChange={(e) => uploadimage(e)}
-                  />
-                  {/* <button onClick={(e) => imageSubmit(e)}>ADD</button>
-                  <button onClick={(e) => imageClearAll(e)}>Clear All</button> */}
-                </form>
-              </Box>
-              <Box>
-                {imageAll?.map((data, index) => (
-                  <Chip
-                    sx={{ height: "50px" }}
-                    key={index}
-                    onDelete={(e) => handleImageDelete(e, index)}
-                    deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
-                    avatar={
-                      <img
-                        alt={`Natacha${index}`}
-                        src={data}
-                        style={{ width: "30px", height: "30px" }}
-                      />
-                    }
-                  />
-                ))}
-              </Box>
-              <BoxforPreImg>
-                {preimageAll?.map((data, index) => (
-                  <Chip
-                    sx={{ height: "50px" }}
-                    key={index}
-                    onDelete={(e) => handlePreImageDelete(e, data)}
-                    deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
-                    avatar={
-                      <img
-                        alt={`Natacha${index}`}
-                        src={data?.url}
-                        style={{ width: "30px", height: "30px" }}
-                      />
-                    }
-                  />
-                ))}
-              </BoxforPreImg>
-            </Box>
-          </AddProductSize>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductImage ? "Please Select atleast One Image*" : null}
-          </Typography>
-
-          <Typography style={{ marginTop: "20px" }}>
-            Product Density:
-          </Typography>
-          <AddProductDensity>
-            <Box>
-              <Box>
-                <Typography style={{ color: "#252F43" }}>
-                  Density Present:
-                </Typography>
-                <input
-                  type="checkBox"
-                  value={density}
-                  onChange={() => handledensitySelectChange()}
-                  style={{ border: "none", outline: "none" }}
-                  placeholder={`Youtube Video Link  example: www.youtube.com`}
-                />
-              </Box>
-
-              <Box style={{ marginBottom: "20px" }}></Box>
-            </Box>
-          </AddProductDensity>
-          <Typography style={{ marginTop: "20px" }}>Product Video:</Typography>
-          <AddProductSteps>
-            <Box>
-              <Box>
-                <Typography style={{ color: "#252F43" }}>
-                  Enter Video Link
-                </Typography>
-                <input
-                  type="text"
-                  value={video}
-                  onChange={(e) => handleVieoSelectChange(e)}
-                  placeholder={`Youtube Video Link  example: www.youtube.com`}
-                  style={{ width: "98%" }}
-                />
-              </Box>
-
-              <Box style={{ marginBottom: "20px" }}></Box>
-            </Box>
-          </AddProductSteps>
-          <Typography>Steps Details:</Typography>
-          <AddProductSteps>
-            <Box>
-              <Box
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                }}
-              >
-                {stepsAll?.length > 0
-                  ? stepsAll?.map((data, index) => {
-                      return (
-                        <Box
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "flex-start",
-                            alignItems: "flex-start",
-                            padding: "10px",
-                            boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
-                            margin: "5px 0px",
-                          }}
-                        >
-                          <Typography>Title: {data.title}</Typography>
-                          <Typography>
-                            Video Link: <a href={data.link}>{data.link}</a>
-                          </Typography>
-                          <Typography>
-                            Description: {data.description}
-                          </Typography>
-                          <Button
-                            style={{ color: "red" }}
-                            onClick={() => handledeleteStepSaved(data.id)}
-                          >
-                            Delete
-                          </Button>
-                        </Box>
-                      );
-                    })
-                  : null}
-              </Box>
-              <Box>
-                {toggleProductshowstep ? (
-                  <>
-                    <hr
+                <Box>
+                  <form>
+                    <Box
                       style={{
-                        marginTop: "10px",
-                        color: "red",
-                        border: "1px solid #EEEFF1",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "200px",
+                        height: "56px",
+                        borderRadius: "5px",
+                        border: "none",
+                        outline: "none",
+                        boxShadow: "0px 0px 10px rgba(0,0,0,0.5)",
+                        padding: "0px 15px",
+                        fontSize: "16px",
+                        fontFamily: "'Tektur', cursive",
+                        fontWeight: "500",
+                        marginTop: "8px",
                       }}
-                    />
-                    <Typography style={{ marginTop: "10px" }}>Step:</Typography>
-                    <Typography style={{ color: "#252F43" }}>
-                      Enter Title
-                    </Typography>
+                      onClick={() => handleChooseImage()}
+                    >
+                      <Typography>
+                        {imageInput ? "Click Add" : "Choose Image"}
+                      </Typography>
+                    </Box>
                     <input
-                      type="text"
-                      value={stepsInputTitle}
-                      onChange={(e) => setStepsInputTitle(e.target.value)}
-                      placeholder={`Enter Title`}
-                      style={{ width: "98%" }}
+                      style={{ display: "none" }}
+                      ref={ImageInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      placeholder="Enter size in Inces"
+                      onChange={(e) => uploadimage(e)}
                     />
-                    <Typography style={{ color: "#252F43" }}>
-                      Enter Description
-                    </Typography>
-                    <textarea
-                      type="text"
-                      value={stepsInputDes}
-                      onChange={(e) => setStepsInputDes(e.target.value)}
-                      placeholder={`Enter Description`}
+                    {/* <button onClick={(e) => imageSubmit(e)}>ADD</button>
+                  <button onClick={(e) => imageClearAll(e)}>Clear All</button> */}
+                  </form>
+                </Box>
+                <Box>
+                  {imageAll?.map((data, index) => (
+                    <Chip
+                      sx={{ height: "50px" }}
+                      key={index}
+                      onDelete={(e) => handleImageDelete(e, index)}
+                      deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
+                      avatar={
+                        <img
+                          alt={`Natacha${index}`}
+                          src={data}
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                      }
                     />
-                    <Typography style={{ color: "#252F43" }}>
-                      Enter Video Link
-                    </Typography>
-                    <input
-                      type="text"
-                      value={stepsInputLink}
-                      onChange={(e) => setStepsInputLink(e.target.value)}
-                      placeholder={`Youtube Video Link  example: www.youtube.com`}
-                      style={{ width: "98%" }}
+                  ))}
+                </Box>
+                <BoxforPreImg>
+                  {preimageAll?.map((data, index) => (
+                    <Chip
+                      sx={{ height: "50px" }}
+                      key={index}
+                      onDelete={(e) => handlePreImageDelete(e, data)}
+                      deleteIcon={<CancelIcon style={{ color: "#fff" }} />}
+                      avatar={
+                        <img
+                          alt={`Natacha${index}`}
+                          src={data?.url}
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                      }
                     />
-                  </>
-                ) : (
-                  ""
-                )}
+                  ))}
+                </BoxforPreImg>
+              </Box>
+            </AddProductSize>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductImage ? "Please Select atleast One Image*" : null}
+            </Typography>
+
+            <Typography style={{ marginTop: "20px" }}>
+              Product Density:
+            </Typography>
+            <AddProductDensity>
+              <Box>
+                <Box>
+                  <Typography style={{ color: "#252F43" }}>
+                    Density Present:
+                  </Typography>
+                  <input
+                    type="checkBox"
+                    value={density}
+                    onChange={() => handledensitySelectChange()}
+                    style={{ border: "none", outline: "none" }}
+                    placeholder={`Youtube Video Link  example: www.youtube.com`}
+                  />
+                </Box>
 
                 <Box style={{ marginBottom: "20px" }}></Box>
               </Box>
-              {toggleProductstepButton ? (
-                <>
-                  <Box>
-                    <Button
-                      onClick={stepsSubmit}
-                      style={{
-                        backgroundColor: "#2DB484",
-                        color: "#fff",
-                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
-                      }}
-                    >
-                      Save Step
-                    </Button>
-                  </Box>
-                  <Box>
-                    <Button
-                      onClick={handleStepRemove}
-                      style={{
-                        backgroundColor: "#B73130",
-                        color: "#fff",
-                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
-                      }}
-                    >
-                      Remove Step
-                    </Button>
-                  </Box>
-                </>
-              ) : (
-                <>
-                  <Box>
-                    <Button
-                      onClick={handleNumOfInputsChange}
-                      style={{
-                        backgroundColor: "#1976D2",
-                        color: "#fff",
-                        boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
-                      }}
-                    >
-                      Add Steps
-                    </Button>
-                  </Box>
-                </>
-              )}
-            </Box>
-          </AddProductSteps>
-
-          <AddProductPrice>
-            <Box>
+            </AddProductDensity>
+            <Typography style={{ marginTop: "20px" }}>
+              Product Video:
+            </Typography>
+            <AddProductSteps>
               <Box>
-                <Typography>Product Cost</Typography>
-              </Box>
-              <Box>
-                <AddProductPriceMoney>
-                  <FormControl fullWidth sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">
-                      Amount<span style={{ color: "red" }}>*</span>
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      startAdornment={
-                        <InputAdornment position="start">₹</InputAdornment>
-                      }
-                      label="Amount"
-                      name="productcostprice"
-                      type="number"
-                      value={constantValues?.productcostprice}
-                      onChange={(e) => handleConstantProductValues(e)}
-                    />
-                  </FormControl>
-                </AddProductPriceMoney>
-                <AddProductPriceDiscount>
-                  <FormControl fullWidth sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">
-                      Discount
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      startAdornment={
-                        <InputAdornment position="start">%</InputAdornment>
-                      }
-                      label="Amount"
-                      name="productdiscount"
-                      value={constantValues?.productdiscount}
-                      onChange={(e) => handleConstantProductValues(e)}
-                      type="number"
-                      inputProps={{ maxLength: 2 }}
-                    />
-                  </FormControl>
-                </AddProductPriceDiscount>
-              </Box>
-              <Box>
-                <Typography>
-                  Final Price:{" "}
-                  <span style={{ fontSize: "20px", color: "#5A73CD" }}>
-                    ₹
-                    {(
-                      constantValues?.productcostprice -
-                      (constantValues?.productcostprice *
-                        constantValues?.productdiscount) /
-                        100
-                    ).toFixed(2)}
-                  </span>
-                </Typography>
-              </Box>
-            </Box>
-          </AddProductPrice>
-          <Typography style={{ fontSize: "12px", color: "red" }}>
-            {toggleProductPrice ? "Product Price required**" : null}
-          </Typography>
-          <AddProductPrice>
-            <Box>
-              <Box>
-                <Typography>Product Dimension</Typography>
-              </Box>
-              <Box>
-                <AddProductPriceMoney>
-                  <FormControl fullWidth sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">
-                      length<span style={{ color: "red" }}>*</span>
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      endAdornment={
-                        <InputAdornment position="end">cms</InputAdornment>
-                      }
-                      label="Amount"
-                      name="productlength"
-                      type="number"
-                      value={constantValues?.productlength}
-                      onChange={(e) => handleConstantProductValues(e)}
-                    />
-                  </FormControl>
-                  <Typography style={{ fontSize: "12px", color: "red" }}>
-                    {toggleProductlength ? "enter valid value*" : null}
+                <Box>
+                  <Typography style={{ color: "#252F43" }}>
+                    Enter Video Link
                   </Typography>
-                </AddProductPriceMoney>
+                  <input
+                    type="text"
+                    value={video}
+                    onChange={(e) => handleVieoSelectChange(e)}
+                    placeholder={`Youtube Video Link  example: www.youtube.com`}
+                    style={{ width: "98%" }}
+                  />
+                </Box>
 
-                <AddProductPriceDiscount>
-                  <FormControl fullWidth sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">
-                      breadth<span style={{ color: "red" }}>*</span>
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      endAdornment={
-                        <InputAdornment position="end">cms</InputAdornment>
-                      }
-                      label="Amount"
-                      name="productbreadth"
-                      value={constantValues?.productbreadth}
-                      onChange={(e) => handleConstantProductValues(e)}
-                      type="number"
-                      inputProps={{ maxLength: 2 }}
-                    />
-                  </FormControl>
-                  <Typography style={{ fontSize: "12px", color: "red" }}>
-                    {toggleProductbreadth ? "enter valid value*" : null}
-                  </Typography>
-                </AddProductPriceDiscount>
-
-                <AddProductPriceMoney>
-                  <FormControl fullWidth sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">
-                      height<span style={{ color: "red" }}>*</span>
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      endAdornment={
-                        <InputAdornment position="end">cms</InputAdornment>
-                      }
-                      label="Amount"
-                      name="productheight"
-                      type="number"
-                      value={constantValues?.productheight}
-                      onChange={(e) => handleConstantProductValues(e)}
-                    />
-                  </FormControl>
-                  <Typography style={{ fontSize: "12px", color: "red" }}>
-                    {toggleProductheight ? "enter valid value*" : null}
-                  </Typography>
-                </AddProductPriceMoney>
-
-                <AddProductPriceDiscount>
-                  <FormControl fullWidth sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">
-                      weight<span style={{ color: "red" }}>*</span>
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      endAdornment={
-                        <InputAdornment position="end">Kg</InputAdornment>
-                      }
-                      label="Amount"
-                      name="productweight"
-                      value={constantValues?.productweight}
-                      onChange={(e) => handleConstantProductValues(e)}
-                      type="number"
-                      inputProps={{ maxLength: 2 }}
-                    />
-                  </FormControl>
-                  <Typography style={{ fontSize: "12px", color: "red" }}>
-                    {toggleProductweight ? "enter valid value*" : null}
-                  </Typography>
-                </AddProductPriceDiscount>
+                <Box style={{ marginBottom: "20px" }}></Box>
               </Box>
-            </Box>
-          </AddProductPrice>
-          <AddProductButtons>
-            <button
-              style={{ backgroundColor: "#2DB484" }}
-              onClick={(e) => handleSubmitForm(e)}
-            >
-              Save
-            </button>
-            <button
-              style={{ backgroundColor: "#C6A762" }}
-              onClick={(e) => handleResetForm(e)}
-            >
-              Reset
-            </button>
-          </AddProductButtons>
-        </form>
-      </AddProductall>
-    </AddProducts>
+            </AddProductSteps>
+            <Typography>Steps Details:</Typography>
+            <AddProductSteps>
+              <Box>
+                <Box
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  {stepsAll?.length > 0
+                    ? stepsAll?.map((data, index) => {
+                        return (
+                          <Box
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "flex-start",
+                              alignItems: "flex-start",
+                              padding: "10px",
+                              boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                              margin: "5px 0px",
+                            }}
+                          >
+                            <Typography>Title: {data.title}</Typography>
+                            <Typography>
+                              Video Link: <a href={data.link}>{data.link}</a>
+                            </Typography>
+                            <Typography>
+                              Description: {data.description}
+                            </Typography>
+                            <Button
+                              style={{ color: "red" }}
+                              onClick={() => handledeleteStepSaved(data.id)}
+                            >
+                              Delete
+                            </Button>
+                          </Box>
+                        );
+                      })
+                    : null}
+                </Box>
+                <Box>
+                  {toggleProductshowstep ? (
+                    <>
+                      <hr
+                        style={{
+                          marginTop: "10px",
+                          color: "red",
+                          border: "1px solid #EEEFF1",
+                        }}
+                      />
+                      <Typography style={{ marginTop: "10px" }}>
+                        Step:
+                      </Typography>
+                      <Typography style={{ color: "#252F43" }}>
+                        Enter Title
+                      </Typography>
+                      <input
+                        type="text"
+                        value={stepsInputTitle}
+                        onChange={(e) => setStepsInputTitle(e.target.value)}
+                        placeholder={`Enter Title`}
+                        style={{ width: "98%" }}
+                      />
+                      <Typography style={{ color: "#252F43" }}>
+                        Enter Description
+                      </Typography>
+                      <textarea
+                        type="text"
+                        value={stepsInputDes}
+                        onChange={(e) => setStepsInputDes(e.target.value)}
+                        placeholder={`Enter Description`}
+                      />
+                      <Typography style={{ color: "#252F43" }}>
+                        Enter Video Link
+                      </Typography>
+                      <input
+                        type="text"
+                        value={stepsInputLink}
+                        onChange={(e) => setStepsInputLink(e.target.value)}
+                        placeholder={`Youtube Video Link  example: www.youtube.com`}
+                        style={{ width: "98%" }}
+                      />
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  <Box style={{ marginBottom: "20px" }}></Box>
+                </Box>
+                {toggleProductstepButton ? (
+                  <>
+                    <Box>
+                      <Button
+                        onClick={stepsSubmit}
+                        style={{
+                          backgroundColor: "#2DB484",
+                          color: "#fff",
+                          boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        Save Step
+                      </Button>
+                    </Box>
+                    <Box>
+                      <Button
+                        onClick={handleStepRemove}
+                        style={{
+                          backgroundColor: "#B73130",
+                          color: "#fff",
+                          boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        Remove Step
+                      </Button>
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Box>
+                      <Button
+                        onClick={handleNumOfInputsChange}
+                        style={{
+                          backgroundColor: "#1976D2",
+                          color: "#fff",
+                          boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        Add Steps
+                      </Button>
+                    </Box>
+                  </>
+                )}
+              </Box>
+            </AddProductSteps>
+
+            <AddProductPrice>
+              <Box>
+                <Box>
+                  <Typography>Product Cost</Typography>
+                </Box>
+                <Box>
+                  <AddProductPriceMoney>
+                    <FormControl fullWidth sx={{ m: 1 }}>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        Amount<span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        startAdornment={
+                          <InputAdornment position="start">₹</InputAdornment>
+                        }
+                        label="Amount"
+                        name="productcostprice"
+                        type="number"
+                        value={constantValues?.productcostprice}
+                        onChange={(e) => handleConstantProductValues(e)}
+                      />
+                    </FormControl>
+                  </AddProductPriceMoney>
+                  <AddProductPriceDiscount>
+                    <FormControl fullWidth sx={{ m: 1 }}>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        Discount
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        startAdornment={
+                          <InputAdornment position="start">%</InputAdornment>
+                        }
+                        label="Amount"
+                        name="productdiscount"
+                        value={constantValues?.productdiscount}
+                        onChange={(e) => handleConstantProductValues(e)}
+                        type="number"
+                        inputProps={{ maxLength: 2 }}
+                      />
+                    </FormControl>
+                  </AddProductPriceDiscount>
+                </Box>
+                <Box>
+                  <Typography>
+                    Final Price:{" "}
+                    <span style={{ fontSize: "20px", color: "#5A73CD" }}>
+                      ₹
+                      {(
+                        constantValues?.productcostprice -
+                        (constantValues?.productcostprice *
+                          constantValues?.productdiscount) /
+                          100
+                      ).toFixed(2)}
+                    </span>
+                  </Typography>
+                </Box>
+              </Box>
+            </AddProductPrice>
+            <Typography style={{ fontSize: "12px", color: "red" }}>
+              {toggleProductPrice ? "Product Price required**" : null}
+            </Typography>
+            <AddProductPrice>
+              <Box>
+                <Box>
+                  <Typography>Product Dimension</Typography>
+                </Box>
+                <Box>
+                  <AddProductPriceMoney>
+                    <FormControl fullWidth sx={{ m: 1 }}>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        length<span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        endAdornment={
+                          <InputAdornment position="end">cms</InputAdornment>
+                        }
+                        label="Amount"
+                        name="productlength"
+                        type="number"
+                        value={constantValues?.productlength}
+                        onChange={(e) => handleConstantProductValues(e)}
+                      />
+                    </FormControl>
+                    <Typography style={{ fontSize: "12px", color: "red" }}>
+                      {toggleProductlength ? "enter valid value*" : null}
+                    </Typography>
+                  </AddProductPriceMoney>
+
+                  <AddProductPriceDiscount>
+                    <FormControl fullWidth sx={{ m: 1 }}>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        breadth<span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        endAdornment={
+                          <InputAdornment position="end">cms</InputAdornment>
+                        }
+                        label="Amount"
+                        name="productbreadth"
+                        value={constantValues?.productbreadth}
+                        onChange={(e) => handleConstantProductValues(e)}
+                        type="number"
+                        inputProps={{ maxLength: 2 }}
+                      />
+                    </FormControl>
+                    <Typography style={{ fontSize: "12px", color: "red" }}>
+                      {toggleProductbreadth ? "enter valid value*" : null}
+                    </Typography>
+                  </AddProductPriceDiscount>
+
+                  <AddProductPriceMoney>
+                    <FormControl fullWidth sx={{ m: 1 }}>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        height<span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        endAdornment={
+                          <InputAdornment position="end">cms</InputAdornment>
+                        }
+                        label="Amount"
+                        name="productheight"
+                        type="number"
+                        value={constantValues?.productheight}
+                        onChange={(e) => handleConstantProductValues(e)}
+                      />
+                    </FormControl>
+                    <Typography style={{ fontSize: "12px", color: "red" }}>
+                      {toggleProductheight ? "enter valid value*" : null}
+                    </Typography>
+                  </AddProductPriceMoney>
+
+                  <AddProductPriceDiscount>
+                    <FormControl fullWidth sx={{ m: 1 }}>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        weight<span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        endAdornment={
+                          <InputAdornment position="end">Kg</InputAdornment>
+                        }
+                        label="Amount"
+                        name="productweight"
+                        value={constantValues?.productweight}
+                        onChange={(e) => handleConstantProductValues(e)}
+                        type="number"
+                        inputProps={{ maxLength: 2 }}
+                      />
+                    </FormControl>
+                    <Typography style={{ fontSize: "12px", color: "red" }}>
+                      {toggleProductweight ? "enter valid value*" : null}
+                    </Typography>
+                  </AddProductPriceDiscount>
+                </Box>
+              </Box>
+            </AddProductPrice>
+            <AddProductButtons>
+              <button
+                style={{ backgroundColor: "#2DB484" }}
+                onClick={(e) => handleSubmitForm(e)}
+              >
+                Save
+              </button>
+              <button
+                style={{ backgroundColor: "#C6A762" }}
+                onClick={(e) => handleResetForm(e)}
+              >
+                Reset
+              </button>
+            </AddProductButtons>
+          </form>
+        </AddProductall>
+      </AddProducts>
+      <Dialog
+        open={loading}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please wait...
+            <CircularProgress
+              style={{ width: "20px", height: "20px" }}
+              color="inherit"
+            />
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

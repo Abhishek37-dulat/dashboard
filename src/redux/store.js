@@ -14,6 +14,7 @@ import { SaveReducer } from "./reducers/SaveReducer";
 import { BlogReducer } from "./reducers/BlogReducer";
 import { SeoReducer } from "./reducers/SeoReducer";
 import { ContactReducer } from "./reducers/ContactReducer";
+import { LoadingReducer } from "./reducers/LoadingReducer";
 
 const reducer = combineReducers({
   Colors: ColorReducer,
@@ -29,6 +30,7 @@ const reducer = combineReducers({
   Blogs: BlogReducer,
   Seos: SeoReducer,
   Contacts: ContactReducer,
+  loading: LoadingReducer,
 });
 
 const middleware = [thunk];

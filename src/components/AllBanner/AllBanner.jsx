@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAllCategories } from "../../redux/actions/CategoriesAction";
 import ReactQuill from "react-quill";
+import EditIcon from "@mui/icons-material/Edit";
 import "react-quill/dist/quill.snow.css";
 
 const ITEM_HEIGHT = 48;
@@ -122,7 +123,9 @@ const AllBanner = () => {
   const { CategorieData } = useSelector((state) => state.Categories);
   const [mainCategorie, setMainCategorie] = useState("");
   const [subCategorie, setSubCategorie] = useState([]);
+  const [preImages, setPreImages] = useState([]);
   const [value, setValue] = useState("");
+  const [bannerForm, setBannerForm] = useState(null);
   console.log("value: ", value);
 
   const handleLogo = (e) => {
@@ -133,24 +136,17 @@ const AllBanner = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setLogoImage(file);
+      imageRead(file);
       setToggleChangeLogo(true);
     }
   };
-  let imageRead = (img, bannerTitle, bannerDescription, tempCategorieData) => {
+  let imageRead = (img) => {
     const reader = new FileReader();
     if (img) {
       reader.readAsDataURL(img);
       reader.onloadend = () => {
-        setfinalLogoImage(reader.result);
-        dispatch(
-          addNewBanner({
-            image: reader.result,
-            title: bannerTitle,
-            description: bannerDescription,
-            categories: tempCategorieData,
-          })
-        );
+        setLogoImage(reader.result);
+        console.log(reader.result);
       };
     } else {
       console.log("not found");
@@ -183,8 +179,15 @@ const AllBanner = () => {
           bannerDescription,
           tempCategorieData
         );
-        imageRead(logoImage, bannerTitle, bannerDescription, tempCategorieData);
 
+        dispatch(
+          addNewBanner({
+            image: logoImage,
+            title: bannerTitle,
+            description: bannerDescription,
+            categories: tempCategorieData,
+          })
+        );
         setToggleChangeLogo(!toggleChangeLogo);
       } else {
         toast.error("Please Select image!", {
@@ -214,12 +217,48 @@ const AllBanner = () => {
     setSubCategorie([...e.target.value]);
   };
 
+  const handleEditBanner = (data) => {
+    setBannerForm(data);
+  };
+
   useEffect(() => {
     dispatch(getAllBanner());
     dispatch(getAllCategories());
   }, [dispatch]);
 
-  console.log(BannerData, logoImage);
+  useEffect(() => {
+    if (bannerForm !== null) {
+      let cateName = 0;
+      for (let i = 0; i < CategorieData.length; i++) {
+        if (CategorieData[i].name === bannerForm?.categories[0]?.name) {
+          cateName = i;
+        }
+      }
+      let subData = bannerForm?.categories[0]?.subCategories?.map(
+        (data) => data.name
+      );
+      setMainCategorie(cateName);
+      setSubCategorie(subData);
+      setBannerTitle(bannerForm?.title);
+      setBannerDescription(bannerForm?.description);
+      setPreImages(bannerForm?.banner_image[0]?.url);
+      if (bannerForm?.banner_image[0]?.url) {
+        setToggleChangeLogo(true);
+      }
+    }
+  }, [bannerForm]);
+
+  console.log(
+    BannerData,
+    logoImage,
+    bannerForm,
+    mainCategorie,
+    subCategorie,
+    bannerTitle,
+    bannerDescription,
+    finallogoImage,
+    preImages
+  );
 
   return (
     <BannerMainBox>
@@ -344,7 +383,33 @@ const AllBanner = () => {
                   }}
                 >
                   <img
-                    src={URL.createObjectURL(logoImage)}
+                    src={logoImage}
+                    alt="logoImg"
+                    style={{
+                      maxWidth: "200px",
+                      backgroundColor: "#EEEFF1",
+                      border: "5px solid #fff",
+                      boxShadow: "0px 0px 5px rgba(0,0,0,0.2)",
+                      padding: "10px",
+                      borderRadius: "7px",
+                    }}
+                  />
+                </Box>
+              ) : (
+                <Typography>No logo uploaded</Typography>
+              )}
+              {preImages && !logoImage ? (
+                <Box
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    marginTop: "10px",
+                  }}
+                >
+                  <img
+                    src={preImages}
                     alt="logoImg"
                     style={{
                       maxWidth: "200px",
@@ -372,6 +437,16 @@ const AllBanner = () => {
           onClick={() => handleSaveToggle()}
         >
           Save Banner
+        </Button>
+        <Button
+          style={{
+            backgroundColor: "#FC004C",
+            color: "#fff",
+            marginTop: "10px",
+          }}
+          onClick={() => handleSaveToggle()}
+        >
+          Clear
         </Button>
       </Box>
 
@@ -419,6 +494,17 @@ const AllBanner = () => {
                 onClick={() => handleClickOpen(data)}
               >
                 <DisabledByDefaultIcon />
+              </IconButton>
+              <IconButton
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "50px",
+                  color: "#1B5EF7",
+                }}
+                onClick={() => handleEditBanner(data)}
+              >
+                <EditIcon />
               </IconButton>
               <Typography>{data?.description}</Typography>
             </Box>

@@ -270,19 +270,22 @@ const DeliveryStatus = ({ orderDetails }) => {
                   ₹ {orderDetails?.total_amount?.toFixed()}
                 </Typography>
               </Box>
-              <Box style={{ justifyContent: "flex-end", marginRight: "10%" }}>
-                <Button
-                  onClick={() => handleClickOpen(orderDetails, "Approved")}
-                >
-                  Approve
-                </Button>
-                <Button
-                  style={{ color: "#E75758" }}
-                  onClick={() => handleClickOpen(orderDetails, "Canceled")}
-                >
-                  Cancel
-                </Button>
-              </Box>
+              {orderDetails?.order_status === "CANCELED" ||
+              orderDetails?.order_status === "PENDING" ? (
+                <Box style={{ justifyContent: "flex-end", marginRight: "10%" }}>
+                  <Button
+                    onClick={() => handleClickOpen(orderDetails, "Approved")}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    style={{ color: "#E75758" }}
+                    onClick={() => handleClickOpen(orderDetails, "Canceled")}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              ) : null}
             </Box>
           </Box>
         </Ticket2>

@@ -6,6 +6,7 @@ const url = process.env.REACT_APP_URL;
 
 export const getAllContacts = () => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_ALL_CONTACTS_LOADING });
     const data = await axios.get(`${url}/contact/contact`);
 
     dispatch({ type: actionType.GET_ALL_CONTACTS, payload: data.data.data });
@@ -16,6 +17,7 @@ export const getAllContacts = () => async (dispatch) => {
 
 export const getSingleContacts = (id) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_SINGLE_CONTACTS_LOADING });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -30,6 +32,7 @@ export const getSingleContacts = (id) => async (dispatch) => {
 
 export const addContacts = (contactdata) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_POST_CONTACTS_LOADING });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -46,6 +49,7 @@ export const addContacts = (contactdata) => async (dispatch) => {
 
 export const updateContacts = (contactdata, id) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_PUT_CONTACTS_LOADING });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -62,6 +66,7 @@ export const updateContacts = (contactdata, id) => async (dispatch) => {
 
 export const deleteContacts = (id) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_DELETE_CONTACTS_LOADING });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,

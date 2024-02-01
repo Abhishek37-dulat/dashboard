@@ -6,6 +6,7 @@ const url = process.env.REACT_APP_URL;
 
 export const getAllProduct = () => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_REQUEST });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -21,6 +22,7 @@ export const getAllProduct = () => async (dispatch) => {
 
 export const getSingleProduct = (id) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_REQUEST });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -38,6 +40,7 @@ export const getSingleProduct = (id) => async (dispatch) => {
 
 export const addNewProduct = (newData) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_REQUEST });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -48,7 +51,6 @@ export const addNewProduct = (newData) => async (dispatch) => {
     const data = await axios.post(`${url}/product/admin/products`, newData, {
       headers,
     });
-    console.log(data);
     dispatch({ type: actionType.POST_PRODUCT, payload: data.data });
   } catch (error) {
     dispatch({ type: actionType.ERROR_POST_PRODUCT, error: error });
@@ -56,8 +58,8 @@ export const addNewProduct = (newData) => async (dispatch) => {
 };
 
 export const updateNewProduct = (id, newData) => async (dispatch) => {
-  console.log("Baaa");
   try {
+    dispatch({ type: actionType.GET_REQUEST });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -79,6 +81,7 @@ export const updateNewProduct = (id, newData) => async (dispatch) => {
 
 export const deleteExistingProduct = (newData) => async (dispatch) => {
   try {
+    dispatch({ type: actionType.GET_REQUEST });
     const token = localStorage.getItem("admintoken");
     const headers = {
       Authorization: `Bearer ${token}`,

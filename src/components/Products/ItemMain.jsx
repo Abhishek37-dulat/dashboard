@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Box, IconButton, Typography, styled } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  styled,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
@@ -184,7 +192,7 @@ const ProductTable = styled(Box)(({ theme }) => ({
 
 const ItemMain = () => {
   const dispatch = useDispatch();
-  const { ProductData } = useSelector((state) => state.Products);
+  const { ProductData, loading } = useSelector((state) => state.Products);
   useEffect(() => {
     dispatch(getAllProduct());
   }, []);
@@ -289,6 +297,21 @@ const ItemMain = () => {
           </table>
         </ProductTable>
       </ProductList>
+      <Dialog
+        open={loading}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please wait...
+            <CircularProgress
+              style={{ width: "20px", height: "20px" }}
+              color="inherit"
+            />
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

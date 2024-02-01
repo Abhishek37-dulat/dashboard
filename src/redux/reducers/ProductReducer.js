@@ -3,8 +3,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const initialState = {
+  loading: false,
   ProductData: [],
   singleProduct: null,
+  error: null,
 };
 const customSuccessToastStyleSuccess = {
   background: "#4CAF50",
@@ -17,8 +19,15 @@ const customSuccessToastStyleError = {
 };
 export const ProductReducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionType.GET_REQUEST:
+      return { ...state, loading: true, error: null };
     case actionType.GET_ALL_PRODUCTS:
-      return { ...state, ProductData: action.payload.data };
+      return {
+        ...state,
+        ProductData: action.payload.data,
+        loading: false,
+        error: null,
+      };
     case actionType.GET_SINGLE_PRODUCT:
       return { ...state, singleProduct: action.payload.data };
     case actionType.POST_PRODUCT:
@@ -36,6 +45,8 @@ export const ProductReducer = (state = initialState, action) => {
       return {
         ...state,
         ProductData: [...state.ProductData, action.payload.data],
+        loading: false,
+        error: null,
       };
     case actionType.PUT_PRODUCT:
       const updatedData = state.ProductData.map((item) => {
@@ -58,6 +69,8 @@ export const ProductReducer = (state = initialState, action) => {
       return {
         ...state,
         ProductData: updatedData,
+        loading: false,
+        error: null,
       };
     case actionType.DELETE_PRODUCT:
       toast.error("Product Deleted successfully!", {
@@ -75,6 +88,8 @@ export const ProductReducer = (state = initialState, action) => {
         ProductData: state.ProductData.filter(
           (item) => item._id !== action.payload.data.data._id
         ),
+        loading: false,
+        error: null,
       };
 
     default:

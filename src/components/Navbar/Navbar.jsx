@@ -102,7 +102,7 @@ const LogoBox = styled(Box)(({ Theme }) => ({
   },
   "& > p": {
     fontFamily: "'Tektur', cursive",
-    fontSize: "36px",
+    fontSize: "24px",
     fontWeight: "700",
     color: "#252F43",
   },
@@ -234,6 +234,7 @@ const ProfileDropDown = styled(Box)(({ theme }) => ({
 const Navbar = () => {
   const navigate = useNavigate();
   const leftmainside = useRef();
+  const toprefbar = useRef();
   const dashboardRef = useRef();
   const productRef = useRef();
   const orderRef = useRef();
@@ -243,6 +244,7 @@ const Navbar = () => {
   const categoriesRef = useRef();
   const colorRef = useRef();
   const blogRef = useRef();
+  const adduserRef = useRef();
   const bdashboardRef = useRef();
   const bproductRef = useRef();
   const borderRef = useRef();
@@ -252,6 +254,7 @@ const Navbar = () => {
   const bcategoriesRef = useRef();
   const bcolorRef = useRef();
   const bblogRef = useRef();
+  const badduserRef = useRef();
   const [sidebarmanager, setSidebarmanager] = useState(0);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [countryCode, setCountryCode] = useState("");
@@ -264,6 +267,7 @@ const Navbar = () => {
     e.preventDefault();
     localStorage.setItem("myValue", v);
     setSidebarmanager(v);
+    const adduserStyling = adduserRef.current.style;
     const dashboardStyling = dashboardRef.current.style;
     const productStyling = productRef.current.style;
     const orderStyling = orderRef.current.style;
@@ -273,6 +277,7 @@ const Navbar = () => {
     const categoriesStyling = categoriesRef.current.style;
     const colorStyling = colorRef.current.style;
     const blogStyling = blogRef.current.style;
+    const badduserStyling = badduserRef.current.style;
     const bdashboardStyling = bdashboardRef.current.style;
     const bproductStyling = bproductRef.current.style;
     const borderStyling = borderRef.current.style;
@@ -293,6 +298,7 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === productRef.current) {
       navigate("/product");
@@ -305,6 +311,7 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === orderRef.current) {
       navigate("/order");
@@ -317,6 +324,7 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === cartRef.current) {
       navigate("/cart");
@@ -329,6 +337,7 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === saveRef.current) {
       navigate("/save");
@@ -341,6 +350,7 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === commentRef.current) {
       navigate("/comment");
@@ -353,6 +363,7 @@ const Navbar = () => {
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === categoriesRef.current) {
       navigate("/categories");
@@ -365,6 +376,7 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
       backToNormalStyling(blogStyling, bblogStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
     }
     if (e.target === colorRef.current) {
       navigate("/colors");
@@ -389,6 +401,20 @@ const Navbar = () => {
       backToNormalStyling(commentStyling, bcommentStyling);
       backToNormalStyling(categoriesStyling, bcategoriesStyling);
       backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(adduserStyling, badduserStyling);
+    }
+    if (e.target === adduserRef.current) {
+      navigate("/adduser");
+      changeByStyling(adduserStyling, badduserStyling);
+      backToNormalStyling(productStyling, bproductStyling);
+      backToNormalStyling(orderStyling, borderStyling);
+      backToNormalStyling(cartStyling, bcartStyling);
+      backToNormalStyling(saveStyling, bsaveStyling);
+      backToNormalStyling(dashboardStyling, bdashboardStyling);
+      backToNormalStyling(commentStyling, bcommentStyling);
+      backToNormalStyling(categoriesStyling, bcategoriesStyling);
+      backToNormalStyling(colorStyling, bcolorStyling);
+      backToNormalStyling(blogStyling, bblogStyling);
     }
   };
   const handleLogoutFunction = () => {
@@ -419,8 +445,15 @@ const Navbar = () => {
     bitem.borderRight = "";
   };
   const handleScreenLeft = () => {
-    leftmainside.current.style.display = "block";
-    leftmainside.current.style.zIndex = "999";
+    if (leftmainside.current.style.display !== "none") {
+      leftmainside.current.style.display = "none";
+      leftmainside.current.style.zIndex = "999";
+      toprefbar.current.style.width = "100%";
+    } else {
+      leftmainside.current.style.display = "block";
+      leftmainside.current.style.zIndex = "999";
+      toprefbar.current.style.width = "85%";
+    }
   };
 
   useEffect(() => {
@@ -466,6 +499,12 @@ const Navbar = () => {
       if (value == 8) {
         changeByStyling(blogRef?.current?.style, bblogRef?.current?.style);
       }
+      if (value == 9) {
+        changeByStyling(
+          adduserRef?.current?.style,
+          badduserRef?.current?.style
+        );
+      }
       setSidebarmanager(value);
     };
     getlocalvalue();
@@ -505,7 +544,7 @@ const Navbar = () => {
         <span style={{ backgroundColor: "#C6A762" }}></span>
         <span style={{ backgroundColor: "#77CC89" }}></span>
       </StaticBar>
-      <OuterNavbar>
+      <OuterNavbar ref={toprefbar}>
         <NavBarContainerTop>
           <NavBarLeft>
             <LeftInitialBox>
@@ -613,7 +652,7 @@ const Navbar = () => {
       <SideBar ref={leftmainside}>
         <LogoBox>
           <span></span>
-          <p>Hair</p>
+          <p>Maneology</p>
           <span></span>
         </LogoBox>
         <BoardBox ref={bdashboardRef}>
@@ -625,6 +664,7 @@ const Navbar = () => {
             Dashboard
           </Button>
         </BoardBox>
+
         <BoardBox ref={bproductRef}>
           <Button
             value="1"
@@ -695,6 +735,15 @@ const Navbar = () => {
             onClick={(e) => handleSideBarClick(e, 8)}
           >
             Blogs
+          </Button>
+        </BoardBox>
+        <BoardBox ref={badduserRef}>
+          <Button
+            value="0"
+            ref={adduserRef}
+            onClick={(e) => handleSideBarClick(e, 9)}
+          >
+            Add Users
           </Button>
         </BoardBox>
       </SideBar>

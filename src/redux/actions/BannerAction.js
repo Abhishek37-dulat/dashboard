@@ -33,6 +33,21 @@ export const addNewBanner = (newData) => async (dispatch) => {
   }
 };
 
+export const updateBanner = (newData, id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("admintoken");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const data = await axios.put(`${url}/banner/${id}`, newData, { headers });
+    console.log(data);
+    dispatch({ type: actionType.UPDATE_BANNER, payload: data.data.data });
+  } catch (error) {
+    dispatch({ type: actionType.ERROR_UPDATE_BANNER, error: error });
+  }
+};
+
 export const deleteBanner = (newData) => async (dispatch) => {
   try {
     const token = localStorage.getItem("admintoken");

@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ToggleOffIcon from "@mui/icons-material/ToggleOff";
-import ToggleOnIcon from "@mui/icons-material/ToggleOn";
+// import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+// import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import HiveIcon from "@mui/icons-material/Hive";
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import {
   Box,
-  IconButton,
   Typography,
   Button,
   styled,
@@ -22,7 +21,7 @@ import {
   getSingleProduct,
 } from "../../redux/actions/ProductAction";
 import { useNavigate } from "react-router-dom";
-import { addSeo, getSeo } from "../../redux/actions/SeoAction";
+import { getSeo } from "../../redux/actions/SeoAction";
 
 const TableRowArea = styled(TableRow)(({ theme }) => ({
   width: "100%",

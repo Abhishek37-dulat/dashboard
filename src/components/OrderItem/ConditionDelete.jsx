@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
-import { deletePost } from "../../redux/actions/PostAction";
+// import { deletePost } from "../../redux/actions/PostAction";
 import {
   ApproveCancelOrder,
   DeniedOrder,

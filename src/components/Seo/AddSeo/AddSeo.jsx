@@ -1,25 +1,14 @@
 import { Box, Button, Chip, Stack, Typography, styled } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import InputComponent from "./InputComponent";
 import FilterTiltShiftIcon from "@mui/icons-material/FilterTiltShift";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useDispatch, useSelector } from "react-redux";
-import { addNewBlog } from "../../../redux/actions/BlogAction";
+import { useDispatch } from "react-redux";
+// import { addNewBlog } from "../../../redux/actions/BlogAction";
 import { useParams } from "react-router-dom";
 import { addSeo } from "../../../redux/actions/SeoAction";
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const MainBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -43,56 +32,6 @@ const MainBox = styled(Box)(({ theme }) => ({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-  },
-}));
-
-const AddProductCategorie = styled(Box)(({ theme }) => ({
-  // border: "1px solid black",
-  width: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  alignItem: "center",
-  marginTop: "10px",
-  "&>p": {
-    color: "#E5323F",
-    fontSize: "12px",
-    fontWeight: "600",
-  },
-  "& > div": {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItem: "center",
-    "& > p": {
-      marginLeft: "5px",
-      fontSize: "16px",
-      fontFamily: "'Tektur', cursive",
-      fontWeight: "500",
-      border: "none",
-      outline: "none",
-    },
-    "& > div": {
-      width: "50%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItem: "center",
-
-      "& > div": {
-        boxShadow: "0px 0px 5px rgba(0,0,0,0.5)",
-        ":hover": {
-          border: "none",
-        },
-        "& > div": {
-          fontSize: "16px",
-          fontFamily: "'Tektur', cursive",
-          fontWeight: "500",
-          border: "none",
-          outline: "none",
-        },
-      },
-    },
   },
 }));
 
@@ -152,17 +91,6 @@ const SchemaBox = styled(Box)(({ theme }) => ({
     ":active": {
       transform: "scale(0.98)",
     },
-  },
-}));
-const BoxImage = styled(Box)(({ theme }) => ({
-  width: "100%",
-  marginTop: "10px",
-  "&>p": {
-    color: "#252F43",
-    fontSize: "16px",
-    fontFamily: "'Tektur', cursive",
-    fontWeight: "500",
-    marginTop: "10px",
   },
 }));
 

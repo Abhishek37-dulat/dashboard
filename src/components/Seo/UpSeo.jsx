@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import React from "react";
-import AddSeo from "./AddSeo/AddSeo";
 import UpdateSeo from "./UpdateSeo/UpdateSeo";
 
 const UpSeo = () => {

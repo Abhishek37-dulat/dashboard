@@ -15,7 +15,6 @@ import {
   Typography,
   styled,
   InputAdornment,
-  Avatar,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -24,14 +23,14 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import ntc from "ntc-hi-js";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import AddColor from "./AddColor";
-import { CategoriesData, ColorList, SizeData } from "../../constant/db";
+// import AddColor from "./AddColor";
+import { SizeData } from "../../constant/db";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../../redux/actions/CategoriesAction";
 import { getAllColors } from "../../redux/actions/ColorsAction";
 import { addNewProduct } from "../../redux/actions/ProductAction";
-import hair from "../../assets/image/Laptop2-removeb.png";
+// import hair from "../../assets/image/Laptop2-removeb.png";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -477,7 +476,7 @@ const AddProduct = () => {
   const [toggleProductbreadth, setToggleProductbreadth] = useState(false);
   const [toggleProductheight, setToggleProductheight] = useState(false);
   const [toggleProductweight, setToggleProductweight] = useState(false);
-  const [toggleProductdensity, setToggleProductdensity] = useState(false);
+  // const [toggleProductdensity, setToggleProductdensity] = useState(false);
   const [toggleProductgender, setToggleProductgender] = useState(false);
   const [toggleProductstepButton, setToggleProductstepButton] = useState(false);
   const [toggleProductshowstep, setToggleProductshowstep] = useState(false);
@@ -531,7 +530,7 @@ const AddProduct = () => {
     productweight: "",
   });
 
-  const [numOfInputs, setNumOfInputs] = useState(0);
+  // const [numOfInputs, setNumOfInputs] = useState(0);
 
   const uploadimage = (e) => {
     const imdata = e.target.files;
@@ -628,27 +627,27 @@ const AddProduct = () => {
     setLengthAll(filteredArrayfinal);
   };
 
-  const imageSubmit = (e) => {
-    e.preventDefault();
-    if (imageInput === "") {
-      return handleOpenalert("please Select Image", "error");
-    } else {
-      if (imageInput) {
-        const reader = new FileReader();
+  // const imageSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (imageInput === "") {
+  //     return handleOpenalert("please Select Image", "error");
+  //   } else {
+  //     if (imageInput) {
+  //       const reader = new FileReader();
 
-        reader.onload = function (e) {
-          // console.log("onLoad: ", e.target.result);
-          setImagePrint([...imagePrint, e.target.result]);
-        };
+  //       reader.onload = function (e) {
+  //         // console.log("onLoad: ", e.target.result);
+  //         setImagePrint([...imagePrint, e.target.result]);
+  //       };
 
-        reader.readAsDataURL(imageInput[0]);
-      } else {
-        console.log("Image Error");
-      }
-      setImageAll([...imageAll, { name: imageInput[0] }]);
-      setImageInput("");
-    }
-  };
+  //       reader.readAsDataURL(imageInput[0]);
+  //     } else {
+  //       console.log("Image Error");
+  //     }
+  //     setImageAll([...imageAll, { name: imageInput[0] }]);
+  //     setImageInput("");
+  //   }
+  // };
   // console.log(imageAll);
 
   const handleOpenalert = (message, messageColor) => {
@@ -665,10 +664,10 @@ const AddProduct = () => {
     );
     setImageAll(filteredArray);
   };
-  const imageClearAll = (e) => {
-    e.preventDefault();
-    setImageAll([]);
-  };
+  // const imageClearAll = (e) => {
+  //   e.preventDefault();
+  //   setImageAll([]);
+  // };
 
   const handleChooseImage = () => {
     setImageInput("");

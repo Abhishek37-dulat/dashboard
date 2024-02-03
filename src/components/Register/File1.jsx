@@ -141,11 +141,9 @@ const UserButton = styled(Box)(({ Theme }) => ({
 const File1 = ({
   handleOnChange,
   userDetails,
-  setUserDetails,
   navigate,
   elementRef,
   setShowFile,
-  showFile,
 }) => {
   const [first_name, setFirst_name] = useState(false);
   const [last_name, setLast_name] = useState(false);

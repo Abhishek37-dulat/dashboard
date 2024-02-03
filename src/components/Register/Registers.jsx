@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Snackbar,
-  Alert,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Box, styled } from "@mui/material";
 import gsap from "gsap";
 import { useNavigate } from "react-router-dom";
 import File1 from "./File1";

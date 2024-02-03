@@ -21,6 +21,7 @@
     "countries-list": "^2.6.1",
     "country-flag-icons": "^1.5.7",
     "gsap": "^3.12.2",
+    "http-proxy-middleware": "^2.0.6",
     "jsonwebtoken": "^9.0.1",
     "ntc-hi-js": "^3.2.0",
     "react": "^18.2.0",
@@ -62,6 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "https://meneology-api.onrender.com"
+  }
 }

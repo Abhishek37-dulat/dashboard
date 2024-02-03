@@ -2,7 +2,7 @@ import { Box, Typography, styled } from "@mui/material";
 import React, { useEffect } from "react";
 import ItemMain from "./ItemMain";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCarts } from "../../redux/actions/CartAction";
+// import { getAllCarts } from "../../redux/actions/CartAction";
 import { getAllSaves } from "../../redux/actions/SavedAction";
 
 const AllCommentBox = styled(Box)(({ theme }) => ({

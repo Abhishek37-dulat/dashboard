@@ -1,12 +1,12 @@
 import React from "react";
-import { Box, IconButton, Typography, styled } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 
-import CategoryIcon from "@mui/icons-material/Category";
-import BeachAccessIcon from "@mui/icons-material/BeachAccess";
+// import CategoryIcon from "@mui/icons-material/Category";
+// import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import ItemRow from "./ItemRow";

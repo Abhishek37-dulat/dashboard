@@ -6,15 +6,15 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import mm from "../../assets/image/mm.png";
-import mm1 from "../../assets/image/hair.png";
-import mm2 from "../../assets/image/Laptop2.jpg";
+import React, { useEffect, useState } from "react";
+// import mm from "../../assets/image/mm.png";
+// import mm1 from "../../assets/image/hair.png";
+// import mm2 from "../../assets/image/Laptop2.jpg";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { gsap } from "gsap";
+// import { gsap } from "gsap";
 import { useSelector } from "react-redux";
-import convertCssColorNameToHex from "convert-css-color-name-to-hex";
+// import convertCssColorNameToHex from "convert-css-color-name-to-hex";
 import colorNameList from "color-name-list";
 
 const MainProductBox = styled(Box)(({ theme }) => ({
@@ -86,7 +86,7 @@ const SingleProductView = () => {
   const [count, setCount] = useState(0);
   const [imgL, setImgL] = useState([]);
   const { singleProduct } = useSelector((state) => state.Products);
-  const [color, setColor] = useState("#000000");
+  // const [color, setColor] = useState("#000000");
   const [dataFromLocal, setDataFromLocal] = useState();
   const handleLeftClick = (e) => {
     setCount(

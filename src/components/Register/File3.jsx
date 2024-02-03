@@ -155,11 +155,9 @@ const UserButtonBack = styled(Box)(({ Theme }) => ({
 const File3 = ({
   handleOnChange,
   userDetails,
-  setUserDetails,
   navigate,
   elementRef3,
   setShowFile,
-  showFile,
 }) => {
   const [zip_code, setzip_code] = useState(false);
   const [company_logo, setcompany_logo] = useState(false);

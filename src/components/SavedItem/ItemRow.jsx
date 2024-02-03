@@ -1,21 +1,8 @@
-import React, { useState } from "react";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ToggleOffIcon from "@mui/icons-material/ToggleOff";
-import ToggleOnIcon from "@mui/icons-material/ToggleOn";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  Box,
-  IconButton,
-  Typography,
-  Button,
-  styled,
-  TableRow,
-  TableCell,
-} from "@mui/material";
+import { Button, styled, TableRow, TableCell } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const TableRowArea = styled(TableRow)(({ theme }) => ({

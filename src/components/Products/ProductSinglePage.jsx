@@ -15,7 +15,6 @@ import {
   Typography,
   styled,
   InputAdornment,
-  Avatar,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -27,17 +26,14 @@ import {
 import ntc from "ntc-hi-js";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import CircularProgress from "@mui/material/CircularProgress";
-import AddColor from "./AddColor";
-import { CategoriesData, ColorList, SizeData } from "../../constant/db";
+// import AddColor from "./AddColor";
+import { SizeData } from "../../constant/db";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../../redux/actions/CategoriesAction";
 import { getAllColors } from "../../redux/actions/ColorsAction";
-import {
-  addNewProduct,
-  updateNewProduct,
-} from "../../redux/actions/ProductAction";
-import hair from "../../assets/image/Laptop2-removeb.png";
+import { updateNewProduct } from "../../redux/actions/ProductAction";
+// import hair from "../../assets/image/Laptop2-removeb.png";
 import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
@@ -491,7 +487,7 @@ const AddProduct = () => {
   const { CategorieData } = useSelector((state) => state?.Categories);
   const { ColorData } = useSelector((state) => state?.Colors);
   const { singleProduct, loading } = useSelector((state) => state?.Products);
-  const preImageDisplay = useRef();
+  // const preImageDisplay = useRef();
   // ***********************************
   // ***********************************
   // ***********************************

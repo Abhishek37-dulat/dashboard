@@ -1,13 +1,13 @@
 import { Box, IconButton, Typography, styled } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 
 import { useNavigate } from "react-router-dom";
 import ItemMain from "./ItemMain";
-import { useDispatch } from "react-redux";
-import { getAllColors } from "../../redux/actions/ColorsAction";
-import { getAllProduct } from "../../redux/actions/ProductAction";
+// import { useDispatch } from "react-redux";
+// import { getAllColors } from "../../redux/actions/ColorsAction";
+// import { getAllProduct } from "../../redux/actions/ProductAction";
 
 const ProductHomeContainer = styled(Box)(({ theme }) => ({
   //   border: "1px solid black",

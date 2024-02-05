@@ -20,7 +20,7 @@ const customSuccessToastStyleError = {
 export const ProductReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionType.GET_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: false, error: null };
     case actionType.GET_ALL_PRODUCTS:
       return {
         ...state,
